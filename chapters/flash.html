@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>플래시와 빛 · CameraBook</title>
+<meta name="description" content="딱딱한 빛과 부드러운 빛, 빛의 방향, 역제곱 법칙과 가이드 넘버, 플래시 동조 속도와 HSS, 선막·후막 동조, 역광 필 플래시를 시뮬레이터로 배운다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+</head>
+<body data-chapter="flash">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 13</div>
+    <h1>플래시와 빛</h1>
+    <p class="lead">사진(photo-graph)은 말 그대로 '빛으로 그린 그림'입니다. 지금까지는 주어진 빛을 어떻게 받을지 배웠다면, 이 장에서는 빛을 <b>만들고 다루는</b> 법을 배웁니다. 플래시는 어두울 때 켜는 비상등이 아니라, 원하는 곳에 원하는 양의 빛을 더하는 도구입니다.</p>
+    <ul class="objectives">
+      <li>광원의 크기와 방향이 그림자와 입체감을 어떻게 바꾸는지 안다.</li>
+      <li>역제곱 법칙으로 거리에 따른 빛의 감소를 계산하고, 가이드 넘버를 쓴다.</li>
+      <li>플래시 동조 속도와 HSS, 선막·후막 동조를 이해한다.</li>
+      <li>한낮 역광에서 필 플래시로 얼굴을 살리는 법을 안다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="quality">
+    <h2>빛의 질: 크기와 방향</h2>
+    <p>그림자의 경계가 칼처럼 또렷한 빛을 <span class="term">딱딱한 빛</span><span class="en">(Hard Light)</span>, 경계가 부드럽게 번지는 빛을 <span class="term">부드러운 빛</span><span class="en">(Soft Light)</span>이라 합니다. 이를 결정하는 것은 빛의 밝기가 아니라 <b>피사체에서 본 광원의 크기</b>입니다. 한낮의 태양은 엄청나게 크지만 너무 멀어서 작은 점처럼 보이므로 딱딱하고, 흐린 날은 하늘 전체가 광원이 되어 부드럽습니다. 같은 소프트박스도 가까이 둘수록 커 보여 부드러워집니다.</p>
+    <div class="sim" id="sim-light">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>광원의 크기와 방향</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-light"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>광원 크기(피사체에서 본) <output id="lt-s-out"></output></span><input type="range" id="lt-s" min="0" max="100" value="10"></label>
+          <label class="ctrl"><span>방향 <output id="lt-a-out"></output></span><input type="range" id="lt-a" min="0" max="170" value="45"></label>
+          <label class="ctrl"><span>높이 <output id="lt-h-out"></output></span><input type="range" id="lt-h" min="0" max="70" value="35"></label>
+        </div>
+      </div>
+      <div class="sim-note">크기를 키우면 그림자 경계(밝음과 어둠의 경계선, 터미네이터)가 넓게 번집니다. 방향 0° = 카메라 옆 정면광(그림자 없음, 납작함), 45° = 렘브란트·루프 라이팅(입체감), 90° = 측광(반쪽만 밝음, 극적), 135° 이상 = 역광(윤곽만 빛남). 카메라 위 내장 플래시가 '납작한' 사진을 만드는 이유도 여기서 보입니다.</div>
+    </div>
+    <div class="callout tip"><strong>빛을 부드럽게 만드는 법</strong>① 광원을 크게: 소프트박스, 우산, 디퓨저. ② 광원을 가까이. ③ 벽이나 천장에 반사(바운스)시켜 큰 반사면을 광원으로. ④ 창가의 커튼 너머 빛. 바운스는 외장 플래시의 헤드를 천장으로 돌리는 것만으로 되는 가장 쉬운 방법입니다(벽·천장 색이 빛에 묻어난다는 점만 주의).</div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="inverse">
+    <h2>역제곱 법칙: 거리 2배, 빛은 1/4</h2>
+    <p>작은 광원에서 나온 빛은 사방으로 퍼지므로, 거리가 2배가 되면 같은 빛이 4배 넓은 면적에 퍼져 밝기는 1/4(2스톱 어둡게)이 됩니다. 이것이 <span class="term">역제곱 법칙</span><span class="en">(Inverse Square Law)</span>입니다.</p>
+    <div class="formula">$$E \propto \frac{1}{d^2}$$
+      <div class="where">\(E\): 피사체가 받는 빛의 세기, \(d\): 광원과의 거리. 1 m → 2 m는 −2스톱, 1 m → 1.4 m는 −1스톱.</div>
+    </div>
+    <p>플래시 사진에서 앞사람은 하얗게 날아가고 뒷사람과 배경은 까맣게 묻히는 이유가 이것입니다. 반대로 광원을 멀리 두면 앞뒤 거리 차이의 비율이 작아져 고르게 비춥니다.</p>
+    <div class="sim" id="sim-inv">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>플래시로 단체 사진 찍기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-inv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>플래시–첫째 줄 거리 <output id="iv-d-out"></output></span><input type="range" id="iv-d" min="5" max="60" value="10"></label>
+          <label class="ctrl"><span>플래시 광량 <output id="iv-p-out"></output></span><input type="range" id="iv-p" min="-6" max="0" value="-2"></label>
+          <label class="ctrl"><span>조리개 <output id="iv-n-out"></output></span><input type="range" id="iv-n"></label>
+        </div>
+      </div>
+      <div class="sim-view" style="border-top:1px solid var(--border)"><canvas id="cv-invbar"></canvas></div>
+      <div class="sim-note">세 사람은 1 m 간격으로 서 있고, 뒤로 벽이 있습니다. 플래시를 가까이 두면 줄마다 밝기 차이가 크고, 멀리 두면(광량은 올려서) 고르게 됩니다. 아래 막대는 각 줄이 받은 빛의 스톱 차이입니다.</div>
+    </div>
+    <div class="sim" id="sim-gn">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>가이드 넘버 계산기</h3></div>
+      <div class="sim-controls" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <label class="ctrl"><span>가이드 넘버(ISO 100, m) <output id="gn-g-out"></output></span><input type="range" id="gn-g" min="6" max="60" value="36"></label>
+        <label class="ctrl"><span>ISO <output id="gn-iso-out"></output></span><input type="range" id="gn-iso"></label>
+        <label class="ctrl"><span>조리개 <output id="gn-n-out"></output></span><input type="range" id="gn-n"></label>
+        <label class="ctrl"><span>플래시 출력 <output id="gn-p-out"></output></span><input type="range" id="gn-p" min="0" max="7" value="0"></label>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">빛이 닿는 최대 거리</span><span class="v" id="gn-d">—</span></div>
+      </div>
+      <div class="sim-note"><b>가이드 넘버(GN) = 거리(m) × F값</b> (ISO 100, 최대 출력). GN 36인 플래시로 f/4이면 9 m까지 적정 노출입니다. ISO를 4배 올리면 GN은 2배(√4)가 되고, 출력을 1/2로 줄이면 GN은 1/√2배가 됩니다. 내장 플래시는 GN 6~12, 외장 플래시는 30~60 정도입니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="sync">
+    <h2>동조 속도와 고속 동조(HSS)</h2>
+    <p>플래시의 섬광은 1/1000~1/20000초로 아주 짧습니다. 4장에서 보았듯 셔터가 빠르면 두 막 사이의 좁은 틈(슬릿)이 센서를 훑고 지나가므로, 그 짧은 섬광 순간에는 센서의 일부만 열려 있습니다. 센서 전체가 동시에 열리는 가장 빠른 셔터 속도를 <span class="term">동조 속도</span><span class="en">(Sync Speed)</span>라 하며, 보통 1/160~1/250초입니다.</p>
+    <div class="sim" id="sim-sync">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>동조 속도를 넘기면?</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-sync"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>셔터 속도 <output id="sy-t-out"></output></span><input type="range" id="sy-t"></label>
+          <div class="ctrl"><span>플래시 모드</span><div class="seg" id="sy-m"><button data-value="normal" class="on">일반 섬광</button><button data-value="hss">HSS(고속 동조)</button></div></div>
+        </div>
+      </div>
+      <div class="sim-note">동조 속도(1/250)보다 빠르게 하면 섬광 순간에 후막이 이미 센서 일부를 가려 사진 아래쪽(센서 기준)에 검은 띠가 생깁니다. HSS는 플래시를 아주 빠르게 여러 번 깜박여 슬릿이 지나가는 동안 계속 비추므로 띠가 없지만, 한 번에 터뜨리는 것보다 출력이 크게 떨어집니다. 한낮에 f/1.4로 배경을 흐리면서 플래시를 쓰고 싶을 때 HSS나 ND 필터를 씁니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="curtain">
+    <h2>선막 동조와 후막 동조</h2>
+    <p>어두운 곳에서 셔터를 느리게(예: 1/4초) 하고 플래시를 함께 쓰면, 주변광으로는 흐르는 잔상이, 섬광으로는 또렷한 모습이 한 장에 겹칩니다. 섬광을 셔터가 열리자마자 터뜨리는 것이 <b>선막 동조</b>(기본값), 닫히기 직전에 터뜨리는 것이 <b>후막 동조</b>입니다.</p>
+    <div class="sim" id="sim-rear">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>움직이는 자전거 + 슬로 싱크</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-rear"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>섬광 시점</span><div class="seg" id="rs-m"><button data-value="front" class="on">선막(처음)</button><button data-value="rear">후막(마지막)</button></div></div>
+          <label class="ctrl"><span>셔터 속도 <output id="rs-t-out"></output></span><input type="range" id="rs-t"></label>
+        </div>
+      </div>
+      <div class="sim-note">자전거는 오른쪽으로 달립니다. 선막 동조에서는 또렷한 모습이 출발점에 찍히고 잔상이 앞쪽으로 뻗어, 마치 뒤로 가는 것처럼 보입니다. 후막 동조에서는 또렷한 모습이 도착점에, 잔상이 뒤에 남아 자연스러운 속도감이 납니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 5 -->
+  <section id="fill">
+    <h2>한낮의 플래시: 필 플래시</h2>
+    <p>플래시가 가장 빛나는 순간은 의외로 밝은 낮입니다. 해를 등진 인물, 모자 챙 아래 그늘진 눈, 창가 역광처럼 배경과 얼굴의 밝기 차이가 클 때, 약한 플래시로 얼굴만 살짝 밝히면(<span class="term">필 플래시</span>) 배경도 얼굴도 살릴 수 있습니다. 7장의 다이내믹 레인지 문제를 '조명으로' 푸는 방법입니다.</p>
+    <div class="sim" id="sim-fill">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>창가 역광 + 필 플래시</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-fill"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>노출(창밖 기준) <output id="fl-ev-out"></output></span><input type="range" id="fl-ev" min="-6" max="12" value="0"></label>
+          <label class="ctrl"><span>플래시 광량 보정 <output id="fl-p-out"></output></span><input type="range" id="fl-p" min="-1" max="9" value="-1"></label>
+        </div>
+      </div>
+      <div class="sim-note">플래시를 끈 상태(맨 왼쪽)에서 창밖이 날아가지 않게 노출을 맞추면 인물이 어둡습니다. 플래시 광량을 올려 보세요. 인물(2 m)은 밝아지고, 더 먼 벽(5 m)은 역제곱 법칙 때문에 조금만 밝아지며, 창밖 풍경은 그대로입니다. 너무 세게 하면 '플래시 터뜨린 티'가 납니다. 보통 주변광보다 1~2스톱 약하게(−1 ~ −2 EV)가 자연스럽습니다.</div>
+    </div>
+    <div class="callout"><strong>TTL과 플래시 노출 보정</strong>요즘 플래시는 촬영 직전 약한 예비 섬광을 쏘아 반사광을 재고 출력을 자동으로 정합니다(TTL). 결과가 너무 밝거나 어두우면 카메라 노출 보정과 별도로 '플래시 노출 보정(FEC)'으로 플래시 몫만 조절합니다. 카메라 노출 보정은 배경(주변광)을, FEC는 피사체(플래시광)를 맡는다고 기억하세요.</div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>피사체에서 본 광원이 클수록 빛이 부드럽다. 가까이, 크게, 반사시키면 부드러워진다.</li>
+      <li>빛의 방향이 입체감을 만든다. 정면광은 납작하고, 45° 측면광은 입체적이다.</li>
+      <li>역제곱 법칙: 거리 2배 → 빛 1/4(−2스톱). 가이드 넘버 = 거리 × F값.</li>
+      <li>동조 속도보다 빠른 셔터에서는 검은 띠가 생긴다. HSS는 띠 없이 쓰지만 출력이 약하다.</li>
+      <li>슬로 싱크는 후막 동조가 자연스럽다. 한낮 역광에는 필 플래시로 얼굴만 살린다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>같은 소프트박스를 인물에게서 2 m에서 1 m로 옮기면?</p><div class="opts">
+        <button class="opt">빛이 딱딱해지고 2배 밝아진다</button>
+        <button class="opt" data-correct>빛이 부드러워지고 4배(2스톱) 밝아진다</button>
+        <button class="opt">변화 없다</button>
+      </div><div class="quiz-exp">피사체에서 본 광원이 커져 부드러워지고, 역제곱 법칙으로 (2/1)² = 4배 밝아진다.</div></div>
+      <div class="quiz-q"><p>GN 40(ISO 100) 플래시를 ISO 400에서 쓴다. f/8일 때 최대 거리는?</p><div class="opts">
+        <button class="opt">5 m</button>
+        <button class="opt" data-correct>10 m</button>
+        <button class="opt">20 m</button>
+      </div><div class="quiz-exp">ISO 4배 → GN × √4 = 80. 거리 = 80 / 8 = 10 m.</div></div>
+      <div class="quiz-q"><p>동조 속도가 1/200인 카메라로 1/1000에 일반 플래시를 썼다. 결과는?</p><div class="opts">
+        <button class="opt">완벽하게 고르다</button>
+        <button class="opt" data-correct>사진 일부가 검은 띠로 가려진다</button>
+        <button class="opt">플래시가 터지지 않는다</button>
+      </div><div class="quiz-exp">1/1000에서는 슬릿만 열려 있어, 짧은 섬광 순간에 센서 일부만 빛을 받는다. HSS 모드가 필요하다.</div></div>
+      <div class="quiz-q"><p>밤에 달리는 아이를 1/4초 + 플래시로 찍어 잔상이 '뒤에' 남게 하려면?</p><div class="opts">
+        <button class="opt">선막 동조</button>
+        <button class="opt" data-correct>후막 동조</button>
+        <button class="opt">HSS</button>
+      </div><div class="quiz-exp">후막 동조는 노출이 끝날 때 섬광으로 또렷한 모습을 찍으므로, 그 전까지의 잔상이 진행 방향 뒤에 남는다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------------------------------------------------------------- 1. 광원 크기·방향 (구 + 바닥 그림자) */
+(function () {
+  const W = 300, H = 200;
+  const img = new ImageData(W, H), off = CB.offscreen(W, H);
+  const upd = CB.throttle(() => cv.redraw());
+  const Sz = CB.range("lt-s", (v) => (v < 15 ? "작음(맨 플래시·직사광)" : v < 50 ? "중간(우산)" : "큼(소프트박스·흐린 하늘)"), upd);
+  const Az = CB.range("lt-a", (v) => v + "°", upd);
+  const El = CB.range("lt-h", (v) => v + "°", upd);
+  const cv = CB.canvas("#cv-light", (ctx, w, h) => {
+    const size = 0.02 + Sz() / 100 * 0.9; // 광원 반지름(라디안 근사)
+    const az = Az() / 57.3, el = El() / 57.3;
+    // 광원 방향(카메라 좌표: x 오른쪽, y 위, z 카메라 쪽)
+    const dir = [Math.sin(az), Math.sin(el), Math.cos(az) * Math.cos(el)];
+    const n0 = Math.hypot(...dir); dir[0] /= n0; dir[1] /= n0; dir[2] /= n0;
+    // 원반 모양 광원 샘플
+    const u = Math.abs(dir[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
+    const t1 = [dir[1] * u[2] - dir[2] * u[1], dir[2] * u[0] - dir[0] * u[2], dir[0] * u[1] - dir[1] * u[0]]; const l1 = Math.hypot(...t1); t1.forEach((_, i) => (t1[i] /= l1));
+    const t2 = [dir[1] * t1[2] - dir[2] * t1[1], dir[2] * t1[0] - dir[0] * t1[2], dir[0] * t1[1] - dir[1] * t1[0]];
+    const S = [];
+    for (let k = 0; k < 24; k++) { const a = k * 2.39996, r = Math.sqrt((k + 0.5) / 24) * size; const v = [dir[0] + (t1[0] * Math.cos(a) + t2[0] * Math.sin(a)) * r, dir[1] + (t1[1] * Math.cos(a) + t2[1] * Math.sin(a)) * r, dir[2] + (t1[2] * Math.cos(a) + t2[2] * Math.sin(a)) * r]; const l = Math.hypot(...v); S.push([v[0] / l, v[1] / l, v[2] / l]); }
+    const cx = W * 0.5, cy = H * 0.45, R = H * 0.28, groundY = cy + R; // 구는 바닥에 닿아 있음
+    const d = img.data;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
+      const dx = (x - cx) / R, dy = (cy - y) / R, r2 = dx * dx + dy * dy;
+      let v;
+      if (r2 <= 1) { // 구 표면
+        const n = [dx, dy, Math.sqrt(1 - r2)];
+        let s = 0; S.forEach((L) => { s += Math.max(0, n[0] * L[0] + n[1] * L[1] + n[2] * L[2]); }); s /= S.length;
+        v = 0.06 + 0.94 * s;
+        const c = [0.85, 0.45, 0.3];
+        d[i] = 255 * CB.linToSrgb(c[0] * v); d[i + 1] = 255 * CB.linToSrgb(c[1] * v); d[i + 2] = 255 * CB.linToSrgb(c[2] * v); d[i + 3] = 255;
+      } else if (y > groundY - 2) { // 바닥: 구가 가리는 샘플 비율 = 그림자
+        // 바닥 점의 3D 위치(구 반지름 단위): 바닥 평면 y=-1, 화면 아래로 갈수록 카메라 쪽
+        const gz = (y - groundY) / R * 3, gx = (x - cx) / R * (1 + gz * 0.15), P = [gx, -1, gz];
+        let lit = 0;
+        S.forEach((L) => { if (L[1] <= 0.01) return; // 광원이 바닥 아래면 그림자 계산 생략
+          const b = P[0] * L[0] + P[1] * L[1] + P[2] * L[2], c = P[0] * P[0] + P[1] * P[1] + P[2] * P[2] - 1, disc = b * b - c;
+          const hit = disc > 0 && -b - Math.sqrt(disc) > 0; if (!hit) lit += Math.max(0, L[1]); });
+        lit /= S.length;
+        v = 0.08 + 0.9 * lit;
+        d[i] = 255 * CB.linToSrgb(0.55 * v); d[i + 1] = 255 * CB.linToSrgb(0.55 * v); d[i + 2] = 255 * CB.linToSrgb(0.5 * v); d[i + 3] = 255;
+      } else { d[i] = 32; d[i + 1] = 34; d[i + 2] = 40; d[i + 3] = 255; }
+    }
+    off.getContext("2d").putImageData(img, 0, 0);
+    ctx.drawImage(off, 0, 0, w, h);
+    // 광원 위치 아이콘(위에서 본 작은 지도)
+    const mx = w - 70, my = 60, mr = 44;
+    ctx.fillStyle = "rgba(0,0,0,0.45)"; ctx.beginPath(); ctx.arc(mx, my, mr + 6, 0, 7); ctx.fill();
+    ctx.fillStyle = "#e9a07e"; ctx.beginPath(); ctx.arc(mx, my, 7, 0, 7); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.font = "10px " + CB.color("font"); ctx.textAlign = "center"; ctx.fillText("📷", mx, my + mr + 2);
+    const lx = mx + Math.sin(az) * mr * 0.85, ly = my + Math.cos(az) * mr * 0.85;
+    ctx.fillStyle = "#ffe08a"; ctx.beginPath(); ctx.arc(lx, ly, 3 + Sz() / 10, 0, 7); ctx.fill();
+    ctx.fillText("위에서 본 배치", mx, my - mr - 8);
+  }, { aspect: 0.66, maxHeight: 400 });
+})();
+
+/* ---------------------------------------------------------------- 2. 역제곱: 단체 사진 */
+(function () {
+  const W = 440, H = 275;
+  const upd = CB.throttle(() => { cv.redraw(); bar.redraw(); });
+  const Dd = CB.range("iv-d", (v) => (v / 10).toFixed(1) + " m", upd);
+  const Pw = CB.range("iv-p", (v) => (v ? "1/" + Math.pow(2, -v) : "최대"), upd);
+  const N = CB.steps("iv-n", CB.APERTURES.filter((n) => n >= 2 && n <= 16), CB.fmtN, 5.6, upd);
+  const SPR = [["#d9622b", true], ["#2f6fe0", false], ["#3a8f5c", true]].map(([c, lh]) => CB.offscreen(80, 170, (g) => CB.draw.person(g, 40, 168, 165, { shirt: c, longHair: lh })));
+  function rows() {
+    const d = Dd() / 10, gn = 36 * Math.pow(2, Pw() / 2); // 출력 1/2 → GN/√2
+    return [0, 1, 2, 3.5].map((k) => { const dist = d + k; const stops = 2 * Math.log2(gn / (dist * N())); return { dist, stops }; }); // 0 = 적정
+  }
+  const cv = CB.canvas("#cv-inv", (ctx, w, h) => {
+    const r = rows(), sx = w / W;
+    const lum = (s) => Math.pow(2, s); // 적정=1
+    const wall = lum(r[3].stops) * 0.75;
+    const wv = Math.round(255 * CB.linToSrgb(CB.clamp(0.55 * wall, 0, 1)));
+    ctx.fillStyle = `rgb(${wv},${Math.round(wv * 0.95)},${Math.round(wv * 0.88)})`; ctx.fillRect(0, 0, w, h);
+    [2, 1, 0].forEach((k) => { // 먼 줄부터
+      const L = lum(r[k].stops), scale = 1 / (1 + k * 0.18);
+      const ph = H * 0.85 * scale, pw = ph * (80 / 170);
+      const tmp = CB.offscreen(80, 170, (g) => { g.drawImage(SPR[k], 0, 0); g.globalCompositeOperation = "source-atop"; g.fillStyle = L >= 1 ? `rgba(255,255,255,${CB.clamp(1 - 1 / L, 0, 1) * 0.95})` : `rgba(0,0,0,${CB.clamp(1 - Math.pow(L, 0.45), 0, 0.97)})`; g.fillRect(0, 0, 80, 170); });
+      const cxp = W * (0.3 + k * 0.2);
+      ctx.drawImage(tmp, (cxp - pw / 2) * sx, (H * 0.98 - ph) * sx, pw * sx, ph * sx);
+    });
+    CB.hud(ctx, 0, h - 24, w, ["플래시 " + (Pw() ? "1/" + Math.pow(2, -Pw()) : "최대"), CB.fmtN(N()), "ISO 100", "GN 36"]);
+  }, { aspect: 0.625 });
+  const bar = CB.canvas("#cv-invbar", (ctx, w, h) => {
+    const P = CB.palette(), r = rows();
+    const names = ["첫째 줄", "둘째 줄", "셋째 줄", "벽"];
+    const X = (s) => w / 2 + s * (w / 14);
+    ctx.fillStyle = "rgba(63,207,127,0.15)"; ctx.fillRect(X(-0.7), 6, X(0.7) - X(-0.7), h - 22);
+    ctx.strokeStyle = P.axis; ctx.beginPath(); ctx.moveTo(X(0), 4); ctx.lineTo(X(0), h - 16); ctx.stroke();
+    ctx.fillStyle = P.dim; ctx.font = "11px " + CB.color("mono"); ctx.textAlign = "center";
+    for (let s = -6; s <= 6; s += 2) ctx.fillText((s > 0 ? "+" : "") + s, X(s), h - 4);
+    r.forEach((o, i) => {
+      const y = 12 + i * ((h - 30) / 4);
+      const s = CB.clamp(o.stops, -6.5, 6.5);
+      ctx.fillStyle = Math.abs(o.stops) < 0.7 ? P.ok : o.stops > 0 ? P.bad : P.accent2;
+      ctx.fillRect(Math.min(X(0), X(s)), y, Math.abs(X(s) - X(0)) || 2, 10);
+      ctx.fillStyle = P.text; ctx.textAlign = "left"; ctx.font = "11px " + CB.color("font");
+      ctx.fillText(`${names[i]} ${o.dist.toFixed(1)}m  ${CB.signed(o.stops)}`, 6, y + 9);
+    });
+  }, { height: 100 });
+})();
+
+/* ---------------------------------------------------------------- 3. GN 계산기 */
+(function () {
+  const upd = () => calc();
+  const G = CB.range("gn-g", (v) => v, upd);
+  const I = CB.steps("gn-iso", [100, 200, 400, 800, 1600, 3200], (v) => v, 100, upd);
+  const N = CB.steps("gn-n", CB.APERTURES.filter((n) => n >= 1.4 && n <= 16), CB.fmtN, 4, upd);
+  const Pw = CB.range("gn-p", (v) => (v ? "1/" + Math.pow(2, v) : "1/1 (최대)"), upd);
+  function calc() {
+    const gn = G() * Math.sqrt(I() / 100) / Math.pow(2, Pw() / 2);
+    CB.stat("gn-d", CB.fmt(gn / N(), 3) + "<small>m (유효 GN " + CB.fmt(gn, 3) + ")</small>");
+  }
+  calc();
+})();
+
+/* ---------------------------------------------------------------- 4. 동조 속도 */
+(function () {
+  const W = 440, H = 275;
+  const photo = CB.scenes.portrait(W, H, { sceneEV: 6 });
+  photo.render({ N: 5.6, t: 31.4 / 64, iso: 100, focus: 2.5, focal: 50, noise: false });
+  const base = CB.offscreen(W, H, (g) => g.putImageData(photo.last, 0, 0));
+  const upd = CB.throttle(() => cv.redraw());
+  const T = CB.steps("sy-t", CB.SHUTTERS.filter((t) => t <= 1 / 60 && t >= 1 / 8000), CB.fmtT, 1 / 250, upd);
+  const M = CB.seg("sy-m", upd);
+  const SYNC = 1 / 250, TRAVEL = 1 / 280;
+  const cv = CB.canvas("#cv-sync", (ctx, w, h) => {
+    const t = T(), hss = M() === "hss";
+    // 주변광은 거의 없음(어두운 실내) → 플래시가 대부분의 빛
+    ctx.fillStyle = "#050505"; ctx.fillRect(0, 0, w, h);
+    let lit0 = 0, lit1 = 1, power = 1;
+    if (!hss && t < SYNC) {
+      // 섬광 시점(선막이 끝까지 내려간 순간)에 열려 있는 부분: 후막이 이미 지나간 비율만큼 가려짐
+      const covered = CB.clamp((TRAVEL - t) / TRAVEL, 0, 1);
+      lit0 = covered; lit1 = 1; // 센서 위쪽(=사진 아래쪽, 상은 뒤집혀 맺힘)이 가려짐
+    }
+    if (hss) power = CB.clamp(t / SYNC, 0.05, 1) * 0.6 + 0.0; // HSS는 슬릿 시간만큼만 빛을 받아 약함
+    // 사진 좌표에서는 위아래가 뒤집혀 있음: 센서 위쪽 = 사진 아래쪽
+    const y0 = (1 - lit1) * h, y1 = (1 - lit0) * h;
+    ctx.save(); ctx.globalAlpha = 1;
+    ctx.drawImage(base, 0, (1 - lit1) * H, W, (lit1 - lit0) * H, 0, y0, w, y1 - y0);
+    ctx.restore();
+    if (power < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - Math.pow(power, 0.45)})`; ctx.fillRect(0, 0, w, h); }
+    CB.hud(ctx, 0, h - 24, w, [CB.fmtT(t), hss ? "HSS" : "일반 섬광", t < SYNC && !hss ? { text: "동조 속도 초과!", color: "#ff8080" } : hss ? "출력 약 " + Math.round(power * 100) + "%" : "OK"]);
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 5. 선막/후막 */
+(function () {
+  const W = 440, H = 275;
+  const bg = CB.offscreen(W, H, (g) => { CB.draw.sky(g, W, H, "#0b1022", "#1d2440", H * 0.6); g.fillStyle = "#14151a"; g.fillRect(0, H * 0.62, W, H); g.fillStyle = "#2a2c33"; g.fillRect(0, H * 0.9, W, H); });
+  const bike = CB.offscreen(200, 200, (g) => CB.draw.cyclist(g, 100, 196, 140, { shirt: "#e0443e", helmet: "#ffd34d" }));
+  const upd = CB.throttle(() => cv.redraw());
+  const M = CB.seg("rs-m", upd);
+  const T = CB.steps("rs-t", [1 / 30, 1 / 15, 1 / 8, 1 / 4, 1 / 2, 1], CB.fmtT, 1 / 4, upd);
+  const cv = CB.canvas("#cv-rear", (ctx, w, h) => {
+    const sx = w / W, t = T(), speed = 300; // px/s
+    ctx.drawImage(bg, 0, 0, w, h);
+    const len = speed * t, x0 = W * 0.5 - len / 2, x1 = W * 0.5 + len / 2;
+    // 주변광 잔상(어둡고 반투명)
+    const n = 30;
+    ctx.save(); ctx.globalAlpha = 0.07; ctx.globalCompositeOperation = "lighter";
+    const B = 150; // 화면 위 자전거 크기(px)
+    for (let k = 0; k <= n; k++) { const x = x0 + (len * k) / n; ctx.drawImage(bike, (x - B / 2) * sx, (H * 0.94 - B) * sx, B * sx, B * sx); }
+    ctx.restore();
+    // 섬광으로 또렷한 모습
+    const xs = M() === "front" ? x0 : x1;
+    ctx.drawImage(bike, (xs - B / 2) * sx, (H * 0.94 - B) * sx, B * sx, B * sx);
+    ctx.fillStyle = "#7ee2a8"; ctx.font = "13px " + CB.color("font"); ctx.textAlign = "center";
+    ctx.fillText("진행 방향 →", w * 0.5, 22);
+    CB.hud(ctx, 0, h - 24, w, [CB.fmtT(t), M() === "front" ? "선막 동조" : "후막 동조", M() === "front" ? "잔상이 앞쪽 (어색)" : "잔상이 뒤쪽 (자연스러움)"]);
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 6. 필 플래시 */
+(function () {
+  const W = 440, H = 275;
+  const photo = CB.scenes.backlit(W, H, { sceneEV: 9 });
+  const subj = photo.layers.find((l) => l.name === "subject"), wall = photo.layers.find((l) => l.depth === 5);
+  const upd = CB.throttle(() => cv.redraw());
+  const EV = CB.range("fl-ev", (v) => CB.signed(v / 3) + " EV", upd);
+  const Pw = CB.range("fl-p", (v) => (v < 0 ? "끔" : CB.signed((v - 6) / 3) + " EV"), upd);
+  const cv = CB.canvas("#cv-fill", (ctx, w, h) => {
+    const ev = EV() / 3, on = Pw() >= 0, fec = (Pw() - 6) / 3;
+    // 플래시가 인물(2 m)에 주는 빛: 실내 주변광의 2^fec 배 × (창밖 기준으로는 −3스톱인 실내를 끌어올림)
+    const flash = on ? 0.125 * Math.pow(2, 3 + fec) : 0; // fec 0이면 인물이 창밖과 같은 밝기
+    subj.gain = 0.125 + flash;
+    wall.gain = 0.125 + flash * Math.pow(2 / 5, 2);
+    photo.invalidate();
+    photo.render({ N: 8, t: 64 / Math.pow(2, 9 - ev), iso: 100, focus: 2, focal: 35, noiseSeed: 41 });
+    photo.draw(ctx, 0, 0, w, h);
+    if (on) { ctx.fillStyle = "rgba(255,255,255,0.9)"; ctx.beginPath(); ctx.arc(w - 18, 18, 7, 0, 7); ctx.fill(); }
+    CB.hud(ctx, 0, h - 24, w, ["노출 " + CB.signed(ev), on ? "플래시 " + CB.signed(fec) : "플래시 끔", "인물 2 m · 벽 5 m"]);
+  }, { aspect: 0.625 });
+})();
+</script>
+</body>
+</html>
