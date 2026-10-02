@@ -120,7 +120,7 @@
   /* ------------------------------------------------------------ canvas helper */
   /**
    * HiDPI 캔버스. 폭은 부모 폭을 따르고 높이는 aspect(높이/폭) 또는 height(px)로 결정.
-   *   const cv = CB.canvas(el, (ctx,w,h)=>{...}, {aspect:0.5, maxHeight: 420});
+   *   const cv = CB.canvas(el, (ctx,w,h)=>{...}, {aspect:0.5, maxHeight: 420});  aspect는 폭→비율 함수도 가능
    */
   CB.canvas = function (canvas, draw, opts = {}) {
     if (typeof canvas === "string") canvas = document.querySelector(canvas);
@@ -129,7 +129,7 @@
     function resize() {
       const parent = canvas.parentElement;
       const w = Math.max(200, Math.floor(opts.width || parent.clientWidth || 600));
-      let h = opts.height || Math.round(w * (opts.aspect || 0.5));
+      let h = opts.height || Math.round(w * (typeof opts.aspect === "function" ? opts.aspect(w) : opts.aspect || 0.5));
       if (opts.minHeight) h = Math.max(h, opts.minHeight);
       if (opts.maxHeight) h = Math.min(h, opts.maxHeight);
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
