@@ -935,6 +935,82 @@
     },
   };
 
+  /* ======================================================= 간이 원근 투영 렌더러
+     세계 좌표: X(오른쪽), Y(위), Z(앞, 카메라가 바라보는 방향). 카메라 높이 1.6 m.
+     스프라이트는 실제 높이(m)를 가진 그림. 산은 무한대 거리(방위각 함수). */
+  CB.World = function () {
+    const D = CB.draw;
+    const spr = (wpx, hpx, draw) => ({ img: CB.offscreen(wpx, hpx, draw), wpx, hpx });
+    const S = {
+      person: spr(80, 170, (g) => D.person(g, 40, 168, 165, { shirt: "#d9622b", longHair: true })),
+      tree: spr(160, 200, (g) => D.tree(g, 80, 198, 200, "#3f7d3a", "#5b4033", 7)),
+      tree2: spr(160, 200, (g) => D.tree(g, 80, 198, 190, "#4f8a45", "#5b4033", 12)),
+      bldg: spr(120, 200, (g) => D.building(g, 0, 200, 120, 200, "#b9a58e", "#f2e2b0", 0.2, 3)),
+      bldg2: spr(120, 200, (g) => D.building(g, 0, 200, 120, 200, "#9fb0bf", "#f2e2b0", 0.2, 8)),
+      lamp: spr(30, 200, (g) => { g.fillStyle = "#444"; g.fillRect(13, 10, 4, 190); g.fillRect(13, 10, 14, 4); g.fillStyle = "#ffe9a8"; g.fillRect(22, 14, 6, 6); }),
+    };
+    // 물체: [스프라이트, X, Z, 높이m, 폭m]
+    const OBJ = [];
+    const r = CB.rng(31);
+    for (let i = 0; i < 14; i++) OBJ.push([i % 2 ? S.tree : S.tree2, r.range(-30, 30), r.range(18, 45), r.range(6, 9), 0]);
+    for (let i = 0; i < 9; i++) OBJ.push([i % 2 ? S.bldg : S.bldg2, -120 + i * 30 + r.range(-5, 5), r.range(110, 150), r.range(22, 40), 18]);
+    for (let z = 13; z < 80; z += 9) OBJ.push([S.lamp, 2.6, z, 4, 0.3]);
+    function mountainElev(azDeg) { // 산 능선의 고도각(도)
+      return 2.2 + 1.3 * Math.sin(azDeg * 0.21) + 0.8 * Math.sin(azDeg * 0.57 + 1) + 0.4 * Math.sin(azDeg * 1.9);
+    }
+    /**
+     * draw(ctx, w, h, {f, sw, camZ, subjectZ, showSubject})
+     */
+    function draw(ctx, w, h, o) {
+      const fpx = (o.f / o.sw) * w, cy = h * 0.55, camH = 1.6, camZ = o.camZ || 0;
+      // 하늘
+      const g = ctx.createLinearGradient(0, 0, 0, cy); g.addColorStop(0, "#6fa3dc"); g.addColorStop(1, "#d8e6f2");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, cy);
+      // 산(무한대)
+      ctx.fillStyle = "#8d9ab8"; ctx.beginPath(); ctx.moveTo(0, cy);
+      for (let x = 0; x <= w; x += 2) { const az = Math.atan((x - w / 2) / fpx) * 57.3; ctx.lineTo(x, cy - Math.tan(mountainElev(az) / 57.3) * fpx); }
+      ctx.lineTo(w, cy); ctx.fill();
+      // 땅
+      ctx.fillStyle = "#86a46e"; ctx.fillRect(0, cy, w, h - cy);
+      // 길(소실점으로 모이는 선)
+      const proj = (X, Y, Z) => { const zr = Z - camZ; return [w / 2 + (X / zr) * fpx, cy + ((camH - Y) / zr) * fpx]; };
+      ctx.fillStyle = "#c9b48f";
+      ctx.beginPath();
+      const zn = Math.max(camZ + 0.3, camZ + 0.3), zf = camZ + 2000;
+      let p1 = proj(-1.2, 0, zn), p2 = proj(1.2, 0, zn), p3 = proj(1.2, 0, zf), p4 = proj(-1.2, 0, zf);
+      ctx.moveTo(...p1); ctx.lineTo(...p2); ctx.lineTo(...p3); ctx.lineTo(...p4); ctx.fill();
+      ctx.fillStyle = "#e9dcc0";
+      for (let z = Math.ceil(camZ) + 1; z < camZ + 300; z += 3) { const a = proj(-0.08, 0, z), b = proj(0.08, 0, z + 1.2); if (a[1] - b[1] < 0.3) continue; ctx.fillRect(a[0], b[1], b[0] - a[0], a[1] - b[1]); }
+      // 물체: 먼 것부터
+      const items = OBJ.map((o2) => ({ s: o2[0], X: o2[1], Z: o2[2], H: o2[3] }));
+      if (o.showSubject !== false) items.push({ s: S.person, X: -0.4, Z: o.subjectZ || 5, H: 1.7 });
+      items.sort((a, b) => b.Z - a.Z);
+      items.forEach((it) => {
+        const zr = it.Z - camZ; if (zr < 0.3) return;
+        const hh = (it.H / zr) * fpx, ww = hh * (it.s.wpx / it.s.hpx);
+        const [x, yb] = proj(it.X, 0, it.Z);
+        if (x + ww < -50 || x - ww > w + 50) return;
+        ctx.drawImage(it.s.img, x - ww / 2, yb - hh, ww, hh);
+      });
+    }
+    function map(ctx, w, h, o) { // 위에서 본 지도
+      const P = CB.palette();
+      const zMax = o.zMax || 160, camZ = o.camZ || 0;
+      const sc = (h - 16) / zMax, x0 = w / 2, y0 = h - 8;
+      const X = (x) => x0 + x * sc * 1.2, Y = (z) => y0 - (z - Math.min(0, camZ)) * sc;
+      ctx.fillStyle = P.surface; ctx.fillRect(0, 0, w, h);
+      OBJ.forEach((ob) => { if (ob[2] > zMax) return; ctx.fillStyle = ob[0] === S.lamp ? P.dim : ob[3] > 15 ? "#9a8a78" : "#4f8a45"; ctx.beginPath(); ctx.arc(X(ob[1]), Y(ob[2]), ob[3] > 15 ? 3 : 2.5, 0, 7); ctx.fill(); });
+      ctx.fillStyle = "#d9622b"; ctx.beginPath(); ctx.arc(X(-0.4), Y(o.subjectZ || 5), 4, 0, 7); ctx.fill();
+      const half = Math.atan(o.sw / 2 / o.f);
+      ctx.fillStyle = "rgba(255,138,76,0.18)"; ctx.strokeStyle = P.accent; ctx.lineWidth = 1.2;
+      const L = zMax * 1.5;
+      ctx.beginPath(); ctx.moveTo(X(0), Y(camZ)); ctx.lineTo(X(-Math.tan(half) * L), Y(camZ + L)); ctx.lineTo(X(Math.tan(half) * L), Y(camZ + L)); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = P.text; ctx.beginPath(); ctx.arc(X(0), Y(camZ), 4, 0, 7); ctx.fill();
+      ctx.font = "11px " + CB.color("font"); ctx.fillStyle = P.dim; ctx.textAlign = "left"; ctx.fillText("위에서 본 모습 · 📷 카메라 · 🟠 인물", 8, 14);
+    }
+    return { draw, map };
+    };
+
   /* ------------------------------------------------------------ layout build */
   const LOGO = `<svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent-2)"/></linearGradient></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="url(#cbg)"/><g fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"><circle cx="16" cy="16" r="8.5"/><path d="M16 7.5 L19.5 14 M24.1 13.4 L17.5 18.3 M21.3 22.7 L14.3 20.6 M11.2 23.2 L12.7 15.4 M8.6 12.3 L16.4 12.7"/></g></svg>`;
   const ICON_MENU = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>`;
