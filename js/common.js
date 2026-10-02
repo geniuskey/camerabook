@@ -693,7 +693,7 @@
     ctx.save();
     const h = opts.h || 24;
     ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(x, y, w, h);
-    ctx.font = (opts.size || 12) + "px " + getComputedStyle(document.body).getPropertyValue("--mono");
+    ctx.font = (opts.size || (w < 420 ? 10 : 12)) + "px " + getComputedStyle(document.body).getPropertyValue("--mono");
     ctx.textBaseline = "middle"; ctx.fillStyle = "#fff";
     const gap = w / items.length;
     items.forEach((s, i) => { ctx.textAlign = "center"; ctx.fillStyle = typeof s === "object" ? s.color : "#fff"; ctx.fillText(typeof s === "object" ? s.text : s, x + gap * (i + 0.5), y + h / 2 + 1); });

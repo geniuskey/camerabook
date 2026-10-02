@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://camerabook.euiyun.com/sitemap.xml
