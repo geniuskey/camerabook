@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>손떨림 보정과 드라이브 모드 · CameraBook</title>
+<meta name="description" content="렌즈 OIS와 바디 IBIS, 손떨림 보정 '스톱'의 의미, 연사와 버퍼, 결정적 순간 잡기와 프리 캡처, 셀프타이머와 인터벌·타임랩스 계산을 시뮬레이터로 배운다.">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .film { display: flex; gap: 4px; overflow-x: auto; padding: 10px 14px; background: #111; }
+  .film canvas { flex: none; width: 92px; height: 70px; border-radius: 4px; background: #222; }
+  .film .best { outline: 3px solid #7ee2a8; }
+  .film .pre { outline: 2px dashed #ffb86b; }
+</style>
+</head>
+<body data-chapter="stabilization">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 12</div>
+    <h1>손떨림 보정과 드라이브 모드</h1>
+    <p class="lead">흔들린 사진을 줄이는 기술과, 결정적 순간을 놓치지 않게 하는 기술을 함께 다룹니다. 손떨림 보정은 카메라의 흔들림을 상쇄하고, 연사·프리 캡처·셀프타이머·인터벌 같은 드라이브 모드는 '언제' 찍을지를 도와줍니다.</p>
+    <ul class="objectives">
+      <li>렌즈 보정(OIS), 바디 보정(IBIS), 전자식 보정(EIS)의 원리와 차이를 안다.</li>
+      <li>'5스톱 보정'이 무엇을 뜻하고, 무엇은 해결하지 못하는지 안다.</li>
+      <li>연사 속도·버퍼·메모리 카드의 관계를 이해한다.</li>
+      <li>셀프타이머와 인터벌 촬영을 계획한다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="is">
+    <h2>손떨림 보정은 어떻게 동작하나</h2>
+    <p>카메라 안의 자이로 센서가 1초에 수천 번 흔들림의 방향과 속도를 잽니다. 그리고 흔들린 만큼 반대로 무언가를 움직여, 센서 위의 상이 제자리에 머물게 합니다. 무엇을 움직이느냐에 따라 방식이 나뉩니다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 800 210" role="img" aria-label="OIS와 IBIS의 비교">
+        <g transform="translate(20,20)">
+          <text x="170" y="0" text-anchor="middle" class="t-acc">렌즈 보정 (OIS / VR / IS)</text>
+          <rect x="20" y="40" width="200" height="100" rx="10" class="f-surface"/>
+          <ellipse cx="70" cy="90" rx="8" ry="40" fill="rgba(120,190,255,.45)" stroke="var(--accent-2)"/>
+          <ellipse cx="130" cy="78" rx="7" ry="28" fill="rgba(255,138,76,.4)" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M130 46 v-14 M130 110 v14" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M122 32 l8 -8 l8 8 M122 124 l8 8 l8 -8" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <ellipse cx="180" cy="90" rx="8" ry="36" fill="rgba(120,190,255,.45)" stroke="var(--accent-2)"/>
+          <rect x="240" y="60" width="70" height="60" rx="6" class="f-elev"/><rect x="290" y="68" width="8" height="44" fill="#333"/>
+          <text x="130" y="165" text-anchor="middle" class="t-dim">렌즈 안 보정 렌즈 그룹이 상하좌우 이동</text>
+          <text x="270" y="140" text-anchor="middle" class="t-dim">센서 고정</text>
+        </g>
+        <g transform="translate(420,20)">
+          <text x="170" y="0" text-anchor="middle" class="t-acc">바디 보정 (IBIS / 센서 시프트)</text>
+          <rect x="20" y="40" width="150" height="100" rx="10" class="f-surface"/>
+          <ellipse cx="60" cy="90" rx="8" ry="40" fill="rgba(120,190,255,.45)" stroke="var(--accent-2)"/>
+          <ellipse cx="120" cy="90" rx="8" ry="36" fill="rgba(120,190,255,.45)" stroke="var(--accent-2)"/>
+          <rect x="190" y="40" width="130" height="100" rx="8" class="f-elev"/>
+          <rect x="268" y="62" width="10" height="44" fill="#333" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M273 58 v-14 M273 110 v14 M262 84 h-14" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M240 84 l8 -6 v12 z" fill="var(--accent)"/>
+          <text x="170" y="165" text-anchor="middle" class="t-dim">센서 자체가 5축(상하·좌우·회전·기울기)으로 움직임</text>
+        </g>
+      </svg>
+      <figcaption><b>그림 12-1.</b> OIS는 렌즈마다, IBIS는 바디에 한 번 들어간다. 둘을 함께 쓰는 '협조 보정'은 효과가 가장 크다.</figcaption>
+    </figure>
+    <div class="table-wrap"><table>
+      <tr><th>방식</th><th>장점</th><th>단점</th></tr>
+      <tr><td><b>OIS</b> (렌즈)</td><td>망원에서 효과가 크다. 뷰파인더 영상도 안정됨</td><td>렌즈마다 필요, 렌즈가 비싸짐</td></tr>
+      <tr><td><b>IBIS</b> (바디)</td><td>어떤 렌즈든 보정(옛날 수동 렌즈 포함), 회전 흔들림까지</td><td>초망원에서는 센서 이동 범위가 모자람</td></tr>
+      <tr><td><b>EIS</b> (전자식)</td><td>부품 없이 영상 처리로. 동영상에 강력</td><td>화면을 조금 잘라냄(화각 감소), 노출 중 블러는 못 막음</td></tr>
+    </table></div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="stops">
+    <h2>'5스톱 보정'의 진짜 의미</h2>
+    <p>"최대 5스톱 손떨림 보정"은 보정이 없을 때 1/250초가 필요했던 상황에서 2⁵ = 32배 느린 1/8초로도 비슷한 확률로 선명한 사진을 얻을 수 있다는 뜻입니다. 확률이라는 점이 중요합니다. 손떨림은 무작위라서, 한계 근처에서는 몇 장은 선명하고 몇 장은 흔들립니다.</p>
+    <div class="sim" id="sim-hit">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>선명한 컷의 비율(100장 시뮬레이션)</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-hit"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>초점거리(환산) <output id="ht-f-out"></output></span><input type="range" id="ht-f"></label>
+          <label class="ctrl"><span>보정 성능 <output id="ht-is-out"></output></span><input type="range" id="ht-is" min="0" max="8" value="5" step="1"></label>
+          <div class="ctrl"><span>화소 수</span><div class="seg" id="ht-mp"><button data-value="12">12 MP</button><button data-value="24" class="on">24 MP</button><button data-value="61">61 MP</button></div></div>
+        </div>
+      </div>
+      <div class="sim-note">회색 곡선은 보정 끔, 주황 곡선은 보정 켬입니다. 같은 성공률(예: 80%)을 얻는 셔터 속도가 몇 스톱 차이 나는지가 '보정 스톱'입니다. 화소가 많을수록 같은 떨림이 더 많은 픽셀에 걸쳐 보여서 곡선이 오른쪽(더 빠른 셔터)으로 밀립니다.</div>
+    </div>
+    <div class="callout warn"><strong>손떨림 보정이 못 하는 것</strong>보정은 <b>카메라</b>의 흔들림만 상쇄합니다. 피사체의 움직임은 막지 못합니다. 1/4초로 찍은 걷는 사람은 보정을 켜도 흐릅니다(4장). 그리고 삼각대에 고정했을 때 일부 구형 보정 장치는 없는 흔들림을 찾다가 오히려 미세하게 흔들 수 있어 끄라고 권하기도 합니다(최신 기종은 대부분 자동 감지).</div>
+    <div class="callout tip"><strong>몸으로 하는 손떨림 보정</strong>팔꿈치를 몸에 붙이고, 숨을 내쉰 뒤 멈춘 상태에서, 셔터를 '누르지 말고 짜듯이' 부드럽게. 벽이나 기둥에 기대거나 카메라를 난간에 올려놓는 것도 1~2스톱 효과가 있습니다. 반셔터 후 잠깐 기다려 보정이 안정되게 하는 것도 요령입니다.</div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="burst">
+    <h2>연사와 버퍼</h2>
+    <p>셔터 버튼을 누르고 있으면 계속 찍는 <span class="term">연속 촬영</span>(연사)은 초당 장수(fps)로 성능을 말합니다. 그런데 찍힌 사진은 곧바로 메모리 카드에 저장되지 않고, 일단 카메라 안의 고속 메모리인 <span class="term">버퍼</span>에 쌓였다가 카드로 옮겨집니다. 찍는 속도가 카드에 쓰는 속도보다 빠르면 버퍼가 차고, 가득 차면 연사가 뚝 느려집니다.</p>
+    <div class="sim" id="sim-buf">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>버퍼가 차오르는 모습</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-buf"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>연사 속도 <output id="bf-fps-out"></output></span><input type="range" id="bf-fps" min="3" max="40" value="20"></label>
+          <div class="ctrl"><span>파일</span><div class="seg" id="bf-fmt"><button data-value="10">JPEG (10 MB)</button><button data-value="45" class="on">RAW (45 MB)</button></div></div>
+          <div class="ctrl"><span>메모리 카드</span><div class="seg" id="bf-card"><button data-value="60">SD UHS-I (60 MB/s)</button><button data-value="250" class="on">SD UHS-II (250 MB/s)</button><button data-value="1500">CFexpress (1500 MB/s)</button></div></div>
+          <button class="btn primary" id="bf-go">셔터 누르고 있기 (누르는 동안)</button>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">찍은 장수</span><span class="v" id="bf-n">0</span></div>
+        <div class="stat"><span class="k">버퍼 사용</span><span class="v" id="bf-use">0%</span></div>
+        <div class="stat"><span class="k">현재 속도</span><span class="v" id="bf-rate">—</span></div>
+      </div>
+      <div class="sim-note">버퍼 용량은 2 GB로 가정했습니다. RAW + 느린 카드 조합은 몇 초 만에 버퍼가 차서 카드 쓰기 속도에 맞춰 느려집니다. 손을 뗀 뒤에도 카드 접근 표시등이 한동안 깜박이는 것은 버퍼를 비우는 중이기 때문입니다. 연사가 중요하다면 '빠른 카드'가 '빠른 카메라'만큼 중요합니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="moment">
+    <h2>결정적 순간과 프리 캡처</h2>
+    <p>공이 배트에 맞는 순간, 새가 날아오르는 순간을 보고 셔터를 누르면 이미 늦습니다. 사람의 반응 시간은 0.2초 안팎이고, 카메라의 셔터 지연도 수십 ms가 있습니다. 연사는 '그 순간 근처'를 촘촘히 찍어 확률을 높이는 방법이고, 최신 카메라의 <span class="term">프리 캡처</span><span class="en">(Pre-capture)</span>는 반셔터 상태에서 미리 계속 찍어 두다가, 셔터를 누르면 그 직전 0.5~1초 분량까지 함께 저장합니다.</p>
+    <div class="sim" id="sim-moment">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>점프의 꼭짓점 잡기</h3></div>
+      <div class="sim-view"><canvas id="cv-jump"></canvas></div>
+      <div class="film" id="film"></div>
+      <div class="sim-controls" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+        <label class="ctrl"><span>연사 속도 <output id="mo-fps-out"></output></span><input type="range" id="mo-fps" min="1" max="30" value="10"></label>
+        <label class="check"><input type="checkbox" id="mo-pre"> 프리 캡처(0.5초)</label>
+        <div class="ctrl"><span>&nbsp;</span><button class="btn primary" id="mo-go">꼭짓점이다 싶을 때 누르기!</button></div>
+      </div>
+      <div class="sim-msg" id="mo-msg">점프가 반복됩니다. 사람이 가장 높이 떴다고 느낄 때 버튼을 누르세요(0.25초 동안 연사).</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 5 -->
+  <section id="timer">
+    <h2>셀프타이머와 인터벌 촬영</h2>
+    <p><b>셀프타이머</b>는 단체 사진만을 위한 기능이 아닙니다. 삼각대 위에서 장노출을 할 때 셔터를 누르는 손의 진동이 사진에 남지 않도록 <b>2초 타이머</b>를 쓰는 것이 기본입니다. <b>인터벌 촬영</b>은 일정한 간격으로 자동으로 찍는 기능으로, 이어 붙이면 꽃이 피고 구름이 흐르는 <span class="term">타임랩스</span> 영상이 됩니다.</p>
+    <div class="sim" id="sim-tl">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>타임랩스 계산기</h3></div>
+      <div class="sim-controls" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <label class="ctrl"><span>실제 촬영 시간 <output id="tl-dur-out"></output></span><input type="range" id="tl-dur" min="1" max="48" value="8"></label>
+        <label class="ctrl"><span>원하는 영상 길이 <output id="tl-len-out"></output></span><input type="range" id="tl-len" min="5" max="120" value="20" step="5"></label>
+        <div class="ctrl"><span>영상 프레임 레이트</span><div class="seg" id="tl-fps"><button data-value="24">24p</button><button data-value="30" class="on">30p</button><button data-value="60">60p</button></div></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">필요한 사진 장수</span><span class="v" id="tl-n">—</span></div>
+        <div class="stat"><span class="k">촬영 간격</span><span class="v" id="tl-int">—</span></div>
+        <div class="stat"><span class="k">빨라지는 배율</span><span class="v" id="tl-x">—</span></div>
+        <div class="stat"><span class="k">RAW 기준 용량</span><span class="v" id="tl-gb">—</span></div>
+      </div>
+      <div class="sim-note">예: 노을 1시간을 10초 영상(30p)으로 = 300장, 12초 간격. 노출 시간은 간격보다 짧아야 하고, 수동 노출(M)·수동 초점·고정 WB로 찍어야 프레임마다 밝기·색이 깜박이지 않습니다. 낮에서 밤으로 넘어가는 '홀리 그레일' 타임랩스는 Auto ISO나 노출을 천천히 바꾸며 찍고 후보정으로 부드럽게 잇습니다.</div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>손떨림 보정은 자이로로 흔들림을 재고 렌즈 그룹(OIS)이나 센서(IBIS)를 반대로 움직인다. 둘을 함께 쓰면 효과가 가장 크다.</li>
+      <li>'n스톱 보정' = 같은 성공률을 2ⁿ배 느린 셔터로 얻는다. 확률이므로 한계 근처에서는 여러 장 찍는다.</li>
+      <li>보정은 피사체의 움직임을 막지 못한다.</li>
+      <li>연사는 버퍼가 차면 카드 쓰기 속도로 느려진다. RAW·고속 연사에는 빠른 카드가 필요하다.</li>
+      <li>반응 시간 때문에 결정적 순간은 연사·프리 캡처로 잡는다. 삼각대 장노출은 2초 타이머, 타임랩스는 M 모드·고정 WB로.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>보정 없이 1/200초가 필요한 상황에서 '4스톱 보정'이면 대략 어느 셔터까지 비슷한 확률로 선명할까?</p><div class="opts">
+        <button class="opt">1/50</button>
+        <button class="opt" data-correct>1/13 (약 1/12.5)</button>
+        <button class="opt">1/800</button>
+      </div><div class="quiz-exp">2⁴ = 16배 느리게: 1/200 × 16 = 1/12.5초.</div></div>
+      <div class="quiz-q"><p>IBIS(바디 보정)의 장점으로 옳은 것은?</p><div class="opts">
+        <button class="opt">초망원 렌즈에서 OIS보다 항상 강력하다</button>
+        <button class="opt" data-correct>보정 기능이 없는 렌즈를 끼워도 보정된다</button>
+        <button class="opt">피사체 움직임도 멈춘다</button>
+      </div><div class="quiz-exp">센서를 움직이므로 어떤 렌즈든 효과가 있다. 초망원에서는 필요한 이동량이 커서 OIS가 유리하다.</div></div>
+      <div class="quiz-q"><p>RAW로 30fps 연사를 하는데 2초 만에 속도가 확 떨어졌다. 가장 큰 원인은?</p><div class="opts">
+        <button class="opt">배터리 부족</button>
+        <button class="opt" data-correct>버퍼가 가득 차서 카드 쓰기 속도로 제한됨</button>
+        <button class="opt">손떨림 보정이 켜져 있어서</button>
+      </div><div class="quiz-exp">찍는 데이터 속도(30 × RAW 크기)가 카드 쓰기 속도를 넘으면 버퍼가 차고, 그 뒤로는 카드 속도에 맞춰진다.</div></div>
+      <div class="quiz-q"><p>꽃이 피는 3시간을 24p로 15초짜리 타임랩스로 만들려면 촬영 간격은?</p><div class="opts">
+        <button class="opt">약 3초</button>
+        <button class="opt" data-correct>약 30초</button>
+        <button class="opt">약 3분</button>
+      </div><div class="quiz-exp">필요 장수 = 15 × 24 = 360장. 3시간 = 10,800초 ÷ 360 = 30초 간격.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------------------------------------------------------------- 1. 성공률 곡선 */
+(function () {
+  const upd = CB.throttle(() => cv.redraw());
+  const F = CB.steps("ht-f", [24, 35, 50, 85, 135, 200, 400, 600], (v) => v + " mm", 200, upd);
+  const IS = CB.range("ht-is", (v) => (v ? v + "스톱" : "없음"), upd);
+  const MP = CB.seg("ht-mp", upd);
+  // 손떨림 모델: 각속도 크기(랜덤, 레일리 분포)로 노출 시간 동안 이동 → 픽셀 단위 흔들림
+  const N = 400, omega = Array.from({ length: N }, () => Math.hypot(CB.randn(), CB.randn()) * 0.0068); // rad/s
+  function hit(f, t, is, mp) {
+    const px = Math.sqrt(mp * 1e6 * 1.5); // 가로 픽셀 수
+    let ok = 0;
+    for (let i = 0; i < N; i++) { const blur = (omega[i] / Math.pow(2, is)) * t * f / 36 * px; if (blur < 2) ok++; }
+    return ok / N;
+  }
+  const cv = CB.canvas("#cv-hit", (ctx, w, h) => {
+    const P = CB.palette();
+    const f = F(), is = IS(), mp = +MP();
+    const ts = []; for (let e = 0; e <= 12; e += 0.1) ts.push(Math.pow(2, -e)); // 1초 ~ 1/4096
+    const off = ts.map((t) => [t, hit(f, t, 0, mp) * 100]), on = ts.map((t) => [t, hit(f, t, is, mp) * 100]);
+    const at = (arr) => { const p = arr.find((d) => d[1] >= 80); return p ? p[0] : NaN; };
+    const t0 = at(off), t1 = at(on);
+    CB.chart(ctx, null, {
+      x: [1 / 4096, 1], y: [0, 100], logX: true, xTicks: [1 / 4000, 1 / 1000, 1 / 250, 1 / 60, 1 / 15, 1 / 4, 1],
+      xFmt: (v) => CB.fmtT(v), yFmt: (v) => v + "%", xLabel: "셔터 속도", yLabel: "선명한 컷 비율",
+      series: [{ data: off, color: P.dim, width: 2 }, { data: on, color: P.accent, width: 2.5 }],
+      vlines: [{ x: 1 / f, color: P.accent2, label: "1/" + f + " (1/초점거리)" }],
+      hlines: [{ y: 80, color: P.faint }],
+    });
+    if (isFinite(t0) && isFinite(t1)) {
+      ctx.fillStyle = P.text; ctx.font = "600 13px " + CB.color("font"); ctx.textAlign = "left";
+      ctx.fillText(`80% 기준: 보정 끔 ${CB.fmtT(t0)} → 켬 ${CB.fmtT(t1)} (${Math.log2(t1 / t0).toFixed(1)}스톱 이득)`, 66, h - 64);
+    }
+  }, { aspect: 0.55, minHeight: 280 });
+})();
+
+/* ---------------------------------------------------------------- 2. 버퍼 */
+(function () {
+  const upd = () => cv.redraw();
+  const FPS = CB.range("bf-fps", (v) => v + " fps", upd);
+  const FMT = CB.seg("bf-fmt", upd);
+  const CARD = CB.seg("bf-card", upd);
+  const BUF = 2000; // MB
+  let st = { buf: 0, n: 0, t: 0, hist: [], pressed: false, acc: 0 };
+  const btn = document.getElementById("bf-go");
+  const press = (v) => { if (v && !st.pressed) st = { buf: st.buf, n: 0, t: 0, hist: [], pressed: true, acc: 0 }; st.pressed = v; btn.textContent = v ? "찍는 중… (손을 떼면 멈춤)" : "셔터 누르고 있기 (누르는 동안)"; };
+  btn.addEventListener("pointerdown", (e) => { e.preventDefault(); press(true); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => btn.addEventListener(ev, () => press(false)));
+  btn.addEventListener("keydown", (e) => { if (e.key === " " || e.key === "Enter") press(true); });
+  btn.addEventListener("keyup", () => press(false));
+  const cv = CB.canvas("#cv-buf", (ctx, w, h) => {
+    const P = CB.palette();
+    const size = +FMT(), card = +CARD();
+    // 버퍼 막대
+    const bx = 20, bw = 60, by = 20, bh = h - 50;
+    ctx.fillStyle = P.surface; ctx.fillRect(bx, by, bw, bh);
+    const u = st.buf / BUF;
+    ctx.fillStyle = u > 0.95 ? P.bad : P.accent; ctx.fillRect(bx, by + bh * (1 - u), bw, bh * u);
+    ctx.strokeStyle = P.border; ctx.strokeRect(bx, by, bw, bh);
+    ctx.fillStyle = P.dim; ctx.font = "12px " + CB.color("font"); ctx.textAlign = "center"; ctx.fillText("버퍼", bx + bw / 2, h - 12);
+    // 카드로 흐르는 화살표
+    ctx.fillStyle = st.buf > 0 ? P.accent2 : P.faint; ctx.fillText("→ 카드 " + card + " MB/s", bx + bw + 60, by + bh - 6);
+    // 누적 장수 그래프
+    const gx = bx + bw + 130;
+    if (w - gx > 120) {
+      const tMax = Math.max(6, st.t + 0.5), nMax = Math.max(40, (+FPS()) * tMax);
+      CB.chart(ctx, { x: gx, y: by, w: w - gx - 16, h: bh - 20 }, { x: [0, tMax], y: [0, nMax], xLabel: "시간(초)", yLabel: "", xFmt: (v) => v + "s",
+        series: [{ data: st.hist, color: P.accent, width: 2.5 }, { data: [[0, 0], [tMax, (+FPS()) * tMax]], color: P.faint, width: 1, dash: [4, 4] }] });
+      ctx.fillStyle = P.dim; ctx.textAlign = "left"; ctx.fillText("누적 장수 (점선 = 이론상 연사)", gx + 4, by + 12);
+    }
+    CB.stat("bf-n", st.n);
+    CB.stat("bf-use", Math.round(u * 100) + "<small>%</small>");
+    CB.stat("bf-rate", st.pressed ? (st.buf >= BUF - size ? (card / size).toFixed(1) + "<small>fps (카드 속도)</small>" : FPS() + "<small>fps</small>") : st.buf > 0 ? "<small>버퍼 비우는 중</small>" : "—");
+  }, { aspect: 0.5, minHeight: 260, maxHeight: 340 });
+  CB.loop(document.getElementById("cv-buf"), (dt) => {
+    const size = +FMT(), card = +CARD(), fps = +FPS();
+    if (!st.pressed && st.buf <= 0) return;
+    st.buf = Math.max(0, st.buf - card * dt); // 카드로 비움
+    if (st.pressed) {
+      st.t += dt; st.acc += dt * fps;
+      while (st.acc >= 1) { if (st.buf + size <= BUF) { st.buf += size; st.n++; st.acc -= 1; } else { st.acc = Math.min(st.acc, 1); break; } }
+      st.hist.push([st.t, st.n]);
+    }
+    cv.redraw();
+  });
+})();
+
+/* ---------------------------------------------------------------- 3. 결정적 순간 */
+(function () {
+  const PERIOD = 1.6; // 점프 주기(초)
+  const yAt = (t) => { const u = ((t % PERIOD) + PERIOD) % PERIOD / PERIOD; return u < 0.55 ? Math.sin((u / 0.55) * Math.PI) : 0; }; // 0~1 높이
+  const FPS = CB.range("mo-fps", (v) => v + " fps", () => {});
+  const pre = CB.check("mo-pre", () => {});
+  const film = document.getElementById("film");
+  const msg = document.getElementById("mo-msg");
+  let T = 0, burst = null;
+  function drawScene(g, w, h, t) {
+    g.fillStyle = "#cfe3f5"; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#86a46e"; g.fillRect(0, h * 0.8, w, h);
+    const y = yAt(t);
+    const s = h * 0.5;
+    CB.draw.person(g, w * 0.5, h * 0.82 - y * h * 0.32, s, { shirt: "#2f6fe0", stripes: false });
+    g.fillStyle = "rgba(0,0,0,0.15)"; g.beginPath(); g.ellipse(w * 0.5, h * 0.83, s * 0.22 * (1 - y * 0.5), 4, 0, 0, 7); g.fill();
+  }
+  const cv = CB.canvas("#cv-jump", (ctx, w, h) => {
+    drawScene(ctx, w, h, T);
+    // 높이 게이지
+    ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(w - 30, 10, 14, h - 20);
+    ctx.fillStyle = "#7ee2a8"; const y = yAt(T); ctx.fillRect(w - 30, 10 + (h - 20) * (1 - y), 14, (h - 20) * y);
+  }, { aspect: 0.4, maxHeight: 260 });
+  CB.loop(document.getElementById("cv-jump"), (dt) => { T += dt; cv.redraw(); });
+  document.getElementById("mo-go").addEventListener("click", () => {
+    const press = T, lag = 0.04; // 셔터 지연 40 ms
+    const start = press + lag - (pre() ? 0.5 : 0), end = press + lag + 0.25;
+    const fps = +FPS(), frames = [];
+    // 연사 위상은 무작위
+    for (let t = start + Math.random() / fps; t <= end; t += 1 / fps) frames.push(t);
+    film.innerHTML = "";
+    let best = -1, bestY = -1;
+    frames.forEach((t, i) => { const y = yAt(t); if (y > bestY) { bestY = y; best = i; } });
+    frames.forEach((t, i) => {
+      const c = document.createElement("canvas"); c.width = 184; c.height = 140;
+      drawScene(c.getContext("2d"), 184, 140, t);
+      if (i === best) c.className = "best"; else if (t < press) c.className = "pre";
+      film.appendChild(c);
+    });
+    // 꼭짓점 시각과 비교
+    const u = ((press % PERIOD) + PERIOD) % PERIOD;
+    const peakT = PERIOD * 0.275;
+    const pct = Math.round(bestY * 100);
+    msg.className = "sim-msg " + (pct >= 95 ? "ok" : "bad");
+    msg.innerHTML = `누른 시각: 꼭짓점 ${u < peakT ? "보다 " + Math.round((peakT - u) * 1000) + " ms 전" : "에서 " + Math.round((u - peakT) * 1000) + " ms 뒤"} · 연사 ${frames.length}장 중 최고 높이 <b>${pct}%</b>` + (pre() ? " · 점선 = 프리 캡처로 건진 컷" : "");
+  });
+})();
+
+/* ---------------------------------------------------------------- 4. 타임랩스 */
+(function () {
+  const upd = () => calc();
+  const DUR = CB.range("tl-dur", (v) => (v <= 4 ? v * 15 + "분" : (v / 4).toFixed(v % 4 ? 2 : 0) + "시간"), upd);
+  const LEN = CB.range("tl-len", (v) => v + "초", upd);
+  const FPS = CB.seg("tl-fps", upd);
+  function calc() {
+    const durS = DUR() * 15 * 60, n = LEN() * +FPS(), iv = durS / n;
+    CB.stat("tl-n", n + "<small>장</small>");
+    CB.stat("tl-int", (iv >= 60 ? (iv / 60).toFixed(1) + "<small>분</small>" : iv.toFixed(1) + "<small>초</small>"));
+    CB.stat("tl-x", "×" + Math.round(durS / LEN()));
+    CB.stat("tl-gb", (n * 45 / 1000).toFixed(1) + "<small>GB</small>");
+  }
+  calc();
+})();
+</script>
+</body>
+</html>
