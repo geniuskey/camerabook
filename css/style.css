@@ -376,6 +376,7 @@ td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numer
 
 /* ==================================================================== CameraBook 전용 */
 .sim-view.photo { background: #0c0b0a; }
+.sim-body.side > .sim-view { align-self: start; }
 .sim-view.photo canvas { cursor: crosshair; }
 .ctrl .dial-val { font-family: var(--mono); font-weight: 700; color: var(--text); }
 .exp-meter { display: flex; align-items: center; gap: 2px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
