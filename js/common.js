@@ -813,6 +813,22 @@
     g.fillStyle = "#bbb"; g.beginPath(); g.arc(x - s * 0.3, y - s * 0.1, s * 0.045, 0, Math.PI * 2); g.arc(x + s * 0.3, y - s * 0.1, s * 0.045, 0, Math.PI * 2); g.fill();
     g.restore();
   };
+  /** 정면을 향해 달려오는 강아지(x: 중심, y: 발, s: 높이 px) */
+  D.dog = function (g, x, y, s, fur = "#c98a4b") {
+    g.save();
+    const dark = shade(fur, -0.35);
+    g.fillStyle = dark; // 다리
+    [-0.22, -0.08, 0.08, 0.22].forEach((k, i) => { roundRect(g, x + k * s - s * 0.05, y - s * 0.38 - (i % 2) * s * 0.04, s * 0.1, s * 0.38, s * 0.04); g.fill(); });
+    g.fillStyle = fur; g.beginPath(); g.ellipse(x, y - s * 0.48, s * 0.32, s * 0.22, 0, 0, 7); g.fill(); // 몸
+    g.beginPath(); g.arc(x, y - s * 0.78, s * 0.22, 0, 7); g.fill(); // 머리
+    g.fillStyle = dark; g.beginPath(); g.ellipse(x - s * 0.2, y - s * 0.86, s * 0.08, s * 0.16, 0.5, 0, 7); g.ellipse(x + s * 0.2, y - s * 0.86, s * 0.08, s * 0.16, -0.5, 0, 7); g.fill(); // 귀
+    g.fillStyle = "#f3e2cc"; g.beginPath(); g.ellipse(x, y - s * 0.7, s * 0.11, s * 0.08, 0, 0, 7); g.fill(); // 주둥이
+    g.fillStyle = "#1b1410"; g.beginPath(); g.arc(x, y - s * 0.73, s * 0.035, 0, 7); g.arc(x - s * 0.08, y - s * 0.83, s * 0.028, 0, 7); g.arc(x + s * 0.08, y - s * 0.83, s * 0.028, 0, 7); g.fill();
+    g.fillStyle = "#e0576a"; g.beginPath(); g.ellipse(x, y - s * 0.64, s * 0.035, s * 0.05, 0, 0, 7); g.fill(); // 혀
+    g.strokeStyle = shade(fur, -0.15); g.lineWidth = Math.max(1, s * 0.012); // 털 질감
+    for (let k = 0; k < 9; k++) { const a = -0.9 + k * 0.22; g.beginPath(); g.moveTo(x + Math.cos(a) * s * 0.25, y - s * 0.48 + Math.sin(a) * s * 0.12); g.lineTo(x + Math.cos(a) * s * 0.3, y - s * 0.46 + Math.sin(a) * s * 0.16); g.stroke(); }
+    g.restore();
+  };
   D.text = function (g, s, x, y, size, color, align = "center", weight = 700) {
     g.save(); g.font = `${weight} ${size}px ${getComputedStyle(document.body).getPropertyValue("--font") || "sans-serif"}`;
     g.fillStyle = color; g.textAlign = align; g.textBaseline = "middle"; g.fillText(s, x, y); g.restore();
