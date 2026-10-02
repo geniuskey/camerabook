@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>촬영 모드와 측광 · CameraBook</title>
+<meta name="description" content="P·A·S·M 촬영 모드가 무엇을 자동으로 정하는지, 카메라 노출계가 장면을 18% 회색으로 가정하는 이유, 평가·중앙중점·스팟 측광, 노출 보정과 AE 잠금을 가상 카메라로 배운다.">
+<link rel="canonical" href="https://camerabook.euiyun.com/chapters/modes.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="촬영 모드와 측광 · CameraBook">
+<meta property="og:description" content="P·A·S·M 촬영 모드가 무엇을 자동으로 정하는지, 카메라 노출계가 장면을 18% 회색으로 가정하는 이유, 평가·중앙중점·스팟 측광, 노출 보정과 AE 잠금을 가상 카메라로 배운다.">
+<meta property="og:url" content="https://camerabook.euiyun.com/chapters/modes.html">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"촬영 모드와 측광","name":"촬영 모드와 측광 · CameraBook","url":"https://camerabook.euiyun.com/chapters/modes.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/modes.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":6,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"P·A·S·M 촬영 모드가 무엇을 자동으로 정하는지, 카메라 노출계가 장면을 18% 회색으로 가정하는 이유, 평가·중앙중점·스팟 측광, 노출 보정과 AE 잠금을 가상 카메라로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"06 촬영 모드와 측광","item":"https://camerabook.euiyun.com/chapters/modes.html"}]}]}</script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .sim-controls input:disabled { opacity: .45; cursor: not-allowed; }
+  .ctrl.auto > span::after { content: "자동"; font-size: 11px; color: var(--accent-2); border: 1px solid var(--accent-2); border-radius: 999px; padding: 0 6px; margin-left: 6px; }
+  .modedial { display: flex; gap: 4px; flex-wrap: wrap; }
+  .modedial button { font: inherit; font-weight: 800; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--border); background: var(--surface); color: var(--text-dim); cursor: pointer; font-family: var(--mono); }
+  .modedial button.on { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .modedial button[data-value="auto"] { font-size: 11px; }
+  #cv-meter { cursor: crosshair; }
+</style>
+</head>
+<body data-chapter="modes">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 06</div>
+    <h1>촬영 모드와 측광</h1>
+    <p class="lead">카메라 위의 모드 다이얼에는 Auto, P, A, S, M이 새겨져 있습니다. 이 글자들은 "노출 삼각형 중 무엇을 내가 정하고, 무엇을 카메라에 맡길까"의 선택지입니다. 그리고 카메라가 밝기를 정할 때 쓰는 기준, 즉 <b>측광</b>을 이해하면 카메라가 왜 가끔 엉뚱한 밝기로 찍는지, 그때 어떻게 바로잡는지 알 수 있습니다.</p>
+    <ul class="objectives">
+      <li>P·A·S·M 모드에서 사용자와 카메라가 각각 무엇을 정하는지 안다.</li>
+      <li>노출계가 장면을 '평균 18% 회색'으로 가정한다는 것과 그 결과(눈밭은 회색, 검은 배경은 과다)를 이해한다.</li>
+      <li>평가·중앙중점·스팟 측광의 차이를 알고 상황에 맞게 고른다.</li>
+      <li>노출 보정과 AE 잠금으로 카메라의 판단을 바로잡는다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="dial">
+    <h2>모드 다이얼: 누가 무엇을 정하나</h2>
+    <div class="table-wrap"><table>
+      <tr><th>모드</th><th>내가 정함</th><th>카메라가 정함</th><th>이럴 때</th></tr>
+      <tr><td><b>Auto</b></td><td>(거의 없음)</td><td>조리개·셔터·ISO·플래시·WB 전부</td><td>남에게 카메라를 건넬 때</td></tr>
+      <tr><td><b>P</b> 프로그램</td><td>노출 보정, ISO, (프로그램 시프트)</td><td>조리개·셔터 조합</td><td>스냅, 빠르게 대응할 때</td></tr>
+      <tr><td><b>A / Av</b> 조리개 우선</td><td>조리개</td><td>셔터</td><td>인물(배경 흐림), 풍경(심도) — 가장 많이 쓰임</td></tr>
+      <tr><td><b>S / Tv</b> 셔터 우선</td><td>셔터</td><td>조리개</td><td>스포츠, 아이, 패닝, 흐름 표현</td></tr>
+      <tr><td><b>M</b> 수동</td><td>조리개·셔터 (ISO)</td><td>없음(노출계는 안내만)</td><td>조명이 일정한 곳, 야경, 스튜디오, 파노라마</td></tr>
+    </table></div>
+    <p>캐논은 조리개 우선을 Av, 셔터 우선을 Tv라고 표기하고, 니콘·소니·후지 등은 A, S라고 표기합니다. 기능은 같습니다.</p>
+
+    <div class="sim" id="sim-mode">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>모드 다이얼 가상 카메라</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-mode"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>모드 다이얼</span><div class="modedial seg" id="md-mode"><button data-value="auto">AUTO</button><button data-value="P">P</button><button data-value="A" class="on">A</button><button data-value="S">S</button><button data-value="M">M</button></div></div>
+          <label class="ctrl" id="md-ap-c"><span>조리개 <output id="md-ap-out"></output></span><input type="range" id="md-ap"></label>
+          <label class="ctrl" id="md-sh-c"><span>셔터 <output id="md-sh-out"></output></span><input type="range" id="md-sh"></label>
+          <label class="ctrl" id="md-iso-c"><span>ISO <output id="md-iso-out"></output></span><input type="range" id="md-iso"></label>
+          <label class="check"><input type="checkbox" id="md-aiso"> Auto ISO (최저 셔터 1/125)</label>
+          <label class="ctrl" id="md-ec-c"><span>노출 보정 <output id="md-ec-out"></output></span><input type="range" id="md-ec" min="-9" max="9" step="1" value="0"></label>
+          <label class="ctrl"><span>장면 밝기 <output id="md-ev-out"></output></span><input type="range" id="md-ev" min="5" max="15" step="1" value="11"></label>
+        </div>
+      </div>
+      <div class="sim-msg" id="md-msg"></div>
+      <div class="sim-note">회색 '자동' 표시가 붙은 값은 카메라가 정합니다. ① A 모드에서 조리개를 돌리면 셔터가 따라 움직입니다. ② S 모드에서 1/4000을 고르고 장면을 어둡게 하면 조리개가 한계(f/1.4)에 닿아 노출 부족 경고가 뜹니다. 이때 Auto ISO를 켜 보세요. ③ M 모드에서는 화면 아래 노출 막대가 '얼마나 벗어났는지'만 알려 줍니다.</div>
+    </div>
+    <div class="callout tip"><strong>P 모드의 숨은 기능: 프로그램 시프트</strong>P 모드에서 다이얼을 돌리면 밝기는 그대로 둔 채 조리개·셔터 조합만 바뀝니다. 카메라가 고른 f/5.6 · 1/250이 마음에 안 들면 f/2.8 · 1/1000이나 f/11 · 1/60으로 '밀어서' 쓸 수 있습니다. 사실상 A·S 모드를 순간적으로 오가는 셈입니다.</div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="gray">
+    <h2>카메라는 세상을 회색으로 본다</h2>
+    <p>카메라의 노출계는 장면에서 반사되어 오는 빛의 양을 잽니다. 그런데 이 빛의 양만으로는 '밝은 물체가 어둡게 비친 것'인지 '어두운 물체가 밝게 비친 것'인지 구분할 수 없습니다. 하얀 눈밭과 회색 아스팔트를 다르게 대할 방법이 없는 거죠. 그래서 노출계는 단순한 가정을 합니다. <b>"이 장면은 평균하면 중간 회색(반사율 약 18%)이다."</b></p>
+    <p>대부분의 장면은 밝은 곳과 어두운 곳이 섞여 평균이 중간 회색 근처라서 이 가정이 잘 맞습니다. 하지만 장면 대부분이 하얗거나(눈밭, 해변, 흰 벽) 검으면(검은 무대, 밤 거리) 카메라는 그것을 회색으로 만들려고 하다가 틀립니다.</p>
+    <div class="sim" id="sim-meter">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>측광 실험실</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-meter"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>장면</span><div class="seg" id="mt-scene"><button data-value="normal" class="on">평범한 공원</button><button data-value="snow">눈밭</button><button data-value="stage">검은 무대</button><button data-value="backlit">창가 역광</button></div></div>
+          <div class="ctrl"><span>측광 모드</span><div class="seg" id="mt-mode"><button data-value="eval" class="on">평가(멀티)</button><button data-value="center">중앙중점</button><button data-value="spot">스팟</button></div></div>
+          <label class="ctrl"><span>노출 보정 <output id="mt-ec-out"></output></span><input type="range" id="mt-ec" min="-9" max="9" step="1" value="0"></label>
+          <label class="check"><input type="checkbox" id="mt-grid" checked> 측광 영역 표시</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">측광 영역의 평균 밝기</span><span class="v" id="mt-avg">—</span></div>
+        <div class="stat"><span class="k">카메라가 정한 노출(장면 기준)</span><span class="v" id="mt-exp">—</span></div>
+        <div class="stat"><span class="k">이상적인 노출과의 차이</span><span class="v" id="mt-err">—</span></div>
+      </div>
+      <div class="sim-note">스팟 측광일 때는 사진을 클릭해 측광 지점을 옮길 수 있습니다. ① '눈밭'에서 평가 측광 결과가 회색으로 칙칙합니다. 노출 보정을 +1.7 정도 주면 하얀 눈이 됩니다. ② '검은 무대'는 반대로 −1.7. ③ '창가 역광'에서 얼굴에 스팟 측광을 하면 얼굴은 살지만 창밖이 하얗게 날아갑니다.</div>
+    </div>
+    <div class="callout"><strong>"하얀 건 플러스, 검은 건 마이너스"</strong>노출 보정의 오래된 격언입니다. 하얀 피사체가 화면을 채우면 +1~+2스톱, 검은 피사체가 화면을 채우면 −1~−2스톱. 직관과 반대처럼 느껴지지만, '카메라가 회색으로 만들려는 것을 되돌린다'고 생각하면 자연스럽습니다.</div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="metering">
+    <h2>세 가지 측광 모드</h2>
+    <div class="cards">
+      <div><span class="big">평가 / 멀티</span><b>화면 전체를 수백 구역으로 나눠 분석</b>밝기 분포, 초점 위치, 얼굴 인식, 색까지 고려해 '그럴듯한' 노출을 고른다. 대부분 상황의 기본값.</div>
+      <div><span class="big">중앙중점</span><b>화면 가운데를 60~80% 비중으로</b>필름 시절부터 쓰인 예측 가능한 방식. 피사체를 가운데 두는 인물 사진에 무난.</div>
+      <div><span class="big">스팟</span><b>화면의 1~5% 작은 점만</b>역광 인물의 얼굴, 무대 위 가수처럼 '이 부분만은 정확히' 맞춰야 할 때. 정확하지만 실수하기도 쉽다.</div>
+    </div>
+    <p>최신 카메라의 평가 측광은 매우 똑똑해서, 얼굴을 인식하면 얼굴 밝기를 우선하고 하늘이 날아가지 않도록 조금 어둡게 잡기도 합니다. 그래도 눈밭이나 무대처럼 '장면 자체가 평균에서 크게 벗어난' 경우는 여전히 사람의 판단이 필요합니다. 그 판단을 반영하는 도구가 노출 보정입니다.</p>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="ael">
+    <h2>노출 보정과 AE 잠금</h2>
+    <p><span class="term">노출 보정</span><span class="en">(Exposure Compensation)</span>은 "카메라야, 네가 고른 밝기에서 이만큼 더(덜) 밝게"라고 말하는 다이얼입니다. ±버튼이나 전용 다이얼로 1/3스톱씩 조절합니다. P·A·S 모드에서는 카메라가 자동으로 정하는 값(A면 셔터, S면 조리개)이 그만큼 바뀝니다. M 모드에서는 Auto ISO를 켰을 때만 의미가 있습니다.</p>
+    <p><span class="term">AE 잠금</span><span class="en">(AE-L, Auto Exposure Lock)</span>은 지금 측광한 노출을 고정하는 버튼입니다. 예를 들어 역광 인물을 찍을 때, 얼굴을 화면 가득 채워 측광하고 AE-L을 누른 뒤, 구도를 다시 잡아 찍으면 배경이 바뀌어도 얼굴 기준 노출이 유지됩니다. 많은 카메라에서 셔터 반누름도 AE를 잠급니다(설정에 따라 다름).</p>
+    <div class="callout warn"><strong>미러리스라면 화면을 믿어라</strong>미러리스와 스마트폰은 화면(EVF)에 보이는 밝기가 결과물과 같습니다(노출 미리보기 기능이 켜져 있을 때). 거기에 7장의 히스토그램까지 보면, 측광 이론을 몰라도 노출을 크게 틀릴 일이 없습니다. 측광을 이해하는 것은 '카메라가 왜 그렇게 판단했는지' 알고 빠르게 고치기 위함입니다.</div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>A(Av)는 조리개를, S(Tv)는 셔터를 내가 정하고 나머지는 카메라가 맞춘다. M은 모두 내가 정하고 노출계는 안내만 한다.</li>
+      <li>노출계는 장면 평균을 중간 회색(18%)으로 맞추려 한다. 그래서 눈밭은 어둡게, 검은 배경은 밝게 찍힌다.</li>
+      <li>하얀 장면은 +, 검은 장면은 − 노출 보정.</li>
+      <li>평가 측광은 기본, 중앙중점은 예측 가능, 스팟은 특정 부분을 정확히.</li>
+      <li>AE-L로 측광값을 고정하고 구도를 바꿀 수 있다. 미러리스에서는 화면과 히스토그램이 가장 확실한 노출계다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>인물 사진에서 배경을 흐리게 하고 싶다. 가장 적합한 모드와 설정은?</p><div class="opts">
+        <button class="opt">S 모드, 1/30</button>
+        <button class="opt" data-correct>A 모드, 최대 개방(예: f/1.8)</button>
+        <button class="opt">P 모드, 노출 보정 +1</button>
+      </div><div class="quiz-exp">배경 흐림은 조리개가 결정한다. 조리개를 고정하고 셔터는 카메라가 맞추게 하는 A(Av) 모드가 적합하다.</div></div>
+      <div class="quiz-q"><p>새하얀 눈밭을 평가 측광으로 그냥 찍었더니 회색으로 칙칙하다. 해결책은?</p><div class="opts">
+        <button class="opt" data-correct>노출 보정을 + 방향으로(+1~+2)</button>
+        <button class="opt">노출 보정을 − 방향으로</button>
+        <button class="opt">ISO를 낮춘다</button>
+      </div><div class="quiz-exp">노출계가 흰 눈을 18% 회색으로 만들려고 어둡게 찍은 것이다. + 보정으로 원래 밝기를 되찾는다. (A 모드라면 ISO를 낮춰도 셔터가 자동으로 늘어나 밝기는 그대로다.)</div></div>
+      <div class="quiz-q"><p>S 모드에서 1/2000로 고정하고 해 질 녘에 찍는데 화면에 조리개 값이 깜박인다. 무슨 뜻일까?</p><div class="opts">
+        <button class="opt">렌즈가 고장 났다</button>
+        <button class="opt" data-correct>조리개를 최대로 열어도 빛이 부족해 노출 부족이 된다</button>
+        <button class="opt">조리개가 너무 열려 노출 과다다</button>
+      </div><div class="quiz-exp">카메라가 맞출 수 있는 조리개 범위를 벗어났다는 경고다. 셔터를 느리게 하거나 ISO(또는 Auto ISO)를 올려야 한다.</div></div>
+      <div class="quiz-q"><p>무대 위 조명을 받은 가수를 찍는데 배경은 새까맣다. 가장 정확한 측광 방법은?</p><div class="opts">
+        <button class="opt">평가 측광 그대로</button>
+        <button class="opt" data-correct>가수 얼굴에 스팟 측광</button>
+        <button class="opt">중앙중점 측광 + 노출 보정 +2</button>
+      </div><div class="quiz-exp">검은 배경이 평균을 끌어내려 평가 측광은 과다 노출이 되기 쉽다. 밝게 비친 얼굴만 정확히 재는 스팟 측광이 알맞다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------------------------------------------------------------- 1. 모드 다이얼 */
+(function () {
+  const photo = CB.scenes.portrait(440, 275, { sceneEV: 11, mover: 260 });
+  const APS = CB.APERTURES.filter((n) => n >= 1.4 && n <= 16), SHS = CB.SHUTTERS.filter((t) => t <= 30 && t >= 1 / 4000), ISS = CB.ISOS.filter((s) => s >= 100 && s <= 25600);
+  const upd = CB.throttle(() => { solve(); cv.redraw(); });
+  const mode = CB.seg("md-mode", upd);
+  const ap = CB.steps("md-ap", APS, CB.fmtN, 2.8, upd);
+  const sh = CB.steps("md-sh", SHS, CB.fmtT, 1 / 125, upd);
+  const iso = CB.steps("md-iso", ISS, (v) => v, 100, upd);
+  const aiso = CB.check("md-aiso", upd);
+  const ecR = CB.range("md-ec", (v) => CB.signed(v / 3) + " EV", upd), ec = () => ecR() / 3; // 1/3스톱 단위
+  const sev = CB.range("md-ev", (v) => "EV " + v + (v >= 14 ? " (맑음)" : v >= 11 ? " (흐림)" : v >= 8 ? " (실내 밝음)" : " (저녁 실내)"), upd);
+  let cur = { N: 2.8, t: 1 / 125, iso: 100, warn: "" };
+  function setAuto(id, on) { const c = document.getElementById(id); c.classList.toggle("auto", on); c.querySelector("input").disabled = on; }
+  function solve() {
+    const m = mode(), target = sev() - ec(); // 목표 EV100(작을수록 밝게)
+    let N = ap(), t = sh(), I = iso(), warn = "";
+    const autoIso = m === "auto" || aiso();
+    const evFor = (N, t) => CB.ev(N, t, 100); // 받는 빛(ISO 100 기준)
+    if (m === "auto" || m === "P") {
+      // 프로그램 라인: EV를 조리개·셔터에 반씩 나눔
+      I = autoIso ? 100 : I;
+      const need = target + Math.log2(I / 100);
+      let Av = CB.clamp((need - 5) / 2 + 1, 1, 8), Tv = need - Av;
+      t = Math.pow(2, -Tv); N = Math.sqrt(Math.pow(2, Av));
+      if (t > 1 / 60) { t = 1 / 60; N = CB.clamp(Math.sqrt(t * Math.pow(2, need)), 1.4, 16); if (autoIso) { I = CB.clamp(100 * Math.pow(2, evFor(N, t) - target), 100, 25600); } }
+      N = APS[CB.nearest(APS, N)]; t = SHS[CB.nearest(SHS, t)];
+    } else if (m === "A") {
+      const tt = (N * N) / Math.pow(2, target + Math.log2(I / 100));
+      t = tt;
+      if (autoIso && t > 1 / 125) { t = 1 / 125; I = CB.clamp(100 * Math.pow(2, evFor(N, t) - target), 100, 25600); }
+      if (t > 30) { warn = "셔터 한계(30초) — 노출 부족"; t = 30; }
+      if (t < 1 / 4000) { warn = "셔터 한계(1/4000) — 노출 과다"; t = 1 / 4000; }
+      t = SHS[CB.nearest(SHS, t)];
+    } else if (m === "S") {
+      let NN = Math.sqrt(t * Math.pow(2, target + Math.log2(I / 100)));
+      if (autoIso) { NN = CB.clamp(NN, 1.4, 16); I = CB.clamp(100 * Math.pow(2, evFor(NN, t) - target), 100, 25600); }
+      if (NN < 1.4) { warn = "조리개 최대 개방(f/1.4)으로도 부족 — 노출 부족 (깜박!)"; NN = 1.4; }
+      if (NN > 16) { warn = "조리개 최소(f/16)로도 과다 — 노출 과다 (깜박!)"; NN = 16; }
+      N = APS[CB.nearest(APS, NN)];
+    } else if (m === "M") {
+      if (autoIso) I = CB.clamp(100 * Math.pow(2, evFor(N, t) - target), 100, 25600);
+    }
+    if (autoIso) I = ISS[CB.nearest(ISS, I)];
+    cur = { N, t, iso: I, warn };
+    // 컨트롤 상태 반영
+    const userAp = m === "A" || m === "M", userSh = m === "S" || m === "M";
+    setAuto("md-ap-c", !userAp); setAuto("md-sh-c", !userSh); setAuto("md-iso-c", autoIso);
+    document.getElementById("md-ec-c").querySelector("input").disabled = m === "auto" || (m === "M" && !autoIso);
+    if (!userAp) ap.set(N, false);
+    if (!userSh) sh.set(t, false);
+    if (autoIso) iso.set(I, false);
+    document.getElementById("md-aiso").disabled = m === "auto";
+  }
+  const cv = CB.canvas("#cv-mode", (ctx, w, h) => {
+    const c = cur, m = mode();
+    const p = { N: c.N, t: c.t, iso: c.iso, focus: 2.5, focal: 85, blades: 9, noiseSeed: 11, sceneEV: sev() };
+    photo.render(p);
+    photo.draw(ctx, 0, 0, w, h);
+    const dev = photo.exposureStops(p) + Math.log2(c.iso / 100); // 적정 대비
+    // 노출 레벨 막대
+    const bw = Math.min(260, w * 0.6), bx = (w - bw) / 2, by = h - 48;
+    ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(bx - 10, by - 6, bw + 20, 22);
+    ctx.fillStyle = "#fff"; ctx.font = "10px " + CB.color("mono"); ctx.textAlign = "center";
+    for (let k = -3; k <= 3; k++) { const x = bx + ((k + 3) / 6) * bw; ctx.fillRect(x - 0.5, by + 2, 1, k % 3 === 0 ? 8 : 5); ctx.fillText(k === 0 ? "0" : k > 0 ? "+" + k : String(k), x, by + 2); }
+    const xi = bx + ((CB.clamp(dev, -3.2, 3.2) + 3) / 6) * bw;
+    ctx.fillStyle = Math.abs(dev) < 0.2 ? "#7ee2a8" : "#ffb86b"; ctx.beginPath(); ctx.moveTo(xi, by + 12); ctx.lineTo(xi - 5, by + 18); ctx.lineTo(xi + 5, by + 18); ctx.fill();
+    const blink = c.warn && Math.floor(performance.now() / 400) % 2;
+    CB.hud(ctx, 0, h - 24, w, [{ text: m === "auto" ? "AUTO" : m, color: "#ffb86b" }, { text: CB.fmtT(c.t), color: blink && m === "A" ? "#ff5f57" : "#fff" }, { text: CB.fmtN(c.N), color: blink && m === "S" ? "#ff5f57" : "#fff" }, "ISO " + Math.round(c.iso), ec() ? CB.signed(ec()) : "±0"]);
+    const msg = document.getElementById("md-msg");
+    const who = { auto: "카메라가 모두 정합니다.", P: "카메라가 조리개·셔터 조합을 고릅니다(프로그램 라인).", A: "내가 고른 조리개에 맞춰 카메라가 셔터를 정합니다.", S: "내가 고른 셔터에 맞춰 카메라가 조리개를 정합니다.", M: "모두 내가 정합니다. 노출계는 막대로 '적정에서 얼마나 벗어났는지'만 보여 줍니다." }[m];
+    msg.className = "sim-msg" + (c.warn ? " bad" : Math.abs(dev - ec()) < 0.25 ? " ok" : "");
+    msg.textContent = c.warn ? "⚠ " + c.warn : who;
+  }, { aspect: 0.625 });
+  // 경고 깜박임
+  setInterval(() => { if (cur.warn) cv.redraw(); }, 400);
+  solve(); cv.redraw();
+})();
+
+/* ---------------------------------------------------------------- 2. 측광 실험실 */
+(function () {
+  const W = 440, H = 275, D = CB.draw;
+  const scenes = {
+    normal: CB.scenes.portrait(W, H, { sceneEV: 12 }),
+    snow: CB.Photo({ w: W, h: H, sceneEV: 15, build(S) {
+      S.layer(Infinity, (g) => { D.sky(g, W, H, "#9cc4ef", "#e8f1fb", H * 0.45); g.fillStyle = "#f6f8fb"; g.fillRect(0, H * 0.42, W, H); D.mountains(g, W, H * 0.45, H * 0.15, "#e9eef6", 3); });
+      S.layer(40, (g) => { const r = CB.rng(3); for (let i = 0; i < 7; i++) { const x = r.range(0, W), s = H * r.range(0.25, 0.4); g.fillStyle = "#3f5a46"; g.beginPath(); g.moveTo(x, H * 0.5 - s); g.lineTo(x - s * 0.3, H * 0.52); g.lineTo(x + s * 0.3, H * 0.52); g.fill(); g.fillStyle = "#ffffff"; g.beginPath(); g.moveTo(x, H * 0.5 - s); g.lineTo(x - s * 0.12, H * 0.5 - s * 0.6); g.lineTo(x + s * 0.12, H * 0.5 - s * 0.6); g.fill(); } });
+      S.layer(8, (g) => { g.fillStyle = "#fbfcfe"; g.fillRect(0, H * 0.55, W, H); const r = CB.rng(8); g.fillStyle = "#e3e9f2"; for (let i = 0; i < 30; i++) g.fillRect(r.range(0, W), r.range(H * 0.6, H), r.range(10, 40), 2); D.person(g, W * 0.55, H * 0.9, H * 0.42, { shirt: "#d6332b", pants: "#2a3a66", stripes: false }); });
+    } }),
+    stage: CB.Photo({ w: W, h: H, sceneEV: 9, build(S) {
+      S.layer(Infinity, (g) => { g.fillStyle = "#050506"; g.fillRect(0, 0, W, H); });
+      S.layer(10, (g) => {
+        const gr = g.createRadialGradient(W * 0.5, H * 0.55, 10, W * 0.5, H * 0.55, H * 0.45);
+        gr.addColorStop(0, "rgba(255,240,210,0.55)"); gr.addColorStop(1, "rgba(255,240,210,0)");
+        g.fillStyle = gr; g.fillRect(0, 0, W, H);
+        g.fillStyle = "#1a1412"; g.fillRect(0, H * 0.86, W, H);
+        D.person(g, W * 0.5, H * 0.95, H * 0.62, { shirt: "#e8dccb", pants: "#2b2b2b", hair: "#3a2416" });
+        g.strokeStyle = "#888"; g.lineWidth = 2; g.beginPath(); g.moveTo(W * 0.58, H * 0.95); g.lineTo(W * 0.56, H * 0.42); g.stroke();
+      });
+    } }),
+    backlit: CB.scenes.backlit(W, H, { sceneEV: 9 }),
+  };
+  // 이상적 노출 = 주인공이 제 밝기로 나오는 노출. 역광 장면은 실내(인물)가 바깥보다 3스톱 어둡다
+  const IDEAL = { normal: 0, snow: 0, stage: 0, backlit: 3 };
+  let spot = { normal: [185, 70], snow: [242, 135], stage: [220, 85], backlit: [158, 70] };
+  const upd = CB.throttle(() => cv.redraw());
+  const scene = CB.seg("mt-scene", upd);
+  const mode = CB.seg("mt-mode", upd);
+  const ecR = CB.range("mt-ec", (v) => CB.signed(v / 3) + " EV", upd), ec = () => ecR() / 3;
+  const grid = CB.check("mt-grid", upd);
+  const refLum = {};
+  function lumMap(name) {
+    if (refLum[name]) return refLum[name];
+    const P = scenes[name];
+    P.render({ N: 4, t: 16 / Math.pow(2, P.sceneEV), iso: 100, focus: name === "backlit" ? 2 : 8, focal: 35, noise: false });
+    const L = new Float32Array(W * H);
+    for (let i = 0; i < W * H; i++) L[i] = 0.2126 * P.lin[i * 3] + 0.7152 * P.lin[i * 3 + 1] + 0.0722 * P.lin[i * 3 + 2];
+    return (refLum[name] = L);
+  }
+  function meter(name, m) {
+    const L = lumMap(name);
+    let s = 0, ws = 0;
+    const [sx, sy] = spot[name];
+    for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) {
+      let wgt = 1;
+      if (m === "center") { const dx = (x - W / 2) / (W * 0.25), dy = (y - H / 2) / (H * 0.3); wgt = 0.25 + 3 * Math.exp(-(dx * dx + dy * dy)); }
+      else if (m === "spot") { wgt = Math.hypot(x - sx, y - sy) < H * 0.06 ? 1 : 0; }
+      else { // 평가: 하이라이트를 조금 덜 반영(로그 평균 + 클리핑 억제)
+        wgt = 1;
+      }
+      const v = m === "eval" ? Math.log2(Math.max(L[y * W + x], 0.002)) : L[y * W + x];
+      s += v * wgt; ws += wgt;
+    }
+    const avg = m === "eval" ? Math.pow(2, s / ws) * 1.25 : s / ws;
+    return avg;
+  }
+  const cvEl = document.getElementById("cv-meter");
+  cvEl.addEventListener("click", (e) => {
+    if (mode() !== "spot") return;
+    const r = cvEl.getBoundingClientRect();
+    spot[scene()] = [((e.clientX - r.left) / r.width) * W, ((e.clientY - r.top) / r.height) * H];
+    cv.redraw();
+  });
+  const cv = CB.canvas("#cv-meter", (ctx, w, h) => {
+    const name = scene(), P = scenes[name], m = mode();
+    const avg = meter(name, m);
+    const offset = Math.log2(0.18 / Math.max(avg, 1e-4)) + ec(); // 장면 기준(0 = 그린 그대로) 대비 노출
+    const N = 4, t = 16 / Math.pow(2, P.sceneEV - offset);
+    P.render({ N, t, iso: 100, focus: name === "backlit" ? 2 : 8, focal: 35, noiseSeed: 12 });
+    P.draw(ctx, 0, 0, w, h);
+    const sx = w / W, sy = h / H;
+    if (grid()) {
+      ctx.save(); ctx.strokeStyle = "rgba(255,255,255,0.75)"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+      if (m === "eval") { for (let i = 1; i < 6; i++) { ctx.beginPath(); ctx.moveTo((w * i) / 6, 0); ctx.lineTo((w * i) / 6, h - 24); ctx.stroke(); } for (let j = 1; j < 4; j++) { ctx.beginPath(); ctx.moveTo(0, ((h - 24) * j) / 4); ctx.lineTo(w, ((h - 24) * j) / 4); ctx.stroke(); } }
+      else if (m === "center") { ctx.beginPath(); ctx.ellipse(w / 2, h / 2, w * 0.25, h * 0.3, 0, 0, 7); ctx.stroke(); }
+      else { const [x, y] = spot[name]; ctx.setLineDash([]); ctx.beginPath(); ctx.arc(x * sx, y * sy, H * 0.06 * sy, 0, 7); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x * sx - 14, y * sy); ctx.lineTo(x * sx + 14, y * sy); ctx.moveTo(x * sx, y * sy - 14); ctx.lineTo(x * sx, y * sy + 14); ctx.stroke(); }
+      ctx.restore();
+    }
+    const err = offset - IDEAL[name];
+    CB.hud(ctx, 0, h - 24, w, [{ eval: "평가 측광", center: "중앙중점", spot: "스팟" }[m], "보정 " + CB.signed(ec()), { text: "적정 대비 " + CB.signed(err), color: Math.abs(err) < 0.5 ? "#7ee2a8" : "#ffb86b" }]);
+    CB.stat("mt-avg", Math.round(CB.linToSrgb(Math.min(1, avg)) * 100) + "<small>% 밝기</small>");
+    CB.stat("mt-exp", CB.signed(offset) + "<small>스톱</small>");
+    CB.stat("mt-err", Math.abs(err) < 0.4 ? '<span style="color:var(--ok)">거의 정확</span>' : (err > 0 ? "+" : "−") + Math.abs(err).toFixed(1) + (err > 0 ? " 과다" : " 부족"));
+  }, { aspect: 0.625 });
+})();
+</script>
+</body>
+</html>

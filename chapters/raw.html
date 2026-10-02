@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>RAW와 JPEG · CameraBook</title>
+<meta name="description" content="카메라 안의 현상 과정, RAW와 JPEG의 차이, 비트 심도와 계조 끊김, 하이라이트 복구, JPEG 압축 원리와 화질 설정, 파일 크기와 HEIF를 시뮬레이터로 배운다.">
+<link rel="canonical" href="https://camerabook.euiyun.com/chapters/raw.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="RAW와 JPEG · CameraBook">
+<meta property="og:description" content="카메라 안의 현상 과정, RAW와 JPEG의 차이, 비트 심도와 계조 끊김, 하이라이트 복구, JPEG 압축 원리와 화질 설정, 파일 크기와 HEIF를 시뮬레이터로 배운다.">
+<meta property="og:url" content="https://camerabook.euiyun.com/chapters/raw.html">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"RAW와 JPEG","name":"RAW와 JPEG · CameraBook","url":"https://camerabook.euiyun.com/chapters/raw.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/raw.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":11,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"카메라 안의 현상 과정, RAW와 JPEG의 차이, 비트 심도와 계조 끊김, 하이라이트 복구, JPEG 압축 원리와 화질 설정, 파일 크기와 HEIF를 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"11 RAW와 JPEG","item":"https://camerabook.euiyun.com/chapters/raw.html"}]}]}</script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .pipe { overflow-x: auto; }
+  .pipe svg { min-width: 720px; }
+</style>
+</head>
+<body data-chapter="raw">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 11</div>
+    <h1>RAW와 JPEG</h1>
+    <p class="lead">셔터를 누르는 순간 센서가 기록한 것은 아직 '사진'이 아닙니다. 빨강·초록·파랑 중 한 색만 잰 밝기 값들의 바둑판일 뿐입니다. 이것을 우리가 보는 사진으로 만드는 과정을 필름 시절 용어를 빌려 <b>현상</b>이라 부릅니다. JPEG은 카메라가 현상까지 끝낸 결과물이고, RAW는 현상 전의 원본입니다.</p>
+    <ul class="objectives">
+      <li>카메라 안에서 센서 데이터가 JPEG이 되는 과정을 순서대로 안다.</li>
+      <li>RAW의 장점(비트 심도, 하이라이트 여유, WB 재조정)을 시뮬레이터로 확인한다.</li>
+      <li>JPEG 압축의 원리와 화질 설정의 의미를 안다.</li>
+      <li>상황에 따라 RAW, JPEG, RAW+JPEG을 고른다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="pipeline">
+    <h2>카메라 안의 현상소</h2>
+    <p>센서의 픽셀 위에는 빨강·초록·파랑 필터가 바둑판처럼 깔려 있어서(<span class="term">베이어 패턴</span>), 각 픽셀은 한 가지 색의 밝기만 압니다. 카메라의 처리 엔진은 1초에도 수십 장씩 다음 과정을 거쳐 JPEG을 만듭니다.</p>
+    <figure class="diagram pipe">
+      <svg viewBox="0 0 1000 170" role="img" aria-label="RAW에서 JPEG까지의 처리 단계">
+        <defs><marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
+        <g font-family="var(--font)">
+          <rect x="10" y="40" width="110" height="70" rx="10" class="f-acc2-soft"/>
+          <g transform="translate(30,52)"><rect width="12" height="12" fill="#e0443e"/><rect x="13" width="12" height="12" fill="#2da44e"/><rect x="26" width="12" height="12" fill="#e0443e"/><rect x="39" width="12" height="12" fill="#2da44e"/><rect y="13" width="12" height="12" fill="#2da44e"/><rect x="13" y="13" width="12" height="12" fill="#2f6fe0"/><rect x="26" y="13" width="12" height="12" fill="#2da44e"/><rect x="39" y="13" width="12" height="12" fill="#2f6fe0"/></g>
+          <text x="65" y="102" text-anchor="middle" class="t">RAW 12~14비트</text>
+          <text x="65" y="135" text-anchor="middle" class="t-dim">여기까지가 RAW 파일</text>
+          <path d="M122 75 H140" class="s-acc" marker-end="url(#pa)"/>
+          <rect x="145" y="40" width="100" height="70" rx="10" class="f-elev"/><text x="195" y="72" text-anchor="middle" class="t">디모자이크</text><text x="195" y="92" text-anchor="middle" class="t-dim">빈 색 채우기</text>
+          <path d="M247 75 H265" class="s-acc" marker-end="url(#pa)"/>
+          <rect x="270" y="40" width="100" height="70" rx="10" class="f-elev"/><text x="320" y="72" text-anchor="middle" class="t">화이트 밸런스</text><text x="320" y="92" text-anchor="middle" class="t-dim">10장</text>
+          <path d="M372 75 H390" class="s-acc" marker-end="url(#pa)"/>
+          <rect x="395" y="40" width="100" height="70" rx="10" class="f-elev"/><text x="445" y="72" text-anchor="middle" class="t">색 변환</text><text x="445" y="92" text-anchor="middle" class="t-dim">센서색→sRGB</text>
+          <path d="M497 75 H515" class="s-acc" marker-end="url(#pa)"/>
+          <rect x="520" y="40" width="100" height="70" rx="10" class="f-elev"/><text x="570" y="72" text-anchor="middle" class="t">톤 커브·감마</text><text x="570" y="92" text-anchor="middle" class="t-dim">픽처 스타일</text>
+          <path d="M622 75 H640" class="s-acc" marker-end="url(#pa)"/>
+          <rect x="645" y="40" width="100" height="70" rx="10" class="f-elev"/><text x="695" y="72" text-anchor="middle" class="t">NR·샤프닝</text><text x="695" y="92" text-anchor="middle" class="t-dim">5장</text>
+          <path d="M747 75 H765" class="s-acc" marker-end="url(#pa)"/>
+          <rect x="770" y="40" width="100" height="70" rx="10" class="f-elev"/><text x="820" y="72" text-anchor="middle" class="t">8비트로 줄이기</text><text x="820" y="92" text-anchor="middle" class="t-dim">256단계</text>
+          <path d="M872 75 H890" class="s-acc" marker-end="url(#pa)"/>
+          <rect x="895" y="40" width="95" height="70" rx="10" class="f-acc-soft"/><text x="942" y="72" text-anchor="middle" class="t">JPEG 압축</text><text x="942" y="92" text-anchor="middle" class="t-dim">손실 압축</text>
+          <path d="M145 125 H990" stroke="var(--accent)" stroke-dasharray="4 4" fill="none"/>
+          <text x="568" y="148" text-anchor="middle" class="t-acc">JPEG: 이 모든 결정이 '구워져' 되돌릴 수 없다 · RAW: 나중에 컴퓨터에서 다시 결정</text>
+        </g>
+      </svg>
+      <figcaption><b>그림 11-1.</b> 카메라 내부 현상 과정(간략화). 세부 원리는 <a href="https://sensorbook.euiyun.com/chapters/isp.html">SensorBook 10장 ISP 파이프라인</a> 참고.</figcaption>
+    </figure>
+    <div class="table-wrap"><table>
+      <tr><th></th><th>JPEG</th><th>RAW</th></tr>
+      <tr><td>상태</td><td>완성된 사진</td><td>현상 전 원본 데이터</td></tr>
+      <tr><td>밝기 단계</td><td>채널당 8비트(256단계)</td><td>12~14비트(4,096~16,384단계)</td></tr>
+      <tr><td>WB·스타일</td><td>찍을 때 확정</td><td>나중에 자유롭게 변경(무손실)</td></tr>
+      <tr><td>하이라이트·그림자 여유</td><td>적음</td><td>보통 1~2스톱 이상 더 있음</td></tr>
+      <tr><td>파일 크기(24MP)</td><td>6~12 MB</td><td>25~50 MB</td></tr>
+      <tr><td>바로 공유</td><td>가능</td><td>현상 프로그램 필요</td></tr>
+    </table></div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="bits">
+    <h2>비트 심도: 계단 수의 차이</h2>
+    <p>8비트 JPEG은 각 색을 256단계로, 14비트 RAW는 16,384단계로 기록합니다. 그냥 볼 때는 256단계로도 충분합니다. 차이는 <b>크게 편집할 때</b> 드러납니다. 어둡게 찍힌 하늘을 4스톱 밝히면, 8비트에서는 원래 수십 단계로 표현되던 부분을 256단계로 늘려야 하므로 계단이 보입니다. 이것이 <span class="term">밴딩</span><span class="en">(Banding, 계조 끊김)</span>입니다.</p>
+    <div class="sim" id="sim-bits">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>어두운 노을 하늘 밝히기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-bits"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>파일 형식</span><div class="seg" id="bt-f"><button data-value="8" class="on">JPEG 8비트</button><button data-value="14">RAW 14비트</button></div></div>
+          <label class="ctrl"><span>후보정 밝기 <output id="bt-ev-out"></output></span><input type="range" id="bt-ev" min="0" max="5" step="0.5" value="4"></label>
+        </div>
+      </div>
+      <div class="sim-note">아래 히스토그램을 보세요. 8비트 원본을 크게 밝히면 막대 사이에 빈틈이 생긴 '빗살' 히스토그램이 됩니다. 비어 있는 밝기 단계가 화면에서 띠(밴딩)로 보이는 것입니다. 14비트 RAW는 같은 편집에도 매끈합니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="recover">
+    <h2>날아간 하늘 되살리기</h2>
+    <p>하얗게 날아간 하늘을 JPEG에서 어둡게 하면 회색 덩어리가 될 뿐입니다. 255로 잘린 값은 원래 얼마였는지 알 길이 없으니까요. RAW는 센서가 실제로 포화되기 전까지의 정보를 담고 있고, 카메라 JPEG은 보통 그보다 조금 일찍 흰색으로 처리하므로, RAW에는 JPEG에서 '날아간' 부분의 정보가 1스톱 안팎 남아 있는 경우가 많습니다.</p>
+    <div class="sim" id="sim-rec">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>하이라이트 복구: JPEG vs RAW</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-rec"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>파일</span><div class="seg" id="rc-f"><button data-value="jpg" class="on">JPEG</button><button data-value="raw">RAW</button></div></div>
+          <label class="ctrl"><span>하이라이트 내리기 <output id="rc-h-out"></output></span><input type="range" id="rc-h" min="0" max="20" value="0"></label>
+          <label class="ctrl"><span>촬영 시 노출 과다 <output id="rc-o-out"></output></span><input type="range" id="rc-o" min="0" max="3.5" step="0.5" value="1.5"></label>
+        </div>
+      </div>
+      <div class="sim-note">하늘이 1.5스톱 과다로 찍혔습니다. 하이라이트를 내리면 JPEG은 구름 대신 칙칙한 회색 면이 되고, RAW는 구름의 결이 돌아옵니다. 하지만 RAW도 센서가 포화된 곳(노출 과다 3스톱 근처)은 복구할 수 없습니다. 그래서 RAW 촬영에서도 하이라이트는 지켜야 합니다(7장 ETTR).</div>
+    </div>
+    <div class="callout tip"><strong>RAW가 특히 빛나는 순간</strong>① 역광·노을처럼 밝기 범위가 넓을 때 ② 혼합광이나 판단이 어려운 WB ③ 노출을 실수했을 때 ④ 결혼식처럼 다시 찍을 수 없는 행사. 반대로 연사가 중요한 스포츠, 바로 보내야 하는 보도·SNS, 저장 공간이 빠듯할 때는 JPEG이 실용적입니다. 고민되면 <b>RAW+JPEG</b>을 동시에 기록하세요.</div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="jpeg">
+    <h2>JPEG 압축은 무엇을 버리나</h2>
+    <p>JPEG은 사람 눈이 둔감한 정보를 골라 버려서 파일을 1/10 이하로 줄입니다. ① 눈은 색 변화보다 밝기 변화에 민감하므로 색 정보를 절반 해상도로 줄이고, ② 사진을 8×8 픽셀 블록으로 나눠 '촘촘한 무늬' 성분을 거칠게 저장합니다. 화질 설정을 낮출수록 더 많이 버리고, 블록 경계와 윤곽선 주변의 얼룩(<span class="term">블록·링잉 노이즈</span>)이 생깁니다.</p>
+    <div class="sim" id="sim-jpeg">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>JPEG 화질 슬라이더 (실제 8×8 DCT 압축)</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-jpeg"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>품질 <output id="jp-q-out"></output></span><input type="range" id="jp-q" min="2" max="100" value="80"></label>
+          <label class="check"><input type="checkbox" id="jp-zoom" checked> 확대(×3) 보기</label>
+          <label class="check"><input type="checkbox" id="jp-again"> 10번 다시 저장(재압축)</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">남긴 주파수 계수</span><span class="v" id="jp-nz">—</span></div>
+        <div class="stat"><span class="k">추정 크기(원본 대비)</span><span class="v" id="jp-size">—</span></div>
+      </div>
+      <div class="sim-note">카메라의 '파인/엑스트라 파인'은 품질 90~97 정도로, 눈으로는 원본과 구별하기 어렵습니다. 품질 30 이하에서는 하늘에 블록이, 셔츠 줄무늬 주변에 얼룩이 생깁니다. JPEG을 편집하고 다시 저장할 때마다 손실이 누적된다는 점도 기억하세요.</div>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>형식</th><th>특징</th></tr>
+      <tr><td><b>JPEG</b></td><td>8비트, 손실 압축. 어디서나 열림</td></tr>
+      <tr><td><b>HEIF/HEIC</b></td><td>10비트, 같은 화질에 JPEG의 약 절반 크기. 아이폰·최신 카메라 기본. 호환성은 JPEG보다 낮음</td></tr>
+      <tr><td><b>RAW</b> (CR3, NEF, ARW, RAF, DNG…)</td><td>제조사별 원본. DNG는 어도비가 만든 공개 RAW 형식(일부 스마트폰도 사용)</td></tr>
+      <tr><td><b>압축 RAW</b></td><td>무손실 압축(화질 동일, 크기 약 60%), 손실 압축(눈에 띄지 않는 수준, 크기 약 40%)</td></tr>
+    </table></div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>JPEG은 카메라가 디모자이크·WB·색·톤·NR·압축까지 마친 결과, RAW는 현상 전 원본이다.</li>
+      <li>8비트 JPEG은 크게 편집하면 밴딩이 생긴다. RAW는 12~14비트라 여유가 크다.</li>
+      <li>RAW는 JPEG에서 날아간 하이라이트를 1스톱 안팎 되살릴 수 있지만, 센서가 포화된 곳은 RAW도 불가능하다.</li>
+      <li>JPEG 압축은 색 해상도와 고주파 성분을 버린다. 품질을 낮추면 블록·링잉이 생기고, 재저장할수록 누적된다.</li>
+      <li>고민되면 RAW+JPEG. 공유는 JPEG/HEIF, 보관과 보정은 RAW.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>RAW 파일에 대한 설명으로 옳지 <b>않은</b> 것은?</p><div class="opts">
+        <button class="opt">화이트 밸런스를 나중에 손실 없이 바꿀 수 있다</button>
+        <button class="opt">JPEG보다 밝기 단계가 훨씬 많다</button>
+        <button class="opt" data-correct>센서가 포화된 하이라이트도 완전히 되살릴 수 있다</button>
+        <button class="opt">현상 프로그램이 있어야 일반 사진처럼 볼 수 있다</button>
+      </div><div class="quiz-exp">센서 픽셀이 포화(풀웰)된 곳은 RAW에도 정보가 없다. RAW의 여유는 JPEG이 일찍 잘라낸 부분에 한정된다.</div></div>
+      <div class="quiz-q"><p>어둡게 찍힌 JPEG의 하늘을 크게 밝혔더니 둥근 띠무늬가 보였다. 이 현상과 원인은?</p><div class="opts">
+        <button class="opt" data-correct>밴딩 — 8비트로 표현된 적은 단계를 늘려서</button>
+        <button class="opt">모아레 — 센서 픽셀과 무늬가 간섭해서</button>
+        <button class="opt">노이즈 — ISO가 높아서</button>
+      </div><div class="quiz-exp">적은 계조로 기록된 영역을 늘리면 중간 단계가 없어 계단(띠)이 보인다.</div></div>
+      <div class="quiz-q"><p>JPEG 압축이 사람 눈의 특성을 이용하는 방식으로 옳은 것은?</p><div class="opts">
+        <button class="opt">밝기 정보를 절반 해상도로 줄인다</button>
+        <button class="opt" data-correct>색 정보를 줄이고 촘촘한 무늬(고주파) 성분을 거칠게 저장한다</button>
+        <button class="opt">사진의 가장자리를 잘라낸다</button>
+      </div><div class="quiz-exp">눈은 밝기보다 색 변화, 큰 무늬보다 미세한 무늬에 둔감하다. JPEG은 그 부분부터 버린다.</div></div>
+      <div class="quiz-q"><p>초당 20연사로 축구 경기를 오래 찍어야 하고, 사진은 경기 직후 바로 전송해야 한다. 알맞은 형식은?</p><div class="opts">
+        <button class="opt">비압축 RAW</button>
+        <button class="opt" data-correct>JPEG (또는 HEIF)</button>
+        <button class="opt">RAW만, 나중에 일괄 현상</button>
+      </div><div class="quiz-exp">파일이 작아 버퍼가 덜 차고(12장) 바로 공유할 수 있다. 보정 여유보다 속도가 중요한 상황이다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------------------------------------------------------------- 1. 비트 심도 */
+(function () {
+  const W = 400, H = 220;
+  // 장면 선형 휘도(노을 하늘 그라데이션 + 실루엣) — 3스톱 어둡게 찍힘
+  const lin = new Float32Array(W * H * 3);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const i = (y * W + x) * 3;
+    const u = y / H, dx = (x - W * 0.7) / W, dy = (y - H * 0.62) / H, sun = Math.exp(-(dx * dx + dy * dy) * 40);
+    let r = 0.18 + 0.55 * u + 0.4 * sun, g = 0.12 + 0.25 * u + 0.25 * sun, b = 0.32 - 0.18 * u + 0.05 * sun;
+    const ridge = H * (0.72 + 0.06 * Math.sin(x * 0.03) + 0.03 * Math.sin(x * 0.11));
+    if (y > ridge) { r = 0.015; g = 0.012; b = 0.018; }
+    const under = 1 / 16; // 4스톱 노출 부족
+    lin[i] = r * under; lin[i + 1] = g * under; lin[i + 2] = b * under;
+  }
+  const upd = CB.throttle(() => cv.redraw());
+  const F = CB.seg("bt-f", upd);
+  const EV = CB.range("bt-ev", (v) => "+" + v + " 스톱", upd);
+  const out = new ImageData(W, H), off = CB.offscreen(W, H);
+  // 카메라 JPEG의 톤 커브(대비 S커브) — 어두운 쪽에 적은 단계가 배정된다. 디코딩용 역표
+  const tone = CB.toneCurves.vivid, dec = new Float32Array(256), cnt = new Float32Array(256);
+  for (let k = 0; k <= 8192; k++) { const v = k / 8192, c = Math.round(tone(v) * 255); dec[c] += v; cnt[c]++; }
+  for (let c = 0; c < 256; c++) dec[c] = cnt[c] ? dec[c] / cnt[c] : c > 0 ? dec[c - 1] : 0;
+  const cv = CB.canvas("#cv-bits", (ctx, w, h) => {
+    const bits = +F(), ev = EV(), k = Math.pow(2, ev), d = out.data;
+    for (let i = 0, j = 0; i < W * H; i++, j += 3) {
+      for (let c = 0; c < 3; c++) {
+        let v;
+        if (bits === 8) { // 카메라가 감마 적용 후 8비트로 저장 → 편집 때 다시 선형으로
+          v = dec[Math.round(tone(Math.min(1, lin[j + c])) * 255)] * k;
+        } else { const L = (1 << 14) - 1; v = (Math.round(lin[j + c] * L) / L) * k; }
+        d[i * 4 + c] = Math.round(255 * CB.linToSrgb(CB.clamp(v, 0, 1)));
+      }
+      d[i * 4 + 3] = 255;
+    }
+    off.getContext("2d").putImageData(out, 0, 0);
+    ctx.drawImage(off, 0, 0, w, h);
+    // 하늘 일부 확대(계단이 잘 보이도록 대비를 키워 표시)
+    const iw = Math.min(200, w * 0.4), ih = iw * 0.6, ix = 10, iy = 34;
+    const crop = ctx.createImageData(60, 36);
+    for (let y = 0; y < 36; y++) for (let x = 0; x < 60; x++) { const si = ((60 + y * 2) * W + 200 + x) * 4, di = (y * 60 + x) * 4; for (let c = 0; c < 3; c++) crop.data[di + c] = CB.clamp((out.data[si + c] - 128) * 2.2 + 128, 0, 255); crop.data[di + 3] = 255; }
+    const cc = CB.offscreen(60, 36, (g) => g.putImageData(crop, 0, 0));
+    ctx.imageSmoothingEnabled = false; ctx.drawImage(cc, ix, iy, iw, ih); ctx.imageSmoothingEnabled = true;
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(ix, iy, iw, ih);
+    ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(ix, iy + ih - 18, 120, 18); ctx.fillStyle = "#fff"; ctx.font = "11px " + CB.color("font"); ctx.fillText("하늘 확대(대비 강조)", ix + 5, iy + ih - 5);
+    const Hh = CB.hist(out);
+    const hw = Math.min(220, w * 0.45);
+    // 빗살이 보이도록 256빈 그대로 그리기
+    ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(w - hw - 10, h - 80, hw, 70);
+    let mx = 0; for (let i = 1; i < 255; i++) mx = Math.max(mx, Hh.L[i]);
+    ctx.fillStyle = "#fff";
+    for (let i = 0; i < 256; i++) { const v = Math.min(1, Hh.L[i] / mx); if (v > 0) ctx.fillRect(w - hw - 10 + (i / 256) * hw, h - 12 - v * 62, Math.max(1, hw / 256), v * 62); }
+    CB.hud(ctx, 0, 0, w, [bits === 8 ? "JPEG 8비트" : "RAW 14비트", "후보정 +" + ev + " 스톱"]);
+  }, { aspect: 0.55 });
+})();
+
+/* ---------------------------------------------------------------- 2. 하이라이트 복구 */
+(function () {
+  const W = 400, H = 250, D = CB.draw;
+  const photo = CB.Photo({ w: W, h: H, sceneEV: 14, build(S) {
+    S.layer(Infinity, (g) => {
+      D.sky(g, W, H, "#5d93d6", "#cfe2f4", H * 0.65);
+      const r = CB.rng(17);
+      for (let k = 0; k < 7; k++) { // 구름: 흰색~옅은 회색의 결
+        const cx = r.range(0, W), cy = r.range(H * 0.08, H * 0.42), s = r.range(30, 60);
+        for (let j = 0; j < 9; j++) { const v = Math.round(228 + r.range(-24, 22)); g.fillStyle = `rgb(${v},${v + 3},${Math.min(255, v + 10)})`; g.beginPath(); g.arc(cx + r.range(-s, s), cy + r.range(-s * 0.3, s * 0.3), s * r.range(0.35, 0.6), 0, 7); g.fill(); }
+        g.fillStyle = "rgba(170,180,200,0.35)"; g.beginPath(); g.ellipse(cx, cy + s * 0.3, s * 0.9, s * 0.18, 0, 0, 7); g.fill();
+      }
+      D.mountains(g, W, H * 0.7, H * 0.16, "#5f7590", 5);
+      g.fillStyle = "#4e7a3c"; g.fillRect(0, H * 0.68, W, H);
+    });
+    S.layer(30, (g) => { D.tree(g, W * 0.15, H * 0.92, H * 0.6, "#2f5e2c", "#4a3a30", 3); D.tree(g, W * 0.85, H * 0.95, H * 0.5, "#3a6b33", "#4a3a30", 6); });
+  } });
+  const upd = CB.throttle(() => cv.redraw());
+  const F = CB.seg("rc-f", upd);
+  const Hs = CB.range("rc-h", (v) => "−" + (v / 10).toFixed(1) + " 스톱", upd);
+  const O = CB.range("rc-o", (v) => "+" + v + " 스톱", upd);
+  const out = new ImageData(W, H), off = CB.offscreen(W, H);
+  const JPEG_WHITE = 0.3; // JPEG은 센서 포화보다 약 1.7스톱 아래를 흰색으로 처리(RAW의 여유)
+  const cv = CB.canvas("#cv-rec", (ctx, w, h) => {
+    const over = O(), down = Hs() / 10;
+    const stops = Math.log2(JPEG_WHITE) + over; // 센서 값(포화=1) 기준: 장면의 흰색이 JPEG_WHITE에 오면 적정
+    photo.render({ N: 8, t: 64 / Math.pow(2, 14 - stops), iso: 100, focus: 30, focal: 35, noise: false });
+    const L = photo.lin, d = out.data;
+    // 하이라이트 내리기: 밝은 영역을 부드럽게 끌어내림
+    const pull = (v) => { if (down <= 0) return v; const t = CB.smooth(0.25, 1, v); return v * Math.pow(2, -down * t); };
+    for (let i = 0; i < W * H; i++) {
+      for (let c = 0; c < 3; c++) {
+        const sensor = Math.min(1, L[i * 3 + c]);
+        let v;
+        if (F() === "jpg") { const jp = Math.min(1, sensor / JPEG_WHITE); v = pull(jp); }
+        else v = pull(sensor / JPEG_WHITE); // RAW는 JPEG 흰색 위의 정보가 살아 있음
+        d[i * 4 + c] = 255 * CB.linToSrgb(CB.clamp(v, 0, 1));
+      }
+      d[i * 4 + 3] = 255;
+    }
+    off.getContext("2d").putImageData(out, 0, 0);
+    ctx.drawImage(off, 0, 0, w, h);
+    CB.hud(ctx, 0, h - 24, w, [F() === "jpg" ? "JPEG" : "RAW", "노출 +" + over, "하이라이트 −" + down.toFixed(1)]);
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 3. JPEG 압축 */
+(function () {
+  const W = 320, H = 200;
+  const photo = CB.scenes.portrait(W, H, { sceneEV: 12 });
+  photo.render({ N: 8, t: 64 / 4096, iso: 100, focus: 2.5, focal: 35, noise: false });
+  const src = new Uint8ClampedArray(photo.last.data);
+  const QL = [16, 11, 10, 16, 24, 40, 51, 61, 12, 12, 14, 19, 26, 58, 60, 55, 14, 13, 16, 24, 40, 57, 69, 56, 14, 17, 22, 29, 51, 87, 80, 62, 18, 22, 37, 56, 68, 109, 103, 77, 24, 35, 55, 64, 81, 104, 113, 92, 49, 64, 78, 87, 103, 121, 120, 101, 72, 92, 95, 98, 112, 100, 103, 99];
+  const QC = [17, 18, 24, 47, 99, 99, 99, 99, 18, 21, 26, 66, 99, 99, 99, 99, 24, 26, 56, 99, 99, 99, 99, 99, 47, 66, 99, 99, 99, 99, 99, 99].concat(Array(32).fill(99));
+  const C = []; for (let u = 0; u < 8; u++) { C.push([]); for (let x = 0; x < 8; x++) C[u].push((u === 0 ? Math.SQRT1_2 : 1) * Math.cos(((2 * x + 1) * u * Math.PI) / 16) / 2); }
+  function codec(ch, w, h, Q) { // 한 채널 8×8 DCT → 양자화 → 역변환. 남은 계수 수 반환
+    let nz = 0; const blk = new Float32Array(64), co = new Float32Array(64);
+    for (let by = 0; by < h; by += 8) for (let bx = 0; bx < w; bx += 8) {
+      for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) blk[y * 8 + x] = ch[Math.min(h - 1, by + y) * w + Math.min(w - 1, bx + x)] - 128;
+      for (let v = 0; v < 8; v++) for (let u = 0; u < 8; u++) { let s = 0; for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) s += blk[y * 8 + x] * C[u][x] * C[v][y]; const q = Q[v * 8 + u]; const r = Math.round(s / q); if (r) nz++; co[v * 8 + u] = r * q; }
+      for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) { let s = 0; for (let v = 0; v < 8; v++) for (let u = 0; u < 8; u++) s += co[v * 8 + u] * C[u][x] * C[v][y]; if (by + y < h && bx + x < w) ch[(by + y) * w + bx + x] = s + 128; }
+    }
+    return nz;
+  }
+  function compress(rgba, q) {
+    const sc = q < 50 ? 5000 / q : 200 - 2 * q;
+    const ql = QL.map((v) => CB.clamp(Math.floor((v * sc + 50) / 100), 1, 255)), qc = QC.map((v) => CB.clamp(Math.floor((v * sc + 50) / 100), 1, 255));
+    const n = W * H, Y = new Float32Array(n), cw = W / 2, chh = H / 2, Cb = new Float32Array(cw * chh), Cr = new Float32Array(cw * chh);
+    for (let i = 0; i < n; i++) { const r = rgba[i * 4], g = rgba[i * 4 + 1], b = rgba[i * 4 + 2]; Y[i] = 0.299 * r + 0.587 * g + 0.114 * b; }
+    for (let y = 0; y < chh; y++) for (let x = 0; x < cw; x++) { let cb = 0, cr = 0; for (let k = 0; k < 4; k++) { const i = ((y * 2 + (k >> 1)) * W + x * 2 + (k & 1)) * 4, r = rgba[i], g = rgba[i + 1], b = rgba[i + 2]; cb += 128 - 0.1687 * r - 0.3313 * g + 0.5 * b; cr += 128 + 0.5 * r - 0.4187 * g - 0.0813 * b; } Cb[y * cw + x] = cb / 4; Cr[y * cw + x] = cr / 4; }
+    let nz = codec(Y, W, H, ql) + codec(Cb, cw, chh, qc) + codec(Cr, cw, chh, qc);
+    const out = new Uint8ClampedArray(n * 4);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = y * W + x, j = (y >> 1) * cw + (x >> 1), yy = Y[i], cb = Cb[j] - 128, cr = Cr[j] - 128; out[i * 4] = yy + 1.402 * cr; out[i * 4 + 1] = yy - 0.344136 * cb - 0.714136 * cr; out[i * 4 + 2] = yy + 1.772 * cb; out[i * 4 + 3] = 255; }
+    return { out, nz };
+  }
+  const upd = CB.throttle(() => cv.redraw());
+  const Q = CB.range("jp-q", (v) => v, upd);
+  const zoom = CB.check("jp-zoom", upd);
+  const again = CB.check("jp-again", upd);
+  const img = new ImageData(W, H), off = CB.offscreen(W, H);
+  let key = "", res = null;
+  const cv = CB.canvas("#cv-jpeg", (ctx, w, h) => {
+    const k = Q() + "|" + again();
+    if (k !== key) {
+      res = compress(src, Q());
+      if (again()) for (let t = 0; t < 9; t++) { const q2 = CB.clamp(Q() + ((t % 3) - 1) * 6, 2, 100); res = compress(res.out, q2); } // 편집 후 조금씩 다른 품질로 재저장
+      key = k;
+    }
+    img.data.set(res.out); off.getContext("2d").putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = !zoom();
+    if (zoom()) ctx.drawImage(off, 105, 10, W / 3, H / 3, 0, 0, w, h); else ctx.drawImage(off, 0, 0, w, h);
+    ctx.imageSmoothingEnabled = true;
+    CB.hud(ctx, 0, h - 24, w, ["품질 " + Q(), zoom() ? "×3 확대" : "전체", again() ? "10회 재저장" : "1회 저장"]);
+    const total = W * H * 1.5;
+    CB.stat("jp-nz", (res.nz / total * 100).toFixed(1) + "<small>%</small>");
+    CB.stat("jp-size", "≈ " + Math.max(1, Math.round(res.nz / total * 100 * 0.9 + 1)) + "<small>%</small>");
+  }, { aspect: 0.625 });
+})();
+</script>
+</body>
+</html>

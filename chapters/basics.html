@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>카메라는 어떻게 사진을 만드나 · CameraBook</title>
+<meta name="description" content="바늘구멍 사진기에서 미러리스와 스마트폰까지. 렌즈·조리개·셔터·센서·처리 엔진의 역할, DSLR과 미러리스의 차이, 센서 크기와 화소 수의 의미를 시뮬레이터로 배운다.">
+<link rel="canonical" href="https://camerabook.euiyun.com/chapters/basics.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="카메라는 어떻게 사진을 만드나 · CameraBook">
+<meta property="og:description" content="바늘구멍 사진기에서 미러리스와 스마트폰까지. 렌즈·조리개·셔터·센서·처리 엔진의 역할, DSLR과 미러리스의 차이, 센서 크기와 화소 수의 의미를 시뮬레이터로 배운다.">
+<meta property="og:url" content="https://camerabook.euiyun.com/chapters/basics.html">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"카메라는 어떻게 사진을 만드나","name":"카메라는 어떻게 사진을 만드나 · CameraBook","url":"https://camerabook.euiyun.com/chapters/basics.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/basics.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":1,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"바늘구멍 사진기에서 미러리스와 스마트폰까지. 렌즈·조리개·셔터·센서·처리 엔진의 역할, DSLR과 미러리스의 차이, 센서 크기와 화소 수의 의미를 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"01 카메라는 어떻게 사진을 만드나","item":"https://camerabook.euiyun.com/chapters/basics.html"}]}]}</script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .fig-lg svg .t, .fig-lg svg .t-acc { font-size: 16px; }
+  .fig-lg svg .t-dim { font-size: 14px; }
+  #cam-svg .ray { stroke: #f5b93a; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+  #cam-svg .part { transition: transform .12s ease; }
+  .sensor-legend { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px 0; }
+  .sensor-legend button { font: inherit; font-size: 12.5px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+  .sensor-legend button.on { color: var(--text); border-color: currentColor; font-weight: 700; }
+  .sensor-legend button i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+</style>
+</head>
+<body data-chapter="basics">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 01</div>
+    <h1>카메라는 어떻게 사진을 만드나</h1>
+    <p class="lead">수십만 원짜리 미러리스든 주머니 속 스마트폰이든, 카메라가 하는 일은 같습니다. 빛을 모으고, 양과 시간을 조절해, 센서에 기록하고, 보기 좋게 다듬는 것. 이 장에서는 어두운 방에 뚫린 작은 구멍에서 출발해 오늘날의 카메라가 왜 지금 모양이 되었는지 따라가 봅니다.</p>
+    <ul class="objectives">
+      <li>바늘구멍 사진기로 '상(像)'이 맺히는 원리를 이해하고, 렌즈가 왜 필요한지 설명할 수 있다.</li>
+      <li>렌즈·조리개·셔터·센서·처리 엔진이 각각 무엇을 조절하는지 안다.</li>
+      <li>DSLR, 미러리스, 컴팩트, 스마트폰 카메라의 구조적 차이를 안다.</li>
+      <li>센서 크기와 화소 수가 사진에 주는 영향을 숫자로 비교할 수 있다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="obscura">
+    <h2>어두운 방과 작은 구멍</h2>
+    <p>창문을 모두 가린 깜깜한 방의 벽에 작은 구멍을 하나 뚫으면, 맞은편 벽에 바깥 풍경이 <b>거꾸로</b> 비칩니다. 이것을 라틴어로 '어두운 방'이라는 뜻의 <span class="term">카메라 옵스큐라</span><span class="en">(Camera Obscura)</span>라고 부르고, '카메라'라는 이름이 여기서 나왔습니다.</p>
+    <p>원리는 단순합니다. 바깥 풍경의 한 점(예: 나무 꼭대기)에서는 빛이 사방으로 퍼져 나가지만, 그중 구멍을 통과하는 빛은 아주 좁은 다발뿐입니다. 이 다발이 직진해서 벽의 한 점에 닿습니다. 위쪽에서 온 빛은 구멍을 지나 아래쪽에, 왼쪽에서 온 빛은 오른쪽에 닿으니 상이 뒤집힙니다.</p>
+    <figure class="diagram fig-lg">
+      <svg viewBox="0 0 800 270" role="img" aria-label="바늘구멍으로 상이 거꾸로 맺히는 원리">
+        <rect x="380" y="20" width="14" height="95" class="f-surface"/>
+        <rect x="380" y="141" width="14" height="95" class="f-surface"/>
+        <rect x="394" y="20" width="330" height="216" fill="var(--surface)" opacity=".55"/>
+        <rect x="716" y="20" width="10" height="216" class="f-elev"/>
+        <!-- 나무 -->
+        <rect x="96" y="150" width="14" height="70" fill="#7a5233"/>
+        <circle cx="103" cy="110" r="46" fill="#3fa36b"/>
+        <circle cx="103" cy="66" r="6" fill="#e0443e"/>
+        <path d="M60 222 H150" class="s-axis"/>
+        <!-- 광선: 꼭대기 → 구멍 → 아래 -->
+        <path d="M103 66 L387 128 L716 200" stroke="#e0443e" stroke-width="2" fill="none"/>
+        <path d="M103 66 L170 45 M103 66 L160 100 M103 66 L140 30" stroke="#e0443e" stroke-width="1.5" fill="none" opacity=".35"/>
+        <path d="M103 220 L387 128 L716 60" stroke="#2f6fe0" stroke-width="2" fill="none"/>
+        <!-- 거꾸로 맺힌 상 -->
+        <g transform="translate(716,128) scale(-1,-1) translate(-716,-128)">
+          <rect x="700" y="88" width="10" height="50" fill="#7a5233" opacity=".8" transform="translate(4,0)"/>
+        </g>
+        <g opacity=".85">
+          <rect x="709" y="60" width="6" height="40" fill="#7a5233"/>
+          <circle cx="712" cy="140" r="33" fill="#3fa36b" transform="translate(0,0)"/>
+          <circle cx="712" cy="198" r="5" fill="#e0443e"/>
+        </g>
+        <text x="103" y="250" text-anchor="middle" class="t">바깥 풍경</text>
+        <text x="387" y="255" text-anchor="middle" class="t-acc">바늘구멍</text>
+        <text x="650" y="255" text-anchor="middle" class="t">벽(스크린): 거꾸로 선 상</text>
+        <text x="200" y="40" class="t-dim">한 점에서 빛은 사방으로 퍼지지만…</text>
+        <text x="420" y="110" class="t-dim">구멍을 지난 좁은 다발만 벽에 닿는다</text>
+      </svg>
+      <figcaption><b>그림 1-1.</b> 카메라 옵스큐라. 나무 꼭대기(빨강)의 빛은 벽 아래쪽에, 밑동(파랑)의 빛은 위쪽에 닿아 상이 뒤집힌다. 모든 카메라의 센서에도 상은 거꾸로 맺힌다.</figcaption>
+    </figure>
+    <p>그렇다면 구멍을 아주 작게 만들수록 선명해질까요? 구멍이 크면 한 점에서 온 빛이 벽에 넓은 원으로 퍼지니 흐릿해집니다. 반대로 너무 작게 하면 빛의 파동 성질 때문에 구멍을 지나며 퍼지는 <span class="term">회절</span><span class="en">(Diffraction)</span>이 커져서 다시 흐릿해집니다. 게다가 구멍이 작을수록 빛이 거의 들어오지 않아 상이 아주 어둡습니다. 직접 확인해 봅시다.</p>
+
+    <div class="sim" id="sim-pinhole">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>바늘구멍 사진기 vs 렌즈</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-pin"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>구멍에 끼울 것</span><div class="seg" id="pin-mode"><button data-value="pin" class="on">바늘구멍</button><button data-value="lens">렌즈</button></div></div>
+          <label class="ctrl"><span>구멍 지름 <output id="pin-d-out"></output></span><input type="range" id="pin-d" min="0" max="100" value="38"></label>
+          <label class="ctrl"><span>상자 깊이 <output id="pin-L-out"></output></span><input type="range" id="pin-L" min="30" max="200" value="100"></label>
+          <label class="check"><input type="checkbox" id="pin-auto" checked> 밝기 자동 보정(노출 시간 늘리기)</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">F값 (깊이 ÷ 지름)</span><span class="v" id="pin-N">—</span></div>
+        <div class="stat"><span class="k">상의 번짐</span><span class="v" id="pin-blur">—</span></div>
+        <div class="stat"><span class="k">맑은 날 필요한 노출 시간</span><span class="v" id="pin-t">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 바늘구멍을 아주 크게, 아주 작게 해 보세요. 가장 선명한 '최적 크기'가 있습니다. ② 렌즈로 바꾸면 구멍이 커져도 선명하고, 노출 시간이 수천 분의 1로 줄어듭니다. 이것이 카메라에 렌즈가 있는 이유입니다.</div>
+    </div>
+
+    <p>위 시뮬레이터의 'F값'은 3장에서 자세히 다룰 개념인데, 여기서 미리 정체를 밝혀 두면 <b>상자 깊이(초점거리)를 구멍 지름으로 나눈 값</b>입니다. 바늘구멍은 보통 f/200~f/500이라 맑은 날에도 수 초~수십 초를 노출해야 합니다. 렌즈는 큰 구멍으로 들어온 빛을 굴절시켜 다시 한 점에 모아 주므로, f/2 같은 밝은 구멍으로도 선명한 상을 만들 수 있습니다. 노출 시간은 (200/2)² = 10,000배 짧아집니다.</p>
+    <div class="callout tip"><strong>렌즈의 대가: 초점</strong>바늘구멍은 거리와 상관없이 모든 것이 똑같이 (덜) 선명합니다. 렌즈는 '특정 거리'에 있는 것만 정확히 한 점으로 모읍니다. 그래서 렌즈 카메라에는 <b>초점</b>을 맞추는 기능이 반드시 필요하고, 초점이 맞지 않은 거리는 흐려집니다. 배경 흐림(아웃포커스)은 이 '대가'를 예술로 바꾼 것입니다(3·8장).</div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="parts">
+    <h2>카메라의 다섯 부품</h2>
+    <p>현대 카메라는 바늘구멍 상자에 다섯 가지를 더한 것이라고 보면 됩니다. 각 부품이 '빛의 무엇'을 조절하는지 기억해 두면 이후 모든 장이 쉬워집니다.</p>
+    <div class="table-wrap"><table>
+      <tr><th>부품</th><th>조절하는 것</th><th>사진에 드러나는 부작용(혹은 표현)</th><th>장</th></tr>
+      <tr><td><b>렌즈</b></td><td>빛을 모아 상을 맺음, 초점·화각</td><td>초점 위치, 원근감, 왜곡</td><td>8·9</td></tr>
+      <tr><td><b>조리개</b></td><td>구멍 크기 = 빛의 <b>양</b></td><td>배경 흐림(심도), 회절</td><td>3</td></tr>
+      <tr><td><b>셔터</b></td><td>빛을 받는 <b>시간</b></td><td>움직임 정지 또는 흐름(모션 블러), 손떨림</td><td>4</td></tr>
+      <tr><td><b>센서</b></td><td>빛을 전기 신호로 바꿈, ISO(증폭)</td><td>노이즈, 다이내믹 레인지</td><td>5·7</td></tr>
+      <tr><td><b>처리 엔진</b></td><td>색(화이트 밸런스), 밝기 곡선, 선명도, 압축</td><td>색감, 계조, 파일 형식</td><td>10·11</td></tr>
+    </table></div>
+    <p>이 중 <b>조리개·셔터·ISO</b> 세 가지가 사진의 밝기를 함께 결정합니다. 그래서 이 셋을 묶어 <span class="term">노출 삼각형</span>이라고 부르며, 다음 장의 주제입니다. 중요한 점은 셋이 밝기만 바꾸는 것이 아니라 각자 고유한 '부작용'을 가진다는 것입니다. 사진을 잘 찍는다는 것은 결국 <b>원하는 부작용을 고르는 일</b>입니다.</p>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="types">
+    <h2>DSLR, 미러리스, 그리고 스마트폰</h2>
+    <p>렌즈를 바꿔 끼울 수 있는 카메라는 크게 <span class="term">DSLR</span><span class="en">(Digital Single-Lens Reflex)</span>과 <span class="term">미러리스</span><span class="en">(Mirrorless)</span>로 나뉩니다. 차이는 이름 그대로 '거울'입니다. DSLR은 렌즈 뒤의 거울이 빛을 위로 꺾어 프리즘을 거쳐 <b>광학 뷰파인더</b>로 보내 줍니다. 셔터를 누르는 순간에만 거울이 튀어 올라 빛이 센서로 갑니다. 미러리스는 거울 없이 센서가 항상 빛을 받고, 그 영상을 작은 화면(<b>전자식 뷰파인더</b>, EVF)에 보여 줍니다.</p>
+
+    <div class="sim" id="sim-cam">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>빛은 어디로 가나: 셔터를 눌러 보세요</h3></div>
+      <div class="sim-view" style="background:var(--bg-elev)">
+        <svg id="cam-svg" viewBox="0 0 800 340" style="display:block;width:100%;height:auto" role="img" aria-label="카메라 내부의 빛 경로"></svg>
+      </div>
+      <div class="sim-controls" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <div class="ctrl"><span>카메라 종류</span><div class="seg" id="cam-type"><button data-value="dslr" class="on">DSLR</button><button data-value="ml">미러리스</button><button data-value="phone">스마트폰</button></div></div>
+        <div class="ctrl"><span>&nbsp;</span><button class="btn primary" id="cam-shoot">셔터 누르기 (찰칵)</button></div>
+      </div>
+      <div class="sim-msg" id="cam-msg"></div>
+    </div>
+
+    <div class="table-wrap"><table>
+      <tr><th></th><th>DSLR</th><th>미러리스</th><th>스마트폰</th></tr>
+      <tr><td>뷰파인더</td><td>광학식(실제 빛)</td><td>전자식(센서 영상)</td><td>화면</td></tr>
+      <tr><td>노출 미리보기</td><td>불가(찍어 봐야 앎)</td><td>가능(보이는 대로 찍힘)</td><td>가능</td></tr>
+      <tr><td>셔터</td><td>기계식</td><td>기계식 + 전자식</td><td>전자식</td></tr>
+      <tr><td>조리개</td><td>렌즈마다 가변</td><td>렌즈마다 가변</td><td>대부분 고정</td></tr>
+      <tr><td>센서 크기</td><td>APS-C ~ 풀프레임</td><td>1형 ~ 중형</td><td>1/3″ ~ 1형</td></tr>
+      <tr><td>강점</td><td>배터리, 지연 없는 광학 파인더</td><td>작고 정확한 AF, 동영상</td><td>계산 사진(합성), 휴대성</td></tr>
+    </table></div>
+    <div class="callout"><strong>미러리스가 주류가 된 이유</strong>거울이 없으면 몸체가 얇아지고, 센서 자체로 초점을 잡으니 얼굴·눈 인식 AF가 정확해집니다(8장). 뷰파인더로 보이는 밝기와 색이 곧 결과물이라 노출을 실수할 일도 줄어듭니다. 주요 제조사들은 2020년대 들어 신형 DSLR 개발을 사실상 멈췄습니다.</div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="sensor-size">
+    <h2>센서 크기: 사진의 '그릇'</h2>
+    <p>센서는 필름의 역할을 하는 반도체 칩입니다. 크기는 카메라의 성격을 가장 크게 좌우하는 숫자입니다. 35 mm 필름과 같은 36×24 mm를 <span class="term">풀프레임</span><span class="en">(Full Frame)</span>이라 하고, 그보다 작은 센서는 풀프레임 대비 대각선 길이의 비율인 <span class="term">크롭 팩터</span><span class="en">(Crop Factor)</span>로 표현합니다.</p>
+
+    <div class="sim" id="sim-sensor">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>센서 크기 실측 비교</h3></div>
+      <div class="sensor-legend" id="sz-legend"></div>
+      <div class="sim-view"><canvas id="cv-sz"></canvas></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">크기</span><span class="v" id="sz-dim">—</span></div>
+        <div class="stat"><span class="k">면적 (풀프레임 대비)</span><span class="v" id="sz-area">—</span></div>
+        <div class="stat"><span class="k">크롭 팩터</span><span class="v" id="sz-crop">—</span></div>
+        <div class="stat"><span class="k">빛 모으는 양 차이</span><span class="v" id="sz-stops">—</span></div>
+      </div>
+      <div class="sim-note">이름표를 눌러 센서를 고르세요. 같은 화각·같은 F값으로 찍으면 센서 면적에 비례해 빛을 더 모읍니다. 면적이 2배면 '1스톱' 유리합니다(노이즈가 적고 배경이 더 흐려짐). 스마트폰 센서 실제 크기는 <a href="https://sensors.euiyun.com/compare/">Mobile Image Sensor DB</a>에서 비교해 볼 수 있습니다.</div>
+    </div>
+
+    <p>'1/1.3인치'처럼 분수로 적힌 크기는 옛날 촬상관(진공관 카메라) 시절의 관습에서 온 이름이라 실제 대각선 길이와 다릅니다. 1형(1인치) 센서의 대각선은 약 16 mm로, 1인치(25.4 mm)의 약 2/3입니다. 이름보다는 실제 mm 크기와 면적을 비교하는 습관을 들이세요.</p>
+    <div class="callout warn"><strong>센서가 크면 무조건 좋을까?</strong>큰 센서는 노이즈와 배경 흐림에서 유리하지만, 렌즈도 함께 커지고 무거워지며 비싸집니다. 같은 화각을 만들려면 초점거리가 길어져야 하기 때문입니다(9장). 스마트폰이 작은 센서로 버티는 비결은 여러 장을 합성하는 계산 사진입니다(15장).</div>
+  </section>
+
+  <!-- =============================================================== 5 -->
+  <section id="megapixel">
+    <h2>화소 수의 진실</h2>
+    <p>'2억 화소'처럼 광고에서 가장 크게 외치는 숫자가 <span class="term">화소 수</span><span class="en">(Megapixels)</span>입니다. 화소(픽셀)는 센서 위에 바둑판처럼 놓인 빛 측정 칸 하나하나입니다. 화소가 많을수록 세밀한 디테일을 담을 수 있지만, 같은 센서 면적을 더 잘게 나누는 것이므로 칸 하나가 받는 빛은 줄어듭니다. 그리고 사진을 '보는' 환경이 요구하는 화소 수는 생각보다 적습니다.</p>
+
+    <div class="sim" id="sim-mp">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>몇 화소면 충분할까?</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-mp"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>화소 수 <output id="mp-out"></output></span><input type="range" id="mp" min="0" max="100" value="45"></label>
+          <label class="ctrl"><span>센서 <output id="mp-s-out"></output></span><input type="range" id="mp-s" min="0" max="5" value="5" step="1"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">해상도</span><span class="v" id="mp-res">—</span></div>
+        <div class="stat"><span class="k">300 dpi 인화 크기</span><span class="v" id="mp-print">—</span></div>
+        <div class="stat"><span class="k">픽셀 크기(피치)</span><span class="v" id="mp-pitch">—</span></div>
+      </div>
+      <div class="sim-note">회색 상자는 흔한 보기 환경의 해상도입니다. 인스타그램 피드(1080 px)는 약 1.2 MP, 4K 모니터 전체 화면도 8.3 MP면 충분합니다. 화소가 많으면 '잘라내기(크롭)' 여유가 생기는 것이 진짜 장점입니다.</div>
+    </div>
+    <p>같은 센서에 화소를 더 넣으면 픽셀이 작아집니다. 작은 픽셀은 하나만 놓고 보면 더 노이즈가 많지만, 사진 전체를 같은 크기로 볼 때는 여러 픽셀이 합쳐 보이므로 차이가 크지 않습니다. 결국 화질을 좌우하는 것은 <b>센서 전체가 받은 빛의 양</b>입니다. 스마트폰의 고화소 센서들은 평소에는 4개 또는 9개 픽셀을 하나로 묶어(<span class="term">픽셀 비닝</span>) 1,200만 화소 정도로 저장하고, 밝은 곳에서만 전체 화소를 씁니다.</p>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>카메라는 '어두운 상자 + 구멍'에서 출발했다. 상은 항상 거꾸로 맺히며, 구멍이 작으면 어둡고 너무 작으면 회절로 흐려진다.</li>
+      <li>렌즈는 큰 구멍으로 많은 빛을 받으면서도 선명한 상을 만든다. 대신 특정 거리에만 초점이 맞는다.</li>
+      <li>조리개는 빛의 양, 셔터는 시간, ISO는 증폭을 맡는다. 셋이 밝기를 결정하고 각자 다른 부작용(심도, 움직임, 노이즈)을 남긴다.</li>
+      <li>DSLR은 거울로 광학 파인더에 빛을 보내고, 미러리스는 센서 영상을 전자식 파인더로 보여 준다.</li>
+      <li>센서 면적은 모으는 빛의 총량을 정한다. 면적 2배 = 1스톱. 화소 수는 디테일과 크롭 여유를 정하지만 보기 환경이 요구하는 양은 생각보다 적다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>바늘구멍 사진기의 구멍을 계속 작게 만들면 어떻게 될까?</p><div class="opts">
+        <button class="opt">계속 선명해지고 밝기는 그대로다</button>
+        <button class="opt" data-correct>어느 크기까지는 선명해지다가 회절 때문에 다시 흐려지고, 계속 어두워진다</button>
+        <button class="opt">상이 바로 서게 된다</button>
+      </div><div class="quiz-exp">구멍이 작을수록 기하학적 번짐은 줄지만 회절 번짐이 커진다. 둘이 균형을 이루는 최적 크기가 있다. 들어오는 빛은 구멍 면적에 비례하므로 계속 어두워진다.</div></div>
+      <div class="quiz-q"><p>미러리스 카메라의 뷰파인더로 보이는 영상은 무엇인가?</p><div class="opts">
+        <button class="opt">거울과 프리즘으로 반사된 실제 빛</button>
+        <button class="opt" data-correct>센서가 받은 영상을 작은 화면에 띄운 것</button>
+        <button class="opt">렌즈를 거치지 않은 별도 창으로 본 풍경</button>
+      </div><div class="quiz-exp">미러리스는 센서가 상시 빛을 받아 그 영상을 EVF(전자식 뷰파인더)에 보여 준다. 그래서 노출·화이트 밸런스가 반영된 결과를 미리 볼 수 있다.</div></div>
+      <div class="quiz-q"><p>풀프레임(36×24 mm) 센서는 APS-C(23.5×15.6 mm) 센서보다 면적이 약 몇 배이고, 이는 대략 몇 스톱 차이인가?</p><div class="opts">
+        <button class="opt">1.5배, 0.5스톱</button>
+        <button class="opt" data-correct>2.3배, 약 1.2스톱</button>
+        <button class="opt">4배, 2스톱</button>
+      </div><div class="quiz-exp">864 ÷ 367 ≈ 2.36배. log₂(2.36) ≈ 1.24스톱. 크롭 팩터 1.53의 제곱이 면적비다.</div></div>
+      <div class="quiz-q"><p>인스타그램 피드에 올릴 사진(가로 1080 px)에 필요한 화소 수에 가장 가까운 것은?</p><div class="opts">
+        <button class="opt" data-correct>약 1~1.5 MP</button>
+        <button class="opt">약 12 MP</button>
+        <button class="opt">약 50 MP</button>
+      </div><div class="quiz-exp">1080×1350(4:5) ≈ 1.46 MP. 고화소는 크게 인화하거나 많이 잘라낼 때 의미가 있다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------------------------------------------------------------- 1. 바늘구멍 */
+(function () {
+  const mode = CB.seg("pin-mode", () => cv.redraw());
+  const dmm = (v) => 0.05 * Math.pow(10, (v / 100) * Math.log10(25 / 0.05)); // 0.05~25 mm (로그)
+  const dEl = CB.range("pin-d", (v) => CB.fmt(dmm(v), 2) + " mm", () => cv.redraw());
+  const L = CB.range("pin-L", (v) => v + " mm", () => cv.redraw());
+  const auto = CB.check("pin-auto", () => cv.redraw());
+  // 스크린에 맺힐 장면(정립) 오프스크린
+  const SW = 220, SH = 160;
+  const scene = CB.offscreen(SW, SH, (g, w, h) => {
+    CB.draw.sky(g, w, h, "#6fa6e0", "#cfe4f5", h * 0.7);
+    g.fillStyle = "#f5c542"; g.beginPath(); g.arc(w * 0.8, h * 0.2, 12, 0, 7); g.fill();
+    CB.draw.mountains(g, w, h * 0.7, h * 0.25, "#8094b8", 4);
+    g.fillStyle = "#6c9a55"; g.fillRect(0, h * 0.68, w, h);
+    CB.draw.tree(g, w * 0.3, h * 0.92, h * 0.75, "#3f8a45", "#6b4a33", 2);
+    g.fillStyle = "#c8553d"; g.fillRect(w * 0.55, h * 0.6, w * 0.22, h * 0.25);
+    g.fillStyle = "#7b3626"; g.beginPath(); g.moveTo(w * 0.53, h * 0.61); g.lineTo(w * 0.66, h * 0.45); g.lineTo(w * 0.79, h * 0.61); g.fill();
+    g.fillStyle = "#f8e7a8"; g.fillRect(w * 0.6, h * 0.66, w * 0.05, h * 0.07); g.fillRect(w * 0.69, h * 0.66, w * 0.04, h * 0.19);
+  });
+  let cacheKey = "", blurred = null;
+  const cv = CB.canvas("#cv-pin", (ctx, w, h) => {
+    const P = CB.palette();
+    const lens = mode() === "lens";
+    const Lmm = L();
+    let d = dmm(dEl());
+    if (lens) d = Math.max(d, 0.05);
+    const N = Lmm / d;
+    const lam = 550e-6, u = 3000; // 3 m 앞 물체
+    const geo = lens ? 0.004 * Math.sqrt(Lmm / 50) : d * (u + Lmm) / u;     // 렌즈는 초점이 맞아 기하 번짐이 거의 없음(수차 약간)
+    const diff = 2.44 * lam * N;                                         // 에어리 원반 지름
+    const blur = Math.sqrt(geo * geo + diff * diff);                      // mm
+    // 레이아웃: 왼쪽 측면도, 오른쪽 스크린 영상
+    const split = w > 560 ? w * 0.55 : w;
+    const sideH = w > 560 ? h : h * 0.5;
+    // --- 측면도
+    const bx0 = split * 0.42, scale = (split * 0.5) / 200, bx1 = bx0 + Lmm * scale, cy = sideH * 0.5;
+    const holeHalf = CB.clamp((d / 2) * scale * 4 + 0.6, 0.6, sideH * 0.3);
+    ctx.fillStyle = P.surface; ctx.fillRect(bx0, cy - sideH * 0.38, bx1 - bx0, sideH * 0.76);
+    ctx.fillStyle = P.dim;
+    ctx.fillRect(bx0 - 3, cy - sideH * 0.38, 6, sideH * 0.38 - holeHalf);
+    ctx.fillRect(bx0 - 3, cy + holeHalf, 6, sideH * 0.38 - holeHalf);
+    ctx.fillRect(bx1, cy - sideH * 0.38, 4, sideH * 0.76);
+    if (lens) { ctx.fillStyle = "rgba(120,190,255,0.35)"; ctx.strokeStyle = P.accent2; ctx.beginPath(); ctx.ellipse(bx0, cy, 7, holeHalf, 0, 0, 7); ctx.fill(); ctx.stroke(); }
+    // 물체(화살표)
+    const ox = split * 0.1, oTop = cy - sideH * 0.28;
+    ctx.strokeStyle = "#e0443e"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(ox, cy + sideH * 0.25); ctx.lineTo(ox, oTop); ctx.stroke();
+    ctx.fillStyle = "#e0443e"; ctx.beginPath(); ctx.moveTo(ox - 7, oTop + 10); ctx.lineTo(ox, oTop - 2); ctx.lineTo(ox + 7, oTop + 10); ctx.fill();
+    // 꼭대기 한 점에서 구멍 가장자리로 가는 광선 다발
+    const k = (bx1 - bx0) / (bx0 - ox);
+    ctx.fillStyle = "rgba(224,68,62,0.18)"; ctx.strokeStyle = "rgba(224,68,62,0.75)"; ctx.lineWidth = 1;
+    const yTop = cy - holeHalf, yBot = cy + holeHalf;
+    let s0, s1;
+    if (lens) { const img = cy + (cy - oTop) * k; s0 = img; s1 = img; }
+    else { s0 = yTop + (yTop - oTop) * k; s1 = yBot + (yBot - oTop) * k; }
+    ctx.beginPath(); ctx.moveTo(ox, oTop); ctx.lineTo(bx0, yTop); ctx.lineTo(bx1, s0); ctx.lineTo(bx1, s1); ctx.lineTo(bx0, yBot); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(ox, oTop); ctx.lineTo(bx0, yTop); ctx.lineTo(bx1, s0); ctx.moveTo(ox, oTop); ctx.lineTo(bx0, yBot); ctx.lineTo(bx1, s1); ctx.stroke();
+    ctx.fillStyle = "#e0443e"; ctx.fillRect(bx1 - 1, Math.min(s0, s1) - 1, 5, Math.abs(s1 - s0) + 2);
+    ctx.fillStyle = P.dim; ctx.font = "12px " + CB.color("font"); ctx.textAlign = "center";
+    ctx.fillText("물체(3 m)", ox, cy + sideH * 0.25 + 16);
+    ctx.fillText(lens ? "렌즈" : "구멍", bx0, cy - sideH * 0.38 - 6);
+    ctx.fillText("스크린", bx1, cy + sideH * 0.38 + 16);
+    // --- 스크린 영상(거꾸로)
+    const ix = w > 560 ? split + 10 : 12, iy = w > 560 ? h * 0.12 : sideH + 8;
+    const iw = w > 560 ? w - split - 22 : w - 24, ih = Math.min(iw * (SH / SW), (w > 560 ? h * 0.76 : h - sideH - 16));
+    const iw2 = ih * (SW / SH);
+    const imgH = 1000 * Lmm / u;                          // 스크린 위 상 높이(mm), 물체 높이 1 m 가정
+    const sigmaPx = (blur / 2.4) / imgH * SH * 0.6;
+    const key = sigmaPx.toFixed(2);
+    if (key !== cacheKey) { blurred = CB.blurCanvas(scene, sigmaPx); cacheKey = key; }
+    const rel = Math.pow(16 / N, 2);                       // f/16 대비 밝기
+    const tNeed = (N * N) / Math.pow(2, 15);              // 맑은 날 EV15, ISO 100
+    const bright = auto() ? 1 : CB.clamp(rel, 0, 1.5);
+    ctx.save(); ctx.translate(ix + iw2 / 2, iy + ih / 2); ctx.rotate(Math.PI);
+    ctx.globalAlpha = 1; ctx.drawImage(blurred, -iw2 / 2, -ih / 2, iw2, ih);
+    ctx.restore();
+    if (bright < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - Math.pow(bright, 0.45)})`; ctx.fillRect(ix, iy, iw2, ih); }
+    ctx.strokeStyle = P.border; ctx.strokeRect(ix, iy, iw2, ih);
+    ctx.fillStyle = P.dim; ctx.textAlign = "left"; ctx.fillText("스크린에 맺힌 상(거꾸로)", ix, iy - 6);
+    // 판독
+    CB.stat("pin-N", "f/" + CB.fmt(N, 3));
+    CB.stat("pin-blur", CB.fmt(blur, 2) + "<small>mm</small>");
+    CB.stat("pin-t", tNeed >= 0.3 ? CB.fmt(tNeed, 2) + "<small>초</small>" : CB.fmtT(tNeed));
+  }, { aspect: 0.5, minHeight: 300, maxHeight: 360 });
+})();
+
+/* ---------------------------------------------------------------- 2. 카메라 내부 빛 경로 */
+(function () {
+  const svg = document.getElementById("cam-svg");
+  const msg = document.getElementById("cam-msg");
+  let type = "dslr", firing = false;
+  const MSG = {
+    dslr: "평소: 거울(45°)이 빛을 위로 꺾어 프리즘 → 광학 뷰파인더로 보냅니다. 센서는 셔터 막 뒤에서 기다립니다.",
+    ml: "평소: 셔터가 열린 채 센서가 계속 빛을 받고, 그 영상을 전자식 뷰파인더(EVF)와 화면에 보여 줍니다.",
+    phone: "스마트폰: 렌즈와 센서가 몇 mm 안에 붙어 있고, 기계식 셔터와 조리개가 (대부분) 없습니다. 센서를 전자적으로 켜고 끄는 '전자 셔터'를 씁니다.",
+  };
+  const SHOT = {
+    dslr: "찰칵! 거울이 튀어 올라(뷰파인더는 순간 깜깜해짐) 셔터 막이 열리고, 빛이 센서에 닿습니다. 이 '미러 업' 동작 때문에 DSLR은 소리와 진동이 큽니다.",
+    ml: "찰칵! 셔터 막이 한 번 닫혔다가 정해진 시간만큼 다시 열려 센서를 노출합니다. 전자 셔터를 쓰면 막이 움직이지 않아 무소음 촬영도 됩니다.",
+    phone: "찰칵! 소리는 스피커에서 나는 효과음입니다. 실제로는 센서가 이미 여러 장을 연속으로 읽고 있었고, 그중 몇 장을 합성해 한 장을 만듭니다(15장).",
+  };
+  function draw(shot) {
+    const P = CB.palette();
+    let s = `<defs><marker id="ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f5b93a"/></marker></defs>`;
+    const T = (x, y, t, cls = "t") => `<text x="${x}" y="${y}" class="${cls}" text-anchor="middle">${t}</text>`;
+    if (type === "phone") {
+      s += `<rect x="250" y="40" width="300" height="250" rx="34" fill="${P.surface}" stroke="${P.border}" stroke-width="2"/>`;
+      s += `<rect x="330" y="110" width="140" height="110" rx="14" fill="${P.elev}" stroke="${P.border}"/>`;
+      for (let i = 0; i < 5; i++) s += `<ellipse cx="${360 + i * 9}" cy="165" rx="3.5" ry="${26 - Math.abs(i - 2) * 3}" fill="rgba(120,190,255,.45)" stroke="${P.accent2}"/>`;
+      s += `<rect x="420" y="137" width="8" height="56" fill="#2a2a2a"/><rect x="428" y="140" width="4" height="50" fill="${shot ? "#f5b93a" : "#5a5a5a"}"/>`;
+      s += `<path class="ray" d="M120 140 L356 152 L424 165 M120 190 L356 178 L424 165" marker-end="url(#ca)"/>`;
+      s += T(400, 250, "렌즈 5~7장 + 센서: 두께 약 6~10 mm") + T(372, 105, "렌즈군", "t-dim") + T(470, 210, "센서", "t-dim");
+      s += T(120, 120, "빛", "t-acc");
+    } else {
+      const ml = type === "ml";
+      // 렌즈
+      s += `<rect x="60" y="110" width="170" height="120" rx="12" fill="${P.surface}" stroke="${P.border}"/>`;
+      [90, 140, 190].forEach((x, i) => (s += `<ellipse cx="${x}" cy="170" rx="${8 - i}" ry="${48 - i * 6}" fill="rgba(120,190,255,.4)" stroke="${P.accent2}"/>`));
+      s += T(145, 250, "렌즈");
+      // 몸체
+      s += `<rect x="230" y="${ml ? 70 : 60}" width="${ml ? 300 : 360}" height="${ml ? 210 : 230}" rx="16" fill="${P.elev}" stroke="${P.border}" stroke-width="2"/>`;
+      // 센서 + 셔터
+      const sx = ml ? 470 : 540;
+      s += `<rect x="${sx}" y="120" width="12" height="100" fill="#2a2a2a"/><rect x="${sx + 12}" y="124" width="6" height="92" fill="${shot ? "#f5b93a" : "#555"}"/>`;
+      const open = shot || ml;
+      s += `<rect class="part" x="${sx - 16}" y="${open ? 120 : 120}" width="8" height="${open ? 6 : 100}" fill="${P.dim}"/>`;
+      s += T(sx + 6, 245, "센서", "t-dim") + T(sx - 12, 108, "셔터", "t-dim");
+      if (!ml) {
+        // 거울
+        const mirrorUp = shot;
+        s += `<g transform="rotate(${mirrorUp ? -45 : 0} 300 120)"><line x1="300" y1="120" x2="${mirrorUp ? 300 : 370}" y2="${mirrorUp ? 120 : 190}" stroke="${P.accent2}" stroke-width="5" stroke-linecap="round"/></g>`;
+        if (mirrorUp) s += `<line x1="300" y1="120" x2="370" y2="120" stroke="${P.accent2}" stroke-width="5" stroke-linecap="round"/>`;
+        // 펜타프리즘 + 뷰파인더
+        s += `<path d="M290 60 L350 10 L410 60 Z" fill="${P.surface}" stroke="${P.border}" stroke-width="2"/>`;
+        s += `<rect x="410" y="22" width="60" height="20" rx="4" fill="${P.surface}" stroke="${P.border}"/>`;
+        s += T(372, 54, "프리즘", "t-dim") + T(500, 18, "광학 뷰파인더", "t-dim") + T(340, 205, "거울", "t-dim");
+        if (!mirrorUp) s += `<path class="ray" d="M70 170 L335 155 L335 32 L520 32" marker-end="url(#ca)"/>`;
+        else s += `<path class="ray" d="M70 170 L${sx - 4} 170" marker-end="url(#ca)"/>`;
+        s += `<circle cx="560" cy="32" r="12" fill="${mirrorUp ? "#000" : "#f5b93a"}" opacity=".85"/>` + T(600, 37, mirrorUp ? "깜깜!" : "눈", "t-dim");
+      } else {
+        s += `<path class="ray" d="M70 170 L${sx - 4} 170" marker-end="url(#ca)"/>`;
+        // EVF
+        s += `<rect x="440" y="78" width="80" height="28" rx="4" fill="#111" stroke="${P.border}"/><rect x="446" y="83" width="68" height="18" fill="${shot ? "#111" : "#6b8fc2"}"/>`;
+        s += `<path d="M${sx + 18} 150 C 560 130, 560 95, 522 92" fill="none" stroke="${P.accent}" stroke-dasharray="4 4" stroke-width="1.5"/>`;
+        s += T(480, 66, "EVF(작은 화면)", "t-dim") + T(600, 130, "센서 영상 → 화면", "t-dim");
+      }
+    }
+    svg.innerHTML = s;
+    msg.textContent = shot ? SHOT[type] : MSG[type];
+  }
+  CB.seg("cam-type", (v) => { type = v; draw(false); });
+  document.getElementById("cam-shoot").addEventListener("click", () => {
+    if (firing) return; firing = true;
+    draw(true);
+    setTimeout(() => { firing = false; draw(false); msg.textContent = SHOT[type]; }, 900);
+  });
+  CB.onTheme(() => draw(false));
+  draw(false);
+})();
+
+/* ---------------------------------------------------------------- 3. 센서 크기 */
+(function () {
+  const SENSORS = [
+    { name: "중형(44×33)", w: 43.8, h: 32.9, c: "#7a4ce0" },
+    { name: "풀프레임", w: 36, h: 24, c: "#d9480f" },
+    { name: "APS-C", w: 23.5, h: 15.6, c: "#0b7f92" },
+    { name: "마이크로 포서드", w: 17.3, h: 13, c: "#2da44e" },
+    { name: "1형 (고급 컴팩트·플래그십 폰)", w: 13.2, h: 8.8, c: "#d98a00" },
+    { name: "1/1.3형 (폰 메인)", w: 9.8, h: 7.4, c: "#e0443e" },
+    { name: "1/2.55형 (폰 광각·망원)", w: 5.6, h: 4.2, c: "#2f6fe0" },
+  ];
+  let sel = 1;
+  const leg = document.getElementById("sz-legend");
+  leg.innerHTML = SENSORS.map((s, i) => `<button data-i="${i}" style="color:${s.c}"><i style="background:${s.c}"></i>${s.name}</button>`).join("");
+  const btns = [...leg.querySelectorAll("button")];
+  btns.forEach((b) => b.addEventListener("click", () => { sel = +b.dataset.i; upd(); }));
+  const cv = CB.canvas("#cv-sz", (ctx, w, h) => {
+    const P = CB.palette();
+    const sc = Math.min((w - 40) / 46, (h - 40) / 35);
+    const x0 = 20, y0 = h - 20;
+    SENSORS.forEach((s, i) => {
+      const on = i === sel;
+      ctx.fillStyle = on ? s.c + "33" : "transparent";
+      ctx.strokeStyle = s.c; ctx.lineWidth = on ? 3 : 1.5; ctx.globalAlpha = on ? 1 : 0.7;
+      ctx.fillRect(x0, y0 - s.h * sc, s.w * sc, s.h * sc);
+      ctx.strokeRect(x0, y0 - s.h * sc, s.w * sc, s.h * sc);
+    });
+    ctx.globalAlpha = 1;
+    const s = SENSORS[sel];
+    ctx.fillStyle = P.text; ctx.font = "600 13px " + CB.color("font"); ctx.textAlign = "left";
+    ctx.fillText(s.name, x0 + s.w * sc + 8, y0 - s.h * sc + 14);
+    // 동전 크기 참고(100원: 지름 24 mm)
+    const cx = w - 20 - 12 * sc, cy = 20 + 12 * sc;
+    ctx.strokeStyle = P.faint; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(cx, cy, 12 * sc, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = P.faint; ctx.textAlign = "center"; ctx.font = "12px " + CB.color("font"); ctx.fillText("100원 동전(24 mm)", cx, cy + 4);
+  }, { aspect: 0.62, maxHeight: 440 });
+  function upd() {
+    btns.forEach((b, i) => b.classList.toggle("on", i === sel));
+    const s = SENSORS[sel], area = s.w * s.h, ff = 36 * 24;
+    const crop = Math.hypot(36, 24) / Math.hypot(s.w, s.h);
+    CB.stat("sz-dim", `${s.w}×${s.h}<small>mm</small>`);
+    CB.stat("sz-area", `${CB.fmt(area, 3)}<small>mm²</small> · ${CB.fmt((area / ff) * 100, 2)}%`);
+    CB.stat("sz-crop", "×" + crop.toFixed(2));
+    const st = Math.log2(area / ff);
+    CB.stat("sz-stops", (st >= 0 ? "+" : "−") + Math.abs(st).toFixed(1) + "<small>스톱</small>");
+    cv.redraw();
+  }
+  upd();
+})();
+
+/* ---------------------------------------------------------------- 4. 화소 수 */
+(function () {
+  const SZ = [["1/2.55형", 5.6, 4.2], ["1/1.3형", 9.8, 7.4], ["1형", 13.2, 8.8], ["포서드", 17.3, 13], ["APS-C", 23.5, 15.6], ["풀프레임", 36, 24]];
+  const mpOf = (v) => Math.round(Math.pow(10, CB.map(v, 0, 100, Math.log10(2), Math.log10(200))) * 10) / 10;
+  const mp = CB.range("mp", (v) => mpOf(v) + " MP", () => cv.redraw());
+  const ss = CB.range("mp-s", (v) => SZ[v][0], () => cv.redraw());
+  const TARGETS = [["인스타 피드", 1080, 1350], ["Full HD", 1920, 1080], ["4K 모니터", 3840, 2160], ["A4 인화 300dpi", 3508, 2480]];
+  const cv = CB.canvas("#cv-mp", (ctx, w, h) => {
+    const P = CB.palette();
+    const M = mpOf(mp()) * 1e6, [, sw, sh] = SZ[ss()];
+    const ar = sw / sh;
+    const px = Math.sqrt(M * ar), py = M / px;
+    const fitW = Math.max(px, 3840) * 1.08, fitH = Math.max(py, 2480) * 1.08;
+    const sc = Math.min((w - 30) / fitW, (h - 30) / fitH);
+    const x0 = 15, y0 = 15;
+    ctx.fillStyle = P.accent + "22"; ctx.strokeStyle = P.accent; ctx.lineWidth = 2;
+    ctx.fillRect(x0, y0, px * sc, py * sc); ctx.strokeRect(x0, y0, px * sc, py * sc);
+    ctx.font = "12px " + CB.color("font");
+    TARGETS.forEach(([n, tw, th], i) => {
+      ctx.strokeStyle = P.dim; ctx.setLineDash([4, 3]); ctx.lineWidth = 1;
+      ctx.strokeRect(x0, y0, tw * sc, th * sc); ctx.setLineDash([]);
+      ctx.fillStyle = P.dim; ctx.textAlign = "right";
+      ctx.fillText(n, x0 + tw * sc - 4, y0 + th * sc - 5);
+    });
+    ctx.fillStyle = P.accent; ctx.font = "700 13px " + CB.color("font");
+    ctx.textAlign = "left";
+    ctx.fillText(`내 사진 ${Math.round(px)}×${Math.round(py)}`, x0, y0 + py * sc + 16);
+    CB.stat("mp-res", `${Math.round(px)}×${Math.round(py)}`);
+    CB.stat("mp-print", `${CB.fmt((px / 300) * 2.54, 3)}×${CB.fmt((py / 300) * 2.54, 3)}<small>cm</small>`);
+    CB.stat("mp-pitch", CB.fmt((sw / px) * 1000, 3) + "<small>µm</small>");
+  }, { aspect: 0.62, maxHeight: 420 });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>용어집 & 종합 퀴즈 · CameraBook</title>
+<meta name="description" content="CameraBook에 나온 카메라·사진 용어를 검색하고, 전 범위 종합 퀴즈로 실력을 점검한다.">
+<link rel="canonical" href="https://camerabook.euiyun.com/chapters/glossary.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="용어집 &amp; 종합 퀴즈 · CameraBook">
+<meta property="og:description" content="CameraBook에 나온 카메라·사진 용어를 검색하고, 전 범위 종합 퀴즈로 실력을 점검한다.">
+<meta property="og:url" content="https://camerabook.euiyun.com/chapters/glossary.html">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"용어집 & 종합 퀴즈","name":"용어집 & 종합 퀴즈 · CameraBook","url":"https://camerabook.euiyun.com/chapters/glossary.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/glossary.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":17,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"CameraBook에 나온 카메라·사진 용어를 검색하고, 전 범위 종합 퀴즈로 실력을 점검한다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"17 용어집 & 종합 퀴즈","item":"https://camerabook.euiyun.com/chapters/glossary.html"}]}]}</script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .gl-filter { display: flex; flex-wrap: wrap; gap: 6px; margin: -8px 0 16px; }
+  .gl-filter button { font: inherit; font-size: 12.5px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+  .gl-filter button.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+  .gl-count { font-size: 13px; color: var(--text-faint); margin-bottom: 10px; }
+  .score { position: sticky; top: calc(var(--nav-h) + 8px); z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 12px; background: var(--bg-elev); border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 16px; font-weight: 700; }
+  .score .bar { flex: 1; height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+  .score .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .3s; }
+  .quiz-q .ch { font-size: 12px; font-weight: 400; color: var(--text-faint); margin-left: 6px; }
+</style>
+</head>
+<body data-chapter="glossary">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 17</div>
+    <h1>용어집 & 종합 퀴즈</h1>
+    <p class="lead">카메라 메뉴와 리뷰 기사에 나오는 용어들을 한곳에 모았습니다. 검색하거나 장별로 걸러 보고, 링크를 눌러 해당 장으로 돌아가 복습하세요. 마지막으로 전 범위 종합 퀴즈로 실력을 점검해 봅시다.</p>
+  </header>
+
+  <section id="glossary">
+    <h2>용어집</h2>
+    <input class="gl-search" id="gl-q" type="search" placeholder="용어 검색 (예: 조리개, ISO, bokeh, 동조)" aria-label="용어 검색">
+    <div class="gl-filter" id="gl-f"></div>
+    <div class="gl-count" id="gl-n"></div>
+    <div class="gl-list" id="gl-list"></div>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>종합 퀴즈</h2>
+    <div class="score"><span id="sc-t">0 / 0</span><span class="bar"><i id="sc-b"></i></span><button class="btn" id="sc-r">다시 풀기</button></div>
+    <div class="quiz" id="final"></div>
+  </section>
+</main>
+
+<script>
+(function () {
+  const T = [
+    // 01 기초
+    ["카메라 옵스큐라", "Camera Obscura", "어두운 방의 작은 구멍으로 바깥 풍경이 거꾸로 비치는 현상. 카메라의 기원.", "basics"],
+    ["바늘구멍 사진기", "Pinhole Camera", "렌즈 없이 작은 구멍만으로 상을 맺는 카메라. 초점 조절이 필요 없지만 매우 어둡다.", "basics"],
+    ["회절", "Diffraction", "빛이 좁은 구멍이나 가장자리를 지나며 퍼지는 현상. 조리개를 많이 조이면 사진이 뿌옇게 된다.", "aperture"],
+    ["DSLR", "Digital Single-Lens Reflex", "렌즈 뒤 거울과 프리즘으로 광학 뷰파인더에 상을 보내는 렌즈 교환식 카메라.", "basics"],
+    ["미러리스", "Mirrorless", "거울 없이 센서 영상을 전자식 뷰파인더로 보여 주는 렌즈 교환식 카메라.", "basics"],
+    ["전자식 뷰파인더", "EVF", "센서가 받은 영상을 작은 화면으로 보여 주는 뷰파인더. 노출·WB가 반영된 결과를 미리 볼 수 있다.", "basics"],
+    ["풀프레임", "Full Frame", "35 mm 필름과 같은 36×24 mm 크기의 센서.", "basics"],
+    ["APS-C", "APS-C", "약 23.5×15.6 mm 센서. 크롭 팩터 약 1.5(캐논은 1.6).", "basics"],
+    ["마이크로 포서드", "Micro Four Thirds", "17.3×13 mm 센서 규격. 크롭 팩터 2.0.", "basics"],
+    ["크롭 팩터", "Crop Factor", "풀프레임 대각선 ÷ 센서 대각선. 화각 환산과 등가 조리개 계산에 쓴다.", "basics"],
+    ["화소", "Pixel", "센서 위 빛을 재는 한 칸. 화소 수가 많으면 디테일과 크롭 여유가 늘어난다.", "basics"],
+    ["픽셀 비닝", "Pixel Binning", "인접한 여러 픽셀을 하나로 묶어 읽는 것. 해상도 대신 감도·노이즈 성능을 얻는다.", "basics"],
+    // 02 노출
+    ["노출", "Exposure", "센서에 들어간 빛의 양. 조리개(양)와 셔터(시간)가 정한다.", "exposure"],
+    ["노출 삼각형", "Exposure Triangle", "조리개·셔터 속도·ISO가 함께 사진의 밝기를 정한다는 개념.", "exposure"],
+    ["스톱", "Stop", "빛의 2배(또는 1/2)에 해당하는 단위. 1스톱 = 빛 2배.", "exposure"],
+    ["EV", "Exposure Value", "조리개·셔터 조합을 한 숫자로 나타낸 값. EV = log₂(N²/t). 1 증가 = 1스톱 어둡게.", "exposure"],
+    ["상반 법칙", "Reciprocity", "한쪽을 n스톱 늘리고 다른 쪽을 n스톱 줄이면 노출이 같다는 성질.", "exposure"],
+    ["써니 16 법칙", "Sunny 16 Rule", "맑은 날 f/16에서 셔터 속도 = 1/ISO라는 어림법.", "exposure"],
+    // 03 조리개
+    ["조리개", "Aperture", "렌즈 안에서 빛이 지나는 구멍의 크기를 조절하는 장치.", "aperture"],
+    ["F값", "F-number", "초점거리 ÷ 조리개 지름. 작을수록 구멍이 크고 밝다.", "aperture"],
+    ["최대 개방", "Maximum Aperture", "렌즈가 열 수 있는 가장 큰 조리개(가장 작은 F값).", "aperture"],
+    ["피사계 심도", "Depth of Field", "사진에서 선명해 보이는 앞뒤 거리 범위.", "aperture"],
+    ["착란원", "Circle of Confusion", "초점이 맞지 않은 점이 센서 위에 만드는 작은 원. 충분히 작으면 선명해 보인다.", "aperture"],
+    ["아웃포커스", "Shallow Focus", "배경을 흐리게 해 피사체를 돋보이게 하는 표현(한국식 표현).", "aperture"],
+    ["보케", "Bokeh", "흐려진 부분의 모양과 질감. 점광원은 조리개 모양의 빛망울이 된다.", "aperture"],
+    ["과초점 거리", "Hyperfocal Distance", "초점을 맞추면 그 절반 거리부터 무한대까지 선명해지는 거리.", "aperture"],
+    ["수차", "Aberration", "렌즈 설계의 한계로 상이 흐려지거나 색이 번지는 현상. 조이면 줄어든다.", "aperture"],
+    ["등가 조리개", "Equivalent Aperture", "F값 × 크롭 팩터. 다른 센서 크기의 심도·노이즈를 비교할 때 쓴다.", "aperture"],
+    // 04 셔터
+    ["셔터 속도", "Shutter Speed", "센서가 빛을 받는 시간. 움직임의 정지·흐름을 결정한다.", "shutter"],
+    ["모션 블러", "Motion Blur", "노출 중 피사체가 움직여 생기는 흐름.", "shutter"],
+    ["패닝", "Panning", "움직이는 피사체를 따라 카메라를 돌리며 찍어 피사체는 또렷, 배경은 흐르게 하는 기법.", "shutter"],
+    ["1/초점거리 법칙", "Reciprocal Rule", "손떨림 없이 찍을 수 있는 셔터 속도의 경험칙: 1/(35 mm 환산 초점거리)초.", "shutter"],
+    ["장노출", "Long Exposure", "수 초 이상 셔터를 열어 빛 궤적이나 물의 흐름을 표현하는 기법.", "shutter"],
+    ["벌브", "Bulb", "버튼을 누르고 있는 동안 셔터가 열려 있는 모드.", "shutter"],
+    ["ND 필터", "Neutral Density Filter", "색을 바꾸지 않고 빛의 양만 줄이는 필터. ND8 = 3스톱.", "shutter"],
+    ["포컬 플레인 셔터", "Focal-plane Shutter", "센서 바로 앞의 선막과 후막으로 노출 시간을 만드는 기계식 셔터.", "shutter"],
+    ["전자 셔터", "Electronic Shutter", "센서를 전자적으로 켜고 끄는 셔터. 무소음·초고속이지만 롤링 셔터 왜곡이 생길 수 있다.", "shutter"],
+    ["롤링 셔터", "Rolling Shutter", "센서를 한 줄씩 순서대로 읽어 빠른 움직임이 기울거나 휘는 현상(젤로 현상).", "shutter"],
+    ["글로벌 셔터", "Global Shutter", "모든 픽셀을 동시에 노출하는 셔터. 롤링 셔터 왜곡이 없다.", "shutter"],
+    // 05 ISO
+    ["ISO", "ISO", "센서 신호의 증폭 정도. 빛을 늘리지 않고 밝게 보이게 한다.", "iso"],
+    ["노이즈", "Noise", "사진에 무작위로 생기는 자글자글한 얼룩. 주원인은 빛 부족.", "iso"],
+    ["광자 샷 노이즈", "Photon Shot Noise", "광자 수의 무작위 변동에서 오는 노이즈. 크기는 √(광자 수).", "iso"],
+    ["SNR", "Signal-to-Noise Ratio", "신호 대 잡음비. 클수록 깨끗하다. 샷 노이즈만 있을 때 √N.", "iso"],
+    ["읽기 노이즈", "Read Noise", "센서 회로가 신호를 읽을 때 더해지는 잡음. 어두운 그림자에서 드러난다.", "iso"],
+    ["ISO 불변성", "ISO Invariance", "ISO를 올려 찍은 것과 낮게 찍고 후보정으로 밝힌 것의 노이즈가 거의 같은 성질.", "iso"],
+    ["듀얼 네이티브 ISO", "Dual Native ISO", "두 가지 기준 감도를 가져 높은 쪽에서 회로 잡음이 줄어드는 센서 설계.", "iso"],
+    ["노이즈 감소", "Noise Reduction", "노이즈를 줄이는 처리. 강하면 디테일도 뭉개진다.", "iso"],
+    ["Auto ISO", "Auto ISO", "밝기에 맞춰 ISO를 자동으로 정하는 기능. 최대 ISO와 최저 셔터 속도를 설정할 수 있다.", "iso"],
+    // 06 모드·측광
+    ["프로그램 모드", "P mode", "카메라가 조리개·셔터 조합을 정하는 모드. 프로그램 시프트로 조합을 바꿀 수 있다.", "modes"],
+    ["조리개 우선", "A / Av mode", "사용자가 조리개를 정하고 카메라가 셔터를 맞추는 모드.", "modes"],
+    ["셔터 우선", "S / Tv mode", "사용자가 셔터를 정하고 카메라가 조리개를 맞추는 모드.", "modes"],
+    ["수동 모드", "M mode", "조리개와 셔터를 모두 사용자가 정하는 모드.", "modes"],
+    ["측광", "Metering", "카메라가 장면의 밝기를 재는 것. 평균을 18% 회색으로 맞추려 한다.", "modes"],
+    ["18% 회색", "Middle Gray", "노출계가 기준으로 삼는 중간 밝기의 반사율.", "modes"],
+    ["평가 측광", "Evaluative / Matrix", "화면을 여러 구역으로 나눠 분석하는 기본 측광 방식.", "modes"],
+    ["중앙중점 측광", "Center-weighted", "화면 가운데에 비중을 크게 두는 측광 방식.", "modes"],
+    ["스팟 측광", "Spot Metering", "화면의 작은 영역(1~5%)만 재는 측광 방식.", "modes"],
+    ["노출 보정", "Exposure Compensation", "카메라가 정한 노출을 사용자가 ±로 조절하는 기능.", "modes"],
+    ["AE 잠금", "AE-L", "측광한 노출 값을 고정하는 기능.", "modes"],
+    // 07 히스토그램
+    ["히스토그램", "Histogram", "사진 픽셀의 밝기 분포 그래프. 왼쪽 = 검정, 오른쪽 = 흰색.", "histogram"],
+    ["클리핑", "Clipping", "표현 범위를 넘어 최대(255)나 최소(0)로 잘린 상태.", "histogram"],
+    ["하이라이트 경고", "Highlight Warning / Blinkies", "재생 화면에서 날아간 부분을 깜박여 알려 주는 기능.", "histogram"],
+    ["제브라", "Zebra", "지정한 밝기 이상인 영역에 사선 줄무늬를 표시하는 기능.", "histogram"],
+    ["다이내믹 레인지", "Dynamic Range", "한 번에 담을 수 있는 가장 밝은 것과 어두운 것의 비율(스톱).", "histogram"],
+    ["ETTR", "Expose To The Right", "하이라이트가 잘리지 않는 한 최대한 밝게 찍어 노이즈를 줄이는 RAW 기법.", "histogram"],
+    ["브라케팅", "Bracketing", "노출 등을 조금씩 바꿔 여러 장을 연속 촬영하는 기능.", "histogram"],
+    ["HDR", "High Dynamic Range", "노출이 다른 여러 장을 합성해 넓은 밝기 범위를 담는 기법.", "histogram"],
+    ["톤 매핑", "Tone Mapping", "넓은 밝기 범위를 화면이 표시할 수 있는 범위로 눌러 담는 처리.", "histogram"],
+    // 08 초점
+    ["수동 초점", "MF", "사용자가 초점 링을 돌려 직접 초점을 맞추는 것.", "focus"],
+    ["포커스 피킹", "Focus Peaking", "초점이 맞은 경계에 색을 칠해 보여 주는 MF 보조 기능.", "focus"],
+    ["콘트라스트 AF", "Contrast-detect AF", "영상의 대비가 최대가 되는 위치를 찾아가는 AF. 정확하지만 헌팅이 있다.", "focus"],
+    ["위상차 AF", "Phase-detect AF", "렌즈 양쪽을 지난 빛의 어긋남으로 방향과 거리를 한 번에 계산하는 AF.", "focus"],
+    ["듀얼 픽셀 AF", "Dual Pixel AF", "센서 픽셀 하나를 둘로 나눠 모든 픽셀에서 위상차를 감지하는 방식.", "focus"],
+    ["헌팅", "Hunting", "AF가 초점을 찾지 못하고 앞뒤로 오가는 현상.", "focus"],
+    ["AF-S", "Single AF / One Shot", "반셔터 시 한 번 초점을 맞추고 고정하는 모드.", "focus"],
+    ["AF-C", "Continuous AF / AI Servo", "반셔터를 누르는 동안 계속 초점을 다시 맞추는 모드.", "focus"],
+    ["AF 영역 모드", "AF Area Mode", "어느 부분을 보고 초점을 맞출지 정하는 설정(싱글, 존, 와이드, 트래킹).", "focus"],
+    ["눈 인식 AF", "Eye AF", "사람·동물의 눈을 찾아 초점을 맞추는 기능.", "focus"],
+    ["백버튼 AF", "Back-button AF", "AF를 반셔터 대신 뒤쪽 버튼에 맡기는 설정.", "focus"],
+    // 09 초점거리
+    ["초점거리", "Focal Length", "무한대에 초점을 맞췄을 때 렌즈 주점에서 센서까지의 거리. 화각을 정한다.", "focal"],
+    ["화각", "Angle of View", "카메라가 담는 장면의 각도.", "focal"],
+    ["35 mm 환산 초점거리", "35mm Equivalent", "실제 초점거리 × 크롭 팩터. 다른 센서 간 화각 비교용.", "focal"],
+    ["광각", "Wide-angle", "35 mm 환산 약 35 mm 이하의 넓은 화각 렌즈.", "focal"],
+    ["망원", "Telephoto", "35 mm 환산 약 70 mm 이상의 좁은 화각 렌즈.", "focal"],
+    ["원근감", "Perspective", "가까운 것과 먼 것의 크기 비율. 촬영 거리가 정한다.", "focal"],
+    ["압축 효과", "Telephoto Compression", "먼 곳에서 망원으로 찍을 때 배경이 가까워 보이는 효과. 원인은 거리.", "focal"],
+    ["돌리 줌", "Dolly Zoom", "카메라를 움직이며 줌으로 피사체 크기를 유지해 배경만 변하게 하는 기법.", "focal"],
+    ["단렌즈", "Prime Lens", "초점거리가 하나로 고정된 렌즈. 대체로 밝고 작다.", "focal"],
+    ["줌렌즈", "Zoom Lens", "초점거리를 바꿀 수 있는 렌즈.", "focal"],
+    ["배럴 왜곡", "Barrel Distortion", "직선이 바깥으로 부푸는 왜곡. 광각에서 흔하다.", "focal"],
+    ["핀쿠션 왜곡", "Pincushion Distortion", "직선이 안쪽으로 오므라드는 왜곡. 망원에서 흔하다.", "focal"],
+    ["키스톤", "Keystone", "카메라를 기울여 찍을 때 평행선이 한쪽으로 모이는 원근 현상.", "focal"],
+    // 10 색
+    ["색온도", "Color Temperature", "빛의 색을 켈빈(K)으로 나타낸 값. 낮을수록 주황, 높을수록 파랑.", "color"],
+    ["화이트 밸런스", "White Balance", "조명의 색을 보정해 흰색을 흰색으로 만드는 설정.", "color"],
+    ["AWB", "Auto White Balance", "카메라가 장면을 분석해 화이트 밸런스를 자동으로 정하는 기능.", "color"],
+    ["틴트", "Tint", "초록–마젠타 방향의 색 보정. 형광등의 초록 기운을 잡는다.", "color"],
+    ["회색 카드", "Gray Card", "중립 회색 판. 커스텀 화이트 밸런스와 노출 기준으로 쓴다.", "color"],
+    ["혼합광", "Mixed Lighting", "색온도가 다른 광원이 섞인 조명. WB 하나로 맞지 않는다.", "color"],
+    ["픽처 스타일", "Picture Style / Profile", "JPEG의 대비·채도·색감 레시피.", "color"],
+    ["색 공간", "Color Space", "표현할 수 있는 색의 범위 규격. sRGB, Adobe RGB, Display P3 등.", "color"],
+    // 11 RAW
+    ["RAW", "RAW", "현상 전의 센서 데이터. WB·톤을 나중에 정할 수 있다.", "raw"],
+    ["JPEG", "JPEG", "카메라가 현상·압축을 마친 8비트 손실 압축 이미지.", "raw"],
+    ["HEIF", "HEIF / HEIC", "JPEG보다 효율적인 10비트 이미지 형식.", "raw"],
+    ["DNG", "Digital Negative", "어도비가 만든 공개 RAW 형식.", "raw"],
+    ["베이어 패턴", "Bayer Pattern", "센서 위 빨강·초록·파랑 필터의 바둑판 배열.", "raw"],
+    ["디모자이크", "Demosaicing", "한 색만 잰 픽셀들로부터 모든 픽셀의 RGB를 추정하는 처리.", "raw"],
+    ["비트 심도", "Bit Depth", "밝기 단계의 수. 8비트 256단계, 14비트 16,384단계.", "raw"],
+    ["밴딩", "Banding / Posterization", "계조가 부족해 매끈해야 할 그라데이션이 띠처럼 보이는 현상.", "raw"],
+    ["현상", "Development", "RAW 데이터를 사진으로 만드는 과정.", "raw"],
+    // 12 손떨림·드라이브
+    ["OIS", "Optical Image Stabilization", "렌즈 안의 보정 렌즈를 움직여 손떨림을 상쇄하는 방식.", "stabilization"],
+    ["IBIS", "In-Body Image Stabilization", "센서를 움직여 손떨림을 상쇄하는 바디 내장 방식.", "stabilization"],
+    ["EIS", "Electronic Image Stabilization", "영상 처리로 흔들림을 보정하는 방식. 화면을 조금 잘라 쓴다.", "stabilization"],
+    ["연속 촬영", "Burst / Continuous Shooting", "셔터를 누르는 동안 계속 찍는 기능. fps로 성능을 표시.", "stabilization"],
+    ["버퍼", "Buffer", "찍은 사진을 카드에 쓰기 전에 잠시 담아 두는 카메라 내 고속 메모리.", "stabilization"],
+    ["프리 캡처", "Pre-capture", "반셔터 중 미리 찍어 두다가 셔터를 누르면 직전 장면까지 저장하는 기능.", "stabilization"],
+    ["인터벌 촬영", "Interval Shooting", "일정한 간격으로 자동 촬영하는 기능. 타임랩스에 쓴다.", "stabilization"],
+    ["타임랩스", "Time-lapse", "긴 시간 동안 찍은 사진을 이어 붙여 빠르게 재생하는 영상.", "stabilization"],
+    // 13 플래시
+    ["딱딱한 빛", "Hard Light", "그림자 경계가 또렷한 빛. 작거나 먼 광원.", "flash"],
+    ["부드러운 빛", "Soft Light", "그림자 경계가 부드러운 빛. 크거나 가까운 광원.", "flash"],
+    ["역제곱 법칙", "Inverse Square Law", "광원과의 거리가 2배가 되면 빛의 세기는 1/4이 된다.", "flash"],
+    ["가이드 넘버", "Guide Number", "플래시 광량 지표. GN = 거리(m) × F값(ISO 100).", "flash"],
+    ["동조 속도", "Sync Speed", "센서 전체가 동시에 열리는 가장 빠른 셔터 속도. 일반 플래시의 한계.", "flash"],
+    ["고속 동조", "HSS", "플래시를 빠르게 연속 발광해 동조 속도보다 빠른 셔터에서도 쓰는 모드.", "flash"],
+    ["후막 동조", "Rear-curtain Sync", "노출이 끝날 때 플래시를 터뜨려 잔상이 피사체 뒤에 남게 하는 설정.", "flash"],
+    ["필 플래시", "Fill Flash", "주변광 아래 그늘진 피사체를 약하게 밝히는 플래시 사용법.", "flash"],
+    ["바운스", "Bounce", "플래시를 벽이나 천장에 반사시켜 부드러운 빛을 만드는 기법.", "flash"],
+    ["TTL", "Through The Lens", "렌즈를 통해 들어온 예비 발광을 재서 플래시 출력을 자동으로 정하는 방식.", "flash"],
+    // 14 동영상
+    ["프레임 레이트", "Frame Rate (fps)", "1초에 담는 프레임 수. 24·30·60p 등.", "video"],
+    ["180° 셔터 규칙", "180° Shutter Rule", "동영상 셔터 속도 = 1/(2 × 프레임 레이트).", "video"],
+    ["셔터 각도", "Shutter Angle", "프레임 시간 중 노출 시간의 비율을 각도로 나타낸 것.", "video"],
+    ["플리커", "Flicker", "조명이 깜박이는 주기와 셔터가 맞지 않아 밝기가 일렁이는 현상.", "video"],
+    ["비트레이트", "Bitrate", "1초 영상에 쓰는 데이터 양(Mbps).", "video"],
+    ["코덱", "Codec", "영상 압축 방식. H.264, H.265, ProRes 등.", "video"],
+    ["Log", "Log Profile", "넓은 밝기 범위를 로그 곡선으로 납작하게 기록하는 영상 프로필.", "video"],
+    ["컬러 그레이딩", "Color Grading", "편집 단계에서 영상의 대비·색을 다듬는 작업.", "video"],
+    ["LUT", "Look-Up Table", "색 변환표. Log 영상에 표준 색을 입히거나 특정 룩을 적용할 때 쓴다.", "video"],
+    ["파형 모니터", "Waveform", "화면 가로 위치별 밝기 분포를 보여 주는 영상 노출 도구.", "video"],
+    // 15 스마트폰
+    ["컴퓨테이셔널 포토그래피", "Computational Photography", "여러 장의 사진과 연산으로 광학의 한계를 넘는 기술.", "smartphone"],
+    ["디지털 줌", "Digital Zoom", "사진 일부를 잘라 확대하는 줌. 화소가 줄어든다.", "smartphone"],
+    ["잠망경 렌즈", "Periscope / Folded Lens", "프리즘으로 빛을 꺾어 얇은 폰 안에 긴 초점거리를 넣은 망원 렌즈.", "smartphone"],
+    ["야간 모드", "Night Mode", "짧은 노출 여러 장을 정렬·평균해 노이즈를 줄이는 기능.", "smartphone"],
+    ["다중 프레임 합성", "Multi-frame Merge", "여러 장을 합쳐 노이즈와 다이내믹 레인지를 개선하는 처리.", "smartphone"],
+    ["깊이 지도", "Depth Map", "장면 각 부분의 거리를 나타낸 영상. 인물 모드의 배경 흐림에 쓴다.", "smartphone"],
+    ["인물 모드", "Portrait Mode", "깊이를 추정해 배경을 소프트웨어로 흐리는 기능.", "smartphone"],
+    ["제로 셔터 랙", "Zero Shutter Lag", "셔터를 누르기 전부터 찍어 둔 프레임을 써서 지연 없이 촬영하는 방식.", "smartphone"],
+  ];
+  const chs = Object.fromEntries(CB.CHAPTERS.map((c) => [c.slug, c]));
+  const list = document.getElementById("gl-list"), qEl = document.getElementById("gl-q"), fEl = document.getElementById("gl-f"), nEl = document.getElementById("gl-n");
+  let filt = "all";
+  const used = CB.CHAPTERS.map((c) => c.slug).filter((s) => T.some((t) => t[3] === s));
+  fEl.innerHTML = `<button data-c="all" class="on">전체</button>` + used.map((s) => `<button data-c="${s}">${chs[s].num} ${chs[s].title}</button>`).join("");
+  fEl.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { filt = b.dataset.c; fEl.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b)); render(); }));
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function render() {
+    const q = qEl.value.trim().toLowerCase();
+    const rows = T.filter((t) => (filt === "all" || t[3] === filt) && (!q || (t[0] + " " + t[1] + " " + t[2]).toLowerCase().includes(q)));
+    nEl.textContent = `${rows.length}개 / 전체 ${T.length}개`;
+    list.innerHTML = rows.map((t) => `<div class="gl-item"><h4>${esc(t[0])}<span class="en">${esc(t[1])}</span></h4><p>${esc(t[2])}</p><a class="ch" href="${t[3]}.html">${chs[t[3]].num}장 · ${chs[t[3]].title} →</a></div>`).join("") || `<p style="color:var(--text-dim)">검색 결과가 없습니다.</p>`;
+  }
+  qEl.addEventListener("input", render);
+  render();
+
+  /* ------------------------------------------------ 종합 퀴즈 */
+  const Q = [
+    ["f/4 · 1/250 · ISO 400에서 조리개를 f/2.8로 열었다. 같은 밝기를 유지하려면 셔터는?", ["1/125", "1/500", "1/1000"], 1, "1스톱 밝아졌으니 셔터를 1스톱 빠르게: 1/500.", "exposure"],
+    ["배경 흐림을 가장 크게 하는 조합은?", ["24 mm, f/8, 피사체 5 m", "85 mm, f/1.8, 피사체 2 m", "50 mm, f/4, 피사체 10 m"], 1, "긴 초점거리, 큰 조리개, 가까운 거리가 모두 심도를 얕게 한다.", "aperture"],
+    ["f/22에서 사진이 f/8보다 뿌옇게 보이는 주된 이유는?", ["수차", "회절", "노이즈"], 1, "조리개를 많이 조이면 회절 번짐이 커진다.", "aperture"],
+    ["달리는 강아지를 멈추고 싶을 때 가장 중요한 설정은?", ["빠른 셔터 속도", "낮은 ISO", "작은 조리개"], 0, "움직임 정지는 셔터 속도가 결정한다.", "shutter"],
+    ["전자 셔터로 프로펠러가 휘어 찍히는 현상은?", ["모아레", "롤링 셔터 왜곡", "색수차"], 1, "센서를 줄 단위로 순차적으로 읽기 때문이다.", "shutter"],
+    ["ISO를 올리면 노이즈가 늘어 보이는 근본 원인은?", ["ISO가 센서를 뜨겁게 해서", "적은 빛(적은 광자)을 크게 증폭해서", "렌즈가 어두워져서"], 1, "노이즈의 주범은 빛 부족이고, ISO는 그 상태를 밝게 키울 뿐이다.", "iso"],
+    ["16장을 평균 내면 노이즈는?", ["1/16", "1/4", "그대로"], 1, "무작위 노이즈는 1/√N. √16 = 4.", "smartphone"],
+    ["하얀 눈밭이 회색으로 찍혔다. 해결책은?", ["노출 보정 +", "노출 보정 −", "WB를 텅스텐으로"], 0, "노출계가 눈을 18% 회색으로 만들려 했으니 + 보정.", "modes"],
+    ["S 모드에서 조리개 값이 깜박인다. 의미는?", ["렌즈 고장", "카메라가 맞출 수 있는 조리개 범위를 벗어났다", "배터리 부족"], 1, "최대 개방으로도 부족하거나 최소 조리개로도 과다하다는 경고.", "modes"],
+    ["히스토그램 오른쪽 끝에 벽이 쌓였다면?", ["노출 부족", "하이라이트 클리핑", "색 공간 오류"], 1, "최대 밝기로 잘린 픽셀이 많다는 뜻.", "histogram"],
+    ["장면이 카메라 DR보다 넓을 때의 해결책이 아닌 것은?", ["브라케팅 + HDR 합성", "필 플래시로 그림자 밝히기", "ISO를 크게 올리기"], 2, "ISO를 올리면 DR은 보통 줄어든다.", "histogram"],
+    ["콘트라스트 AF의 약점은?", ["방향을 몰라 헌팅이 생긴다", "밝은 곳에서 동작하지 않는다", "정확도가 낮다"], 0, "대비 값만 보고 정점을 찾으므로 앞뒤로 더듬는다.", "focus"],
+    ["움직이는 피사체에 알맞은 AF 모드는?", ["AF-S", "AF-C", "MF"], 1, "AF-C는 반셔터 동안 계속 초점을 다시 맞춘다.", "focus"],
+    ["APS-C(×1.5)에 56 mm 렌즈를 끼우면 풀프레임 기준 화각은?", ["약 37 mm", "약 56 mm", "약 84 mm"], 2, "56 × 1.5 = 84 mm.", "focal"],
+    ["'망원 압축'의 진짜 원인은?", ["초점거리", "촬영 거리", "조리개"], 1, "원근감은 거리가 정한다. 망원은 멀리서 찍게 만들 뿐이다.", "focal"],
+    ["전구 조명 아래에서 사진이 주황색이다. WB를 어떻게?", ["색온도를 3,000K 근처로", "색온도를 7,500K로", "틴트를 초록으로"], 0, "조명이 3,000K라고 알려 주면 카메라가 파랗게 보정한다.", "color"],
+    ["RAW가 JPEG보다 유리하지 않은 것은?", ["WB 재조정", "하이라이트 복구", "파일 크기와 즉시 공유"], 2, "RAW는 크고 현상이 필요하다.", "raw"],
+    ["'5스톱 손떨림 보정'이면 1/250 대신 대략?", ["1/125", "1/30", "1/8"], 2, "2⁵ = 32배: 1/250 × 32 ≈ 1/8.", "stabilization"],
+    ["플래시–피사체 거리가 1 m에서 2 m가 되면 빛은?", ["1/2", "1/4", "그대로"], 1, "역제곱 법칙: (1/2)² = 1/4, 2스톱.", "flash"],
+    ["동조 속도보다 빠른 셔터에서 일반 플래시를 쓰면?", ["검은 띠가 생긴다", "색이 바뀐다", "노이즈가 생긴다"], 0, "슬릿만 열린 순간에 섬광이 터져 일부만 빛을 받는다.", "flash"],
+    ["30p 영상의 180° 셔터 속도는?", ["1/30", "1/60", "1/120"], 1, "1/(2 × 30) = 1/60.", "video"],
+    ["맑은 날 f/1.8로 24p 영상을 찍을 때 필요한 것은?", ["ND 필터", "높은 ISO", "플래시"], 0, "셔터가 1/50로 묶여 있으니 빛을 줄여야 한다.", "video"],
+    ["폰 인물 모드가 머리카락 경계에서 실수하는 이유는?", ["렌즈가 작아서", "깊이 지도 추정이 어려워서", "셔터가 느려서"], 1, "소프트웨어 보케는 깊이 지도의 정확도에 달려 있다.", "smartphone"],
+    ["폰 카메라 앱의 2× 버튼(1×와 3× 카메라만 있을 때)은?", ["광학 줌", "메인 카메라를 잘라 쓰는 디지털 줌", "망원 카메라를 넓게 쓰는 것"], 1, "사이 배율은 넓은 쪽 카메라를 잘라 쓴다.", "smartphone"],
+  ];
+  const box = document.getElementById("final");
+  let answered = 0, correct = 0;
+  function build() {
+    answered = 0; correct = 0;
+    box.innerHTML = Q.map(([q, opts, a, exp, ch], i) => `<div class="quiz-q"><p>${i + 1}. ${q}<span class="ch">${chs[ch].num}장</span></p><div class="opts">${opts.map((o, k) => `<button class="opt"${k === a ? " data-correct" : ""}>${o}</button>`).join("")}</div><div class="quiz-exp">${exp} <a href="${ch}.html">${chs[ch].title} 복습 →</a></div></div>`).join("");
+    box.querySelectorAll(".quiz-q").forEach((qq) => {
+      const opts = [...qq.querySelectorAll("button.opt")];
+      opts.forEach((b) => b.addEventListener("click", () => {
+        opts.forEach((o) => { o.disabled = true; if (o.hasAttribute("data-correct")) o.classList.add("right"); });
+        if (!b.hasAttribute("data-correct")) b.classList.add("wrong"); else correct++;
+        qq.classList.add("done"); answered++; score();
+      }));
+    });
+    score();
+  }
+  function score() {
+    document.getElementById("sc-t").textContent = answered === Q.length ? `완료! ${correct} / ${Q.length} 정답 ${correct >= Q.length * 0.9 ? "— 카메라 마스터 🎉" : correct >= Q.length * 0.7 ? "— 훌륭해요!" : "— 틀린 장을 복습해 보세요"}` : `${correct} 정답 · ${answered} / ${Q.length} 풀이`;
+    document.getElementById("sc-b").style.width = (answered / Q.length) * 100 + "%";
+  }
+  document.getElementById("sc-r").addEventListener("click", build);
+  build();
+})();
+</script>
+</body>
+</html>

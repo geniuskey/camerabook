@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>히스토그램과 다이내믹 레인지 · CameraBook</title>
+<meta name="description" content="히스토그램 읽는 법, 하이라이트 클리핑과 제브라, 장면과 카메라의 다이내믹 레인지, 오른쪽 노출(ETTR), 브라케팅과 HDR 합성을 시뮬레이터로 배운다.">
+<link rel="canonical" href="https://camerabook.euiyun.com/chapters/histogram.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="히스토그램과 다이내믹 레인지 · CameraBook">
+<meta property="og:description" content="히스토그램 읽는 법, 하이라이트 클리핑과 제브라, 장면과 카메라의 다이내믹 레인지, 오른쪽 노출(ETTR), 브라케팅과 HDR 합성을 시뮬레이터로 배운다.">
+<meta property="og:url" content="https://camerabook.euiyun.com/chapters/histogram.html">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"히스토그램과 다이내믹 레인지","name":"히스토그램과 다이내믹 레인지 · CameraBook","url":"https://camerabook.euiyun.com/chapters/histogram.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/histogram.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":7,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"히스토그램 읽는 법, 하이라이트 클리핑과 제브라, 장면과 카메라의 다이내믹 레인지, 오른쪽 노출(ETTR), 브라케팅과 HDR 합성을 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"07 히스토그램과 다이내믹 레인지","item":"https://camerabook.euiyun.com/chapters/histogram.html"}]}]}</script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .hk { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding: 12px; background: var(--canvas-bg); }
+  .hk canvas { width: 100%; display: block; border-radius: 8px; }
+  .hk .cap { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+  .brk { display: grid; gap: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px 12px 0; background: var(--canvas-bg); }
+  .brk canvas { width: 100%; display: block; border-radius: 6px; }
+  .brk .cap { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 4px; font-family: var(--mono); }
+</style>
+</head>
+<body data-chapter="histogram">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 07</div>
+    <h1>히스토그램과 다이내믹 레인지</h1>
+    <p class="lead">카메라 화면은 밝기에 따라, 보는 각도와 주변 조명에 따라 실제보다 밝거나 어둡게 보입니다. 한낮의 야외에서 화면만 보고 노출을 판단하면 틀리기 쉽습니다. 이때 믿을 수 있는 것이 <b>히스토그램</b>입니다. 그리고 히스토그램을 보면 카메라가 한 번에 담을 수 있는 밝기의 폭, 즉 <b>다이내믹 레인지</b>의 한계도 눈에 들어옵니다.</p>
+    <ul class="objectives">
+      <li>히스토그램의 가로축·세로축이 뜻하는 것을 알고, 노출 과다·부족을 읽는다.</li>
+      <li>하이라이트 클리핑을 히스토그램, 깜박임, 제브라로 확인한다.</li>
+      <li>장면의 밝기 범위와 카메라의 다이내믹 레인지를 비교하고, 무엇을 포기할지 정한다.</li>
+      <li>브라케팅과 HDR 합성의 원리를 이해한다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="read">
+    <h2>히스토그램 읽기</h2>
+    <p><span class="term">히스토그램</span><span class="en">(Histogram)</span>은 사진의 모든 픽셀을 밝기별로 줄 세워 센 막대그래프입니다. 가로축 왼쪽 끝은 완전한 검정, 오른쪽 끝은 완전한 흰색이고, 세로축은 그 밝기를 가진 픽셀 수입니다. 산이 왼쪽에 몰려 있으면 어두운 사진, 오른쪽에 몰려 있으면 밝은 사진입니다.</p>
+    <div class="sim" id="sim-hist">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>라이브 히스토그램</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-hist"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>노출 <output id="hs-ev-out"></output></span><input type="range" id="hs-ev" min="-12" max="12" step="1" value="0"></label>
+          <div class="ctrl"><span>히스토그램</span><div class="seg" id="hs-mode"><button data-value="luma" class="on">밝기</button><button data-value="rgb">RGB</button></div></div>
+          <div class="ctrl"><span>노출 경고</span><div class="seg" id="hs-warn"><button data-value="none" class="on">없음</button><button data-value="blink">깜박임</button><button data-value="zebra">제브라 95%</button><button data-value="zebra70">제브라 70%</button></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">하얗게 날아간 픽셀</span><span class="v" id="hs-hi">—</span></div>
+        <div class="stat"><span class="k">까맣게 뭉개진 픽셀</span><span class="v" id="hs-lo">—</span></div>
+        <div class="stat"><span class="k">평균 밝기</span><span class="v" id="hs-mean">—</span></div>
+      </div>
+      <div class="sim-note">노출을 올리면 산 전체가 오른쪽으로 이동하다가 오른쪽 벽에 부딪혀 쌓입니다. 이렇게 벽에 붙은 픽셀은 '255'로 잘려 디테일이 사라진 것으로, <span class="term">클리핑</span><span class="en">(Clipping)</span>이라 합니다. RGB 모드에서는 빨간 셔츠처럼 한 색 채널만 먼저 잘리는 것도 볼 수 있습니다.</div>
+    </div>
+    <div class="callout"><strong>클리핑 경고 3종</strong><b>깜박임</b>(하이라이트 경고, '블링키'): 재생 화면에서 날아간 부분이 검게·빨갛게 깜박입니다. <b>제브라</b>: 촬영 중 지정한 밝기(보통 95~100%) 이상인 곳에 사선 줄무늬를 그립니다. 영상에서는 얼굴 피부가 70% 근처에 오도록 제브라 70%를 쓰기도 합니다. <b>히스토그램</b>: 오른쪽 끝에 쌓인 '벽'이 보이면 클리핑입니다.</div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="nogood">
+    <h2>'좋은 히스토그램'은 없다</h2>
+    <p>"히스토그램은 가운데 산 모양이어야 한다"는 말은 오해입니다. 히스토그램의 모양은 장면이 정합니다. 하얀 눈밭이나 밝은 웨딩 사진(하이 키)은 오른쪽에 몰려야 맞고, 야경이나 무대 사진(로우 키)은 왼쪽에 몰려야 맞습니다. 확인할 것은 두 가지뿐입니다.</p>
+    <ol>
+      <li><b>잃으면 안 되는 부분이 잘렸는가?</b> 신부 드레스의 주름, 하늘의 구름 같은 부분이 오른쪽 벽에 붙지 않았는지.</li>
+      <li><b>의도한 분위기인가?</b> 밝고 경쾌하게, 혹은 어둡고 묵직하게. 산의 위치가 그 의도와 맞는지.</li>
+    </ol>
+    <div class="sim" id="sim-keys">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>장면별 히스토그램</h3></div>
+      <div class="hk" id="hk"></div>
+      <div class="sim-note">셋 다 적정 노출입니다. 눈밭은 오른쪽, 야경은 왼쪽에 몰려 있고, 역광 창가는 양 끝으로 갈라진 '쌍봉'입니다. 쌍봉은 장면의 밝기 범위가 넓다는 신호로, 다음 절의 주제입니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="dr">
+    <h2>다이내믹 레인지: 한 장에 담을 수 있는 밝기의 폭</h2>
+    <p>맑은 날 창가에 선 사람을 찍으면 창밖 하늘은 실내 그늘보다 수백~수천 배 밝습니다. 스톱으로 10~12스톱 차이입니다. 우리 눈은 이 차이를 비교적 잘 보지만, 센서는 한 번에 담을 수 있는 범위에 한계가 있습니다. 이 범위를 <span class="term">다이내믹 레인지</span><span class="en">(Dynamic Range, DR)</span>라 하고, 역시 스톱으로 표시합니다.</p>
+    <p>센서의 DR은 '가장 밝은 쪽 한계(포화)'와 '가장 어두운 쪽 한계(노이즈 바닥)'의 비율입니다. 노출을 올리고 내리는 것은 이 고정된 폭의 '창문'을 장면의 밝기 범위 위에서 위아래로 미는 것과 같습니다. 창문보다 장면이 넓으면 어딘가는 반드시 잘립니다.</p>
+    <div class="sim" id="sim-dr">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>다이내믹 레인지 창문</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-dr"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>노출 <output id="dr-ev-out"></output></span><input type="range" id="dr-ev" min="-12" max="18" step="1" value="0"></label>
+          <div class="ctrl"><span>카메라 DR</span><div class="seg" id="dr-cam"><button data-value="9">9스톱 (폰 1장)</button><button data-value="12" class="on">12스톱 (APS-C)</button><button data-value="14.5">14.5스톱 (FF)</button></div></div>
+          <label class="check"><input type="checkbox" id="dr-lift" checked> RAW 현상처럼 그림자 끌어올리기</label>
+          <label class="check"><input type="checkbox" id="dr-ov" checked> 잘린 영역 표시</label>
+        </div>
+      </div>
+      <div class="sim-view" style="border-top:1px solid var(--border)"><canvas id="cv-drbar"></canvas></div>
+      <div class="sim-note">아래 막대는 장면의 밝기 분포(스톱, 로그 단위)와 카메라가 담는 범위(창문)입니다. 빨강 = 포화로 날아감, 파랑 = 노이즈에 묻힘. 노출을 내려 창밖을 지키면 실내가 노이즈에 묻히고, 올려 얼굴을 살리면 창밖이 날아갑니다. DR이 넓은 카메라일수록 둘 다 지킬 여지가 커집니다.</div>
+    </div>
+    <div class="callout tip"><strong>ETTR: 오른쪽으로 노출하기</strong>RAW로 찍는다면 하이라이트가 잘리지 않는 한도에서 최대한 밝게 찍는 것이 노이즈에 유리합니다(<span class="term">ETTR</span>, Expose To The Right). 5장에서 보았듯 빛이 많을수록 깨끗하기 때문입니다. 찍은 뒤 현상에서 밝기를 낮추면 그림자가 더 깨끗합니다. 단, 카메라 히스토그램은 RAW가 아니라 JPEG 미리보기 기준이라 실제 RAW에는 0.5~1스톱 여유가 더 있는 경우가 많습니다.</div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="hdr">
+    <h2>브라케팅과 HDR 합성</h2>
+    <p>장면이 카메라의 DR보다 넓다면, 노출을 달리해 여러 장을 찍어 합치면 됩니다. 노출을 일정 간격으로 바꿔 연속 촬영하는 기능을 <span class="term">노출 브라케팅</span><span class="en">(AEB, Auto Exposure Bracketing)</span>이라 하고, 이를 합쳐 넓은 밝기 범위를 한 장에 담는 것을 <span class="term">HDR 합성</span><span class="en">(High Dynamic Range)</span>이라 합니다.</p>
+    <div class="sim" id="sim-hdr">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>3장 브라케팅 → HDR</h3></div>
+      <div class="brk" id="brk"></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-hdr"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>브라케팅 간격 <output id="hd-gap-out"></output></span><input type="range" id="hd-gap" min="1" max="3" step="1" value="2"></label>
+          <label class="ctrl"><span>톤 매핑 강도 <output id="hd-tm-out"></output></span><input type="range" id="hd-tm" min="0" max="100" value="60"></label>
+          <label class="check"><input type="checkbox" id="hd-ghost"> 바람에 흔들리는 사람(고스트)</label>
+        </div>
+      </div>
+      <div class="sim-note">어두운 컷은 창밖을, 밝은 컷은 실내를 책임집니다. 합성은 각 픽셀마다 '잘리지도 묻히지도 않은' 컷의 값을 골라 섞고, 넓어진 밝기 범위를 모니터에 맞게 눌러 담습니다(톤 매핑). 톤 매핑을 과하게 하면 경계에 후광이 생기고 그림처럼 부자연스러워집니다. 촬영 사이에 피사체가 움직이면 반투명한 유령(고스트)이 생기는 것도 확인하세요.</div>
+    </div>
+    <p>스마트폰의 'HDR'은 이 과정을 셔터를 누르기 전부터 자동으로 해 줍니다. 짧은 노출 여러 장을 계속 찍어 두었다가 정렬·합성하므로 고스트도 거의 없습니다(15장). 카메라의 'HDR 모드'나 'D-레인지 옵티마이저', 'DR 확장' 같은 기능도 비슷한 목적이지만, 대부분 한 장 안에서 어두운 곳만 끌어올리는 방식이라 효과는 더 작습니다.</p>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>히스토그램: 가로 = 밝기(왼쪽 검정, 오른쪽 흰색), 세로 = 픽셀 수. 화면 밝기보다 믿을 만하다.</li>
+      <li>양 끝 벽에 쌓이면 클리핑. 깜박임·제브라·히스토그램으로 확인한다.</li>
+      <li>히스토그램의 '정답 모양'은 없다. 장면과 의도가 정한다. 지켜야 할 하이라이트가 잘렸는지만 보라.</li>
+      <li>카메라 DR은 고정된 창문이다. 장면이 더 넓으면 무엇을 포기할지 선택하거나 여러 장을 합성한다.</li>
+      <li>RAW라면 하이라이트를 지키는 한 밝게(ETTR). 브라케팅 + HDR 합성으로 DR을 넓힐 수 있다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>히스토그램의 오른쪽 끝에 높은 벽이 생겼다. 무슨 뜻인가?</p><div class="opts">
+        <button class="opt">사진이 너무 어둡다</button>
+        <button class="opt" data-correct>상당수 픽셀이 최대 밝기로 잘려(하이라이트 클리핑) 디테일이 없다</button>
+        <button class="opt">색이 너무 진하다</button>
+      </div><div class="quiz-exp">오른쪽 끝(255)에 몰린 픽셀은 더 밝은 값을 표현할 수 없어 잘린 것이다.</div></div>
+      <div class="quiz-q"><p>흰 눈 덮인 산을 찍은 적정 노출 사진의 히스토그램으로 자연스러운 것은?</p><div class="opts">
+        <button class="opt">가운데 종 모양</button>
+        <button class="opt" data-correct>오른쪽에 몰려 있지만 끝 벽에는 붙지 않은 모양</button>
+        <button class="opt">왼쪽에 몰린 모양</button>
+      </div><div class="quiz-exp">밝은 장면은 밝은 쪽에 픽셀이 많은 것이 정상이다. 눈의 질감이 살아 있도록 오른쪽 끝에는 닿지 않게 한다.</div></div>
+      <div class="quiz-q"><p>카메라 DR이 12스톱인데 장면이 15스톱이다. 한 장으로 찍을 때 일어나는 일은?</p><div class="opts">
+        <button class="opt">노출을 잘 맞추면 전부 담을 수 있다</button>
+        <button class="opt" data-correct>어딘가 3스톱 정도는 날아가거나 노이즈에 묻힌다</button>
+        <button class="opt">ISO를 올리면 DR이 넓어져 해결된다</button>
+      </div><div class="quiz-exp">창문 폭(12)이 장면 폭(15)보다 좁으므로 어느 쪽을 잘라낼지 선택해야 한다. ISO를 올리면 오히려 DR은 보통 줄어든다. 해결책은 HDR 합성이나 조명 보충(플래시, 반사판)이다.</div></div>
+      <div class="quiz-q"><p>RAW 촬영에서 ETTR(오른쪽 노출)을 하는 이유는?</p><div class="opts">
+        <button class="opt">색을 더 진하게 하려고</button>
+        <button class="opt" data-correct>더 많은 빛을 받아 그림자 노이즈를 줄이려고</button>
+        <button class="opt">파일 크기를 줄이려고</button>
+      </div><div class="quiz-exp">하이라이트가 잘리지 않는 한도에서 빛을 많이 받으면 SNR이 높아진다. 나중에 밝기를 내리면 깨끗한 그림자를 얻는다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* 제브라/깜박임 오버레이 */
+function overlayWarn(ctx, img, w, h, mode, thr) {
+  if (mode === "none") return;
+  const W = img.width, H = img.height, d = img.data, sx = w / W, sy = h / H;
+  const blinkOn = Math.floor(performance.now() / 350) % 2 === 0;
+  ctx.save();
+  for (let y = 0; y < H; y += 1) for (let x = 0; x < W; x += 1) {
+    const i = (y * W + x) * 4, L = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+    if (mode === "blink") {
+      if (d[i] >= 254 && d[i + 1] >= 254 && d[i + 2] >= 254 && blinkOn) { ctx.fillStyle = "#000"; ctx.fillRect(x * sx, y * sy, sx + 0.5, sy + 0.5); }
+    } else if (L >= thr * 255 && ((x + y) % 8 < 3)) {
+      ctx.fillStyle = thr < 0.9 ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)"; ctx.fillRect(x * sx, y * sy, sx + 0.5, sy + 0.5);
+    }
+  }
+  ctx.restore();
+}
+
+/* ---------------------------------------------------------------- 1. 라이브 히스토그램 */
+(function () {
+  const photo = CB.scenes.portrait(400, 250, { sceneEV: 12 });
+  const upd = CB.throttle(() => cv.redraw());
+  const evR = CB.range("hs-ev", (v) => CB.signed(v / 3) + " EV", upd);
+  const mode = CB.seg("hs-mode", upd);
+  const warn = CB.seg("hs-warn", upd);
+  let blinkTimer = null;
+  const cv = CB.canvas("#cv-hist", (ctx, w, h) => {
+    const ev = evR() / 3;
+    photo.render({ N: 4, t: 16 / Math.pow(2, 12 - ev), iso: 100, focus: 2.5, focal: 50, noiseSeed: 13 });
+    photo.draw(ctx, 0, 0, w, h);
+    const wm = warn();
+    overlayWarn(ctx, photo.last, w, h, wm === "zebra70" ? "zebra" : wm, wm === "zebra70" ? 0.7 : 0.95);
+    const H = CB.hist(photo.last, mode());
+    const hw = Math.min(200, w * 0.42), hh = hw * 0.5;
+    CB.drawHist(ctx, w - hw - 10, 10, hw, hh, H, { rgb: mode() === "rgb" });
+    ctx.fillStyle = "rgba(255,255,255,0.8)"; ctx.font = "10px " + CB.color("font");
+    ctx.textAlign = "left"; ctx.fillText("검정", w - hw - 8, hh + 22); ctx.textAlign = "right"; ctx.fillText("흰색", w - 12, hh + 22);
+    CB.hud(ctx, 0, h - 24, w, ["노출 " + CB.signed(ev), "f/4", "ISO 100"]);
+    CB.stat("hs-hi", (photo.stats.clipHi * 100).toFixed(1) + "<small>%</small>");
+    CB.stat("hs-lo", (photo.stats.clipLo * 100).toFixed(1) + "<small>%</small>");
+    CB.stat("hs-mean", Math.round(photo.stats.mean * 100) + "<small>%</small>");
+    clearInterval(blinkTimer);
+    if (wm === "blink") blinkTimer = setInterval(() => cv.redraw(), 350);
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 2. 장면별 히스토그램 */
+(function () {
+  const W = 320, H = 200, D = CB.draw;
+  const snow = CB.Photo({ w: W, h: H, sceneEV: 15, build(S) {
+    S.layer(Infinity, (g) => { D.sky(g, W, H, "#a9cbef", "#eef4fb", H * 0.45); g.fillStyle = "#f4f7fb"; g.fillRect(0, H * 0.42, W, H); D.mountains(g, W, H * 0.45, H * 0.18, "#e6ecf4", 3); });
+    S.layer(8, (g) => { g.fillStyle = "#fafbfd"; g.fillRect(0, H * 0.58, W, H); D.person(g, W * 0.5, H * 0.92, H * 0.38, { shirt: "#c43c32", stripes: false }); });
+  } });
+  const night = CB.Photo({ w: W, h: H, sceneEV: 3, build(S) {
+    S.layer(Infinity, (g) => { D.sky(g, W, H, "#050913", "#14182a", H); });
+    S.layer(100, (g) => { let x = 0, i = 0; while (x < W) { const bw = 30 + (i * 17) % 30; D.building(g, x, H * 0.8, bw, H * (0.3 + ((i * 31) % 6) * 0.07), "#11131c", "#f5c56b", 0.22, 500 + i); x += bw + 2; i++; } g.fillStyle = "#08090d"; g.fillRect(0, H * 0.8, W, H); });
+    S.lights(100, [{ x: W * 0.8, y: H * 0.15, c: [1, 1, 0.95], i: 60 }]);
+  } });
+  const back = CB.scenes.backlit(W, H, { sceneEV: 9 });
+  const items = [[snow, 15, "하이 키: 눈밭 — 오른쪽에 몰림"], [night, 3, "로우 키: 야경 — 왼쪽에 몰림"], [back, 9, "역광 창가 — 양쪽으로 갈라진 쌍봉"]];
+  const box = document.getElementById("hk");
+  items.forEach(([P, ev, cap], k) => {
+    const d = document.createElement("div");
+    d.innerHTML = `<canvas></canvas><div class="cap">${cap}</div>`;
+    box.appendChild(d);
+    CB.canvas(d.querySelector("canvas"), (ctx, w, h) => {
+      P.render({ N: 4, t: 16 / Math.pow(2, ev - (k === 2 ? 1 : 0)), iso: 100, focus: k === 2 ? 2 : 10, focal: 35, noiseSeed: 14 });
+      P.draw(ctx, 0, 0, w, h);
+      const H2 = CB.hist(P.last);
+      const hw = w * 0.46;
+      CB.drawHist(ctx, w - hw - 6, h - hw * 0.45 - 6, hw, hw * 0.45, H2);
+    }, { aspect: 0.625 });
+  });
+})();
+
+/* ---------------------------------------------------------------- 3. 다이내믹 레인지 */
+(function () {
+  const W = 400, H = 250;
+  const photo = CB.scenes.backlit(W, H, { sceneEV: 9, sun: true });
+  const upd = CB.throttle(() => { cv.redraw(); bar.redraw(); });
+  const evR = CB.range("dr-ev", (v) => CB.signed(v / 3) + " EV", upd);
+  const cam = CB.seg("dr-cam", upd);
+  const lift = CB.check("dr-lift", upd);
+  const ov = CB.check("dr-ov", upd);
+  const FW = 9000;
+  // 장면 휘도 분포(로그) 미리 계산
+  photo.render({ N: 4, t: 16 / Math.pow(2, 9), iso: 100, focus: 2, focal: 35, noise: false });
+  const sceneStops = new Float32Array(W * H);
+  for (let i = 0; i < W * H; i++) { const L = 0.2126 * photo.lin[i * 3] + 0.7152 * photo.lin[i * 3 + 1] + 0.0722 * photo.lin[i * 3 + 2]; sceneStops[i] = Math.log2(Math.max(L, 1e-5)); }
+  const out = new ImageData(W, H), off = CB.offscreen(W, H);
+  let state = {};
+  const cv = CB.canvas("#cv-dr", (ctx, w, h) => {
+    const ev = evR() / 3, DR = +cam();
+    const rn = FW / Math.pow(2, DR);
+    photo.render({ N: 4, t: 16 / Math.pow(2, 9 - ev), iso: 100, focus: 2, focal: 35, fw: FW, readNoise: rn, noiseSeed: 15, gain: 1, tone: "linear" });
+    // 직접 톤: (그림자 끌어올리기 = 로그 성향 커브) 적용
+    const L = photo.lin, d = out.data;
+    const lifted = lift();
+    let hi = 0, lo = 0;
+    const floor = (2 * rn) / FW; // SNR≈2 아래는 노이즈에 묻힘
+    for (let i = 0; i < W * H; i++) {
+      for (let c = 0; c < 3; c++) {
+        let v = L[i * 3 + c];
+        v = lifted ? Math.log2(1 + 30 * Math.max(v, 0)) / Math.log2(31) : CB.linToSrgb(CB.clamp(v, 0, 1));
+        d[i * 4 + c] = 255 * CB.clamp(v, 0, 1);
+      }
+      d[i * 4 + 3] = 255;
+      const Y = 0.2126 * L[i * 3] + 0.7152 * L[i * 3 + 1] + 0.0722 * L[i * 3 + 2];
+      const sat = L[i * 3] >= 0.999 || L[i * 3 + 1] >= 0.999 || L[i * 3 + 2] >= 0.999;
+      if (sat) { hi++; if (ov()) { d[i * 4] = 255; d[i * 4 + 1] = 40; d[i * 4 + 2] = 40; } }
+      else if (Y < floor) { lo++; if (ov() && (i % 2)) { d[i * 4] = 40; d[i * 4 + 1] = 90; d[i * 4 + 2] = 255; } }
+    }
+    off.getContext("2d").putImageData(out, 0, 0);
+    ctx.drawImage(off, 0, 0, w, h);
+    CB.hud(ctx, 0, h - 24, w, ["노출 " + CB.signed(ev), "DR " + DR + "스톱", { text: "날아감 " + ((hi / (W * H)) * 100).toFixed(0) + "%", color: "#ff8080" }, { text: "묻힘 " + ((lo / (W * H)) * 100).toFixed(0) + "%", color: "#8fb3ff" }]);
+    state = { ev, DR };
+  }, { aspect: 0.625 });
+  const bar = CB.canvas("#cv-drbar", (ctx, w, h) => {
+    const P = CB.palette();
+    const ev = evR() / 3, DR = +cam();
+    // 장면 분포 히스토그램 (스톱 −12 ~ +4, 기준 노출에서 값 1 = 0 스톱)
+    const lo = -13, hi = 6, bins = 76, hist = new Float32Array(bins);
+    for (let i = 0; i < sceneStops.length; i += 2) { const b = Math.floor(((sceneStops[i] - lo) / (hi - lo)) * bins); if (b >= 0 && b < bins) hist[b]++; }
+    const mx = Math.max(...hist);
+    const X = (s) => 20 + ((s - lo) / (hi - lo)) * (w - 40);
+    const y0 = h - 26;
+    ctx.fillStyle = P.dim;
+    for (let b = 0; b < bins; b++) { const v = hist[b] / mx; ctx.fillRect(X(lo + (b / bins) * (hi - lo)), y0 - v * (h - 50), (w - 40) / bins - 1, v * (h - 50)); }
+    // 카메라 창문: 포화점 = −ev 스톱(장면 기준), 하한 = 포화 − DR
+    const top = -ev, bottom = -ev - DR + 1; // SNR≈2 기준으로 1스톱 여유
+    ctx.fillStyle = "rgba(63,207,127,0.18)"; ctx.fillRect(X(bottom), 8, X(top) - X(bottom), y0 - 8);
+    ctx.strokeStyle = P.ok; ctx.lineWidth = 2; ctx.strokeRect(X(bottom), 8, X(top) - X(bottom), y0 - 8);
+    ctx.fillStyle = "rgba(255,80,80,0.18)"; ctx.fillRect(X(top), 8, w - 20 - X(top), y0 - 8);
+    ctx.fillStyle = "rgba(80,130,255,0.18)"; ctx.fillRect(20, 8, X(bottom) - 20, y0 - 8);
+    ctx.fillStyle = P.dim; ctx.font = "11px " + CB.color("mono"); ctx.textAlign = "center";
+    for (let s = -12; s <= 6; s += 2) ctx.fillText(s, X(s), h - 8);
+    ctx.font = "12px " + CB.color("font");
+    ctx.fillStyle = P.ok; ctx.fillText(`카메라가 담는 범위 (${DR}스톱)`, (X(bottom) + X(top)) / 2, 22);
+    ctx.textAlign = "left"; ctx.fillStyle = P.dim; ctx.fillText("장면 밝기(스톱) →", 22, 22);
+  }, { height: 120 });
+})();
+
+/* ---------------------------------------------------------------- 4. 브라케팅 + HDR */
+(function () {
+  const W = 360, H = 225;
+  const photo = CB.scenes.backlit(W, H, { sceneEV: 9, sun: true });
+  const subj = photo.layers.find((l) => l.name === "subject");
+  const upd = CB.throttle(() => { shoot(); });
+  const gap = CB.range("hd-gap", (v) => "±" + v + " EV", upd);
+  const tm = CB.range("hd-tm", (v) => v + "%", upd);
+  const ghost = CB.check("hd-ghost", upd);
+  const brk = document.getElementById("brk");
+  const cvs = [-1, 0, 1].map((k) => {
+    const d = document.createElement("div"); d.innerHTML = `<canvas></canvas><div class="cap"></div>`; brk.appendChild(d);
+    const o = { k, c: d.querySelector("canvas"), cap: d.querySelector(".cap"), img: null, lin: null };
+    o.cv = CB.canvas(o.c, (ctx, w, h) => { if (!o.img) return; const off = CB.offscreen(W, H, (gg) => gg.putImageData(o.img, 0, 0)); ctx.drawImage(off, 0, 0, w, h); }, { aspect: 0.625 });
+    return o;
+  });
+  const FW = 9000, RN = FW / Math.pow(2, 10.5); // 1장 DR ≈ 10.5스톱
+  const base = 1; // 기준 노출: 장면 그대로(+1스톱 = 인물 쪽으로 약간)
+  function shoot() {
+    const g = gap();
+    cvs.forEach((o, idx) => {
+      const ev = base + o.k * g;
+      photo.invalidate();
+      const shift = ghost() ? (idx - 1) * 14 : 0;
+      if (shift) { // 레이어를 잠깐 옮겨 그리기 위해 buf를 이동
+        const L = subj, b = L.buf, cp = new Float32Array(b.length), Wd = W;
+        for (let y = 0; y < H; y++) for (let x = 0; x < Wd; x++) { const sx = x - shift; if (sx < 0 || sx >= Wd) continue; const i = (y * Wd + x) * 4, j = (y * Wd + sx) * 4; cp[i] = b[j]; cp[i + 1] = b[j + 1]; cp[i + 2] = b[j + 2]; cp[i + 3] = b[j + 3]; }
+        const orig = L.buf; L.buf = cp; photo.render({ N: 4, t: 16 / Math.pow(2, 9 - ev), iso: 100, focus: 2, focal: 35, fw: FW, readNoise: RN, noiseSeed: 20 + idx }); L.buf = orig; photo.invalidate();
+      } else photo.render({ N: 4, t: 16 / Math.pow(2, 9 - ev), iso: 100, focus: 2, focal: 35, fw: FW, readNoise: RN, noiseSeed: 20 + idx });
+      o.img = new ImageData(new Uint8ClampedArray(photo.last.data), W, H);
+      o.lin = new Float32Array(photo.lin);
+      o.ev = ev;
+      o.cap.textContent = (o.k < 0 ? "어둡게 " : o.k > 0 ? "밝게 " : "기준 ") + CB.signed(o.k * g, 0) + " EV";
+      o.cv.redraw();
+    });
+    cv.redraw();
+  }
+  const out = new ImageData(W, H), off = CB.offscreen(W, H);
+  const cv = CB.canvas("#cv-hdr", (ctx, w, h) => {
+    if (!cvs[0].lin) return;
+    // 합성: 각 컷의 선형값을 노출로 나눠 장면 휘도로 환산, 잘림/노이즈 아닌 값에 큰 가중치
+    const rad = new Float32Array(W * H * 3);
+    for (let i = 0; i < W * H; i++) {
+      for (let c = 0; c < 3; c++) {
+        let s = 0, ws = 0;
+        cvs.forEach((o) => { const v = o.lin[i * 3 + c]; const wgt = v >= 0.98 ? 0.0005 : Math.max(0.0005, Math.min(v, 0.98 - v) + 0.02) * Math.pow(2, o.ev * 0.5); s += (v / Math.pow(2, o.ev)) * wgt; ws += wgt; });
+        rad[i * 3 + c] = s / ws;
+      }
+    }
+    // 톤 매핑: 강도에 따라 전역 Reinhard + 약한 로컬 대비
+    const k = tm() / 100;
+    const exposure = Math.pow(2, base + 1.2 * k);
+    const d = out.data;
+    for (let i = 0; i < W * H; i++) {
+      for (let c = 0; c < 3; c++) {
+        const v = rad[i * 3 + c] * exposure;
+        const mapped = k > 0 ? (v * (1 + v / (16 * (1.2 - k)))) / (1 + v) * (1 + k * 0.35) : Math.min(1, v);
+        d[i * 4 + c] = 255 * CB.linToSrgb(CB.clamp(mapped, 0, 1));
+      }
+      d[i * 4 + 3] = 255;
+    }
+    off.getContext("2d").putImageData(out, 0, 0);
+    ctx.drawImage(off, 0, 0, w, h);
+    CB.hud(ctx, 0, h - 24, w, ["HDR 합성(3장)", "톤 매핑 " + tm() + "%"]);
+  }, { aspect: 0.625 });
+  shoot();
+})();
+</script>
+</body>
+</html>

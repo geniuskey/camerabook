@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>CameraBook · 카메라 교과서</title>
+<meta name="description" content="조리개, 셔터, ISO, 초점, 화이트 밸런스, RAW, 플래시, 동영상, 스마트폰 카메라까지 — 가상 카메라를 직접 조작하며 배우는 인터랙티브 카메라 교과서.">
+<link rel="canonical" href="https://camerabook.euiyun.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="CameraBook · 카메라 교과서">
+<meta property="og:description" content="조리개, 셔터, ISO, 초점, 화이트 밸런스, RAW, 플래시, 동영상, 스마트폰 카메라까지 — 가상 카메라를 직접 조작하며 배우는 인터랙티브 카메라 교과서.">
+<meta property="og:url" content="https://camerabook.euiyun.com/">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://camerabook.euiyun.com/#site","name":"CameraBook","alternateName":"카메라 교과서","url":"https://camerabook.euiyun.com/","inLanguage":"ko"},{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/","inLanguage":"ko","isAccessibleForFree":true,"educationalLevel":"일반(입문~중급)","about":["사진","카메라","노출","렌즈"],"image":"https://camerabook.euiyun.com/og.png","hasPart":[{"@type":"Chapter","position":1,"name":"카메라는 어떻게 사진을 만드나","url":"https://camerabook.euiyun.com/chapters/basics.html"},{"@type":"Chapter","position":2,"name":"노출과 노출 삼각형","url":"https://camerabook.euiyun.com/chapters/exposure.html"},{"@type":"Chapter","position":3,"name":"조리개와 아웃포커스","url":"https://camerabook.euiyun.com/chapters/aperture.html"},{"@type":"Chapter","position":4,"name":"셔터 속도와 움직임","url":"https://camerabook.euiyun.com/chapters/shutter.html"},{"@type":"Chapter","position":5,"name":"ISO와 노이즈","url":"https://camerabook.euiyun.com/chapters/iso.html"},{"@type":"Chapter","position":6,"name":"촬영 모드와 측광","url":"https://camerabook.euiyun.com/chapters/modes.html"},{"@type":"Chapter","position":7,"name":"히스토그램과 다이내믹 레인지","url":"https://camerabook.euiyun.com/chapters/histogram.html"},{"@type":"Chapter","position":8,"name":"초점과 오토포커스","url":"https://camerabook.euiyun.com/chapters/focus.html"},{"@type":"Chapter","position":9,"name":"초점거리와 화각","url":"https://camerabook.euiyun.com/chapters/focal.html"},{"@type":"Chapter","position":10,"name":"화이트 밸런스와 색","url":"https://camerabook.euiyun.com/chapters/color.html"},{"@type":"Chapter","position":11,"name":"RAW와 JPEG","url":"https://camerabook.euiyun.com/chapters/raw.html"},{"@type":"Chapter","position":12,"name":"손떨림 보정과 드라이브 모드","url":"https://camerabook.euiyun.com/chapters/stabilization.html"},{"@type":"Chapter","position":13,"name":"플래시와 빛","url":"https://camerabook.euiyun.com/chapters/flash.html"},{"@type":"Chapter","position":14,"name":"동영상 촬영","url":"https://camerabook.euiyun.com/chapters/video.html"},{"@type":"Chapter","position":15,"name":"스마트폰 카메라","url":"https://camerabook.euiyun.com/chapters/smartphone.html"},{"@type":"Chapter","position":16,"name":"촬영 연습장","url":"https://camerabook.euiyun.com/chapters/playground.html"},{"@type":"Chapter","position":17,"name":"용어집 & 종합 퀴즈","url":"https://camerabook.euiyun.com/chapters/glossary.html"}],"description":"조리개, 셔터, ISO, 초점, 화이트 밸런스, RAW, 플래시, 동영상, 스마트폰 카메라까지 — 가상 카메라를 직접 조작하며 배우는 인터랙티브 카메라 교과서."}]}</script>
+<link rel="stylesheet" href="css/style.css">
+<script src="js/common.js"></script>
+<style>
+  .chain { overflow-x: auto; }
+  .chain svg { min-width: 760px; }
+  .paths { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .path { padding: 18px 20px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-elev); }
+  .path h3 { margin: 0 0 6px; font-size: 17px; }
+  .path p { margin: 0 0 10px; color: var(--text-dim); font-size: 14.5px; }
+  .path .steps { display: flex; flex-wrap: wrap; gap: 6px; }
+  .path .steps a { font-family: var(--mono); font-size: 12px; padding: 3px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .path .steps a:hover { text-decoration: none; filter: brightness(1.1); }
+  .hero-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+  .hero-badges span { font-size: 13px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-dim); background: var(--bg-elev); }
+  .hero-cam { border-radius: 20px; border: 1px solid var(--border); background: var(--bg-elev); box-shadow: var(--shadow); overflow: hidden; }
+  .hero-cam .view { background: #0c0b0a; position: relative; }
+  .hero-cam canvas { display: block; width: 100%; }
+  .hero-cam .dials { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 14px 16px 6px; }
+  .hero-cam .ctrl { font-size: 13px; }
+  .hero-cam .foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 4px 16px 14px; font-size: 13px; color: var(--text-dim); }
+  .hero-cam .foot b { color: var(--text); }
+  @media (max-width: 520px) { .hero-cam .dials { grid-template-columns: 1fr; } }
+  .myth { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .myth div { padding: 16px 18px; border-radius: var(--radius); background: var(--bg-elev); border: 1px solid var(--border); font-size: 14.5px; color: var(--text-dim); }
+  .myth div b { display: block; color: var(--text); font-size: 15.5px; margin-bottom: 6px; }
+  .myth div b::before { content: "오해 · "; color: var(--bad); }
+  .myth div a { font-size: 13px; }
+</style>
+</head>
+<body data-root="">
+
+<section class="home-hero">
+  <div class="inner">
+    <div>
+      <div class="eyebrow">Interactive Camera Textbook</div>
+      <h1>다이얼을 돌리면<br><span class="grad">사진이 달라진다</span></h1>
+      <p>카메라에는 버튼과 다이얼이 가득하지만, 대부분은 "자동"에 맡긴 채 지나칩니다. CameraBook은 조리개·셔터·ISO부터 초점, 화이트 밸런스, RAW, 플래시, 동영상, 스마트폰 카메라까지 — 가상 카메라를 직접 조작하며 <b>왜 그렇게 찍히는지</b> 배우는 교과서입니다.</p>
+      <div class="cta">
+        <a class="primary" href="chapters/basics.html">1장부터 시작하기 →</a>
+        <a class="ghost" href="chapters/playground.html">바로 찍어 보기</a>
+      </div>
+      <div class="hero-badges">
+        <span>17개 챕터</span><span>60개 시뮬레이터</span><span>설치 없이 브라우저에서</span><span>입문~중급</span>
+      </div>
+    </div>
+    <div class="hero-cam" id="hero">
+      <div class="view"><canvas id="cv-hero"></canvas></div>
+      <div class="dials">
+        <label class="ctrl"><span>조리개 <output id="h-ap-out"></output></span><input type="range" id="h-ap"></label>
+        <label class="ctrl"><span>셔터 <output id="h-sh-out"></output></span><input type="range" id="h-sh"></label>
+        <label class="ctrl"><span>ISO <output id="h-iso-out"></output></span><input type="range" id="h-iso"></label>
+      </div>
+      <div class="foot"><span id="h-msg">세 다이얼을 움직여 보세요.</span><span>노출 <b id="h-ev">±0.0</b></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="home-section">
+  <h2>카메라는 무엇을 하는가</h2>
+  <p class="sub">한 문장으로: <b>정해진 시간 동안, 정해진 양의 빛을, 선명하게 모아서, 보기 좋게 기록한다.</b> 각 부품이 이 문장의 한 부분을 맡고, 그것이 이 교과서의 목차입니다.</p>
+  <figure class="diagram chain">
+    <svg viewBox="0 0 1100 250" role="img" aria-label="카메라의 사진 생성 과정">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+      </defs>
+      <g transform="translate(20,40)">
+        <rect width="130" height="130" rx="12" class="f-surface"/>
+        <circle cx="92" cy="38" r="16" fill="#f5b93a"/>
+        <path d="M10 110 L48 62 L72 90 L92 72 L122 110 Z" fill="#3fa36b" opacity=".8"/>
+        <text x="65" y="158" text-anchor="middle" class="t">장면의 빛</text>
+        <text x="65" y="176" text-anchor="middle" class="t-mono">Ch.01·13</text>
+      </g>
+      <path d="M160 105 H200" class="s-acc" marker-end="url(#arr)"/>
+      <g transform="translate(210,40)">
+        <ellipse cx="45" cy="65" rx="18" ry="58" class="f-acc-soft"/>
+        <path d="M-5 25 L45 25 L95 65 M-5 105 L45 105 L95 65" stroke="var(--accent)" stroke-width="1.5" fill="none" opacity=".7"/>
+        <text x="45" y="158" text-anchor="middle" class="t">렌즈 · 초점</text>
+        <text x="45" y="176" text-anchor="middle" class="t-mono">Ch.08·09</text>
+      </g>
+      <path d="M315 105 H350" class="s-acc" marker-end="url(#arr)"/>
+      <g transform="translate(360,40)">
+        <circle cx="50" cy="65" r="52" class="f-elev"/>
+        <g fill="var(--surface-2)" stroke="var(--border)">
+          <path d="M50 13 L72 48 L50 65 Z"/><path d="M99 55 L72 48 L50 65 Z" /><path d="M82 105 L68 80 L50 65 Z"/><path d="M18 105 L32 80 L50 65 Z"/><path d="M1 55 L28 48 L50 65 Z"/>
+        </g>
+        <circle cx="50" cy="65" r="17" fill="var(--canvas-bg)" stroke="var(--accent)" stroke-width="2"/>
+        <text x="50" y="158" text-anchor="middle" class="t">조리개 · 양</text>
+        <text x="50" y="176" text-anchor="middle" class="t-mono">Ch.02·03</text>
+      </g>
+      <path d="M470 105 H505" class="s-acc" marker-end="url(#arr)"/>
+      <g transform="translate(515,40)">
+        <rect x="0" y="10" width="100" height="110" rx="8" class="f-elev"/>
+        <rect x="8" y="18" width="84" height="44" fill="var(--surface-2)"/>
+        <rect x="8" y="68" width="84" height="44" fill="var(--surface)"/>
+        <path d="M8 65 H92" stroke="var(--accent)" stroke-width="2"/>
+        <text x="50" y="158" text-anchor="middle" class="t">셔터 · 시간</text>
+        <text x="50" y="176" text-anchor="middle" class="t-mono">Ch.04·12</text>
+      </g>
+      <path d="M625 105 H660" class="s-acc" marker-end="url(#arr)"/>
+      <g transform="translate(670,45)">
+        <rect x="0" y="0" width="110" height="110" rx="8" class="f-surface"/>
+        <g opacity=".9">
+          <rect x="12" y="12" width="20" height="20" fill="#e0443e"/><rect x="34" y="12" width="20" height="20" fill="#2da44e"/><rect x="56" y="12" width="20" height="20" fill="#e0443e"/><rect x="78" y="12" width="20" height="20" fill="#2da44e"/>
+          <rect x="12" y="34" width="20" height="20" fill="#2da44e"/><rect x="34" y="34" width="20" height="20" fill="#2f6fe0"/><rect x="56" y="34" width="20" height="20" fill="#2da44e"/><rect x="78" y="34" width="20" height="20" fill="#2f6fe0"/>
+          <rect x="12" y="56" width="20" height="20" fill="#e0443e"/><rect x="34" y="56" width="20" height="20" fill="#2da44e"/><rect x="56" y="56" width="20" height="20" fill="#e0443e"/><rect x="78" y="56" width="20" height="20" fill="#2da44e"/>
+          <rect x="12" y="78" width="20" height="20" fill="#2da44e"/><rect x="34" y="78" width="20" height="20" fill="#2f6fe0"/><rect x="56" y="78" width="20" height="20" fill="#2da44e"/><rect x="78" y="78" width="20" height="20" fill="#2f6fe0"/>
+        </g>
+        <text x="55" y="153" text-anchor="middle" class="t">센서 · ISO</text>
+        <text x="55" y="171" text-anchor="middle" class="t-mono">Ch.05·07</text>
+      </g>
+      <path d="M790 105 H825" class="s-acc" marker-end="url(#arr)"/>
+      <g transform="translate(835,40)">
+        <rect x="0" y="15" width="100" height="100" rx="12" class="f-acc2-soft"/>
+        <text x="50" y="60" text-anchor="middle" class="t-mono">WB · 톤</text>
+        <text x="50" y="80" text-anchor="middle" class="t-mono">노이즈 감소</text>
+        <text x="50" y="158" text-anchor="middle" class="t">처리 엔진</text>
+        <text x="50" y="176" text-anchor="middle" class="t-mono">Ch.10·11·15</text>
+      </g>
+      <path d="M945 105 H980" class="s-acc" marker-end="url(#arr)"/>
+      <g transform="translate(990,45)">
+        <rect x="0" y="0" width="90" height="110" rx="10" class="f-surface"/>
+        <path d="M0 22 L22 0 H90" fill="none" stroke="var(--border)"/>
+        <text x="45" y="50" text-anchor="middle" class="t-mono">JPEG</text>
+        <text x="45" y="72" text-anchor="middle" class="t-mono">RAW</text>
+        <text x="45" y="94" text-anchor="middle" class="t-mono">MP4</text>
+        <text x="45" y="153" text-anchor="middle" class="t">기록</text>
+        <text x="45" y="171" text-anchor="middle" class="t-mono">Ch.11·14</text>
+      </g>
+      <text x="550" y="238" text-anchor="middle" class="t-dim">빛 → 렌즈가 모으고(초점) → 조리개가 양을, 셔터가 시간을 정하고 → 센서가 기록 → 엔진이 다듬어 → 파일로 저장</text>
+    </svg>
+    <figcaption><b>그림 0-1.</b> 한 장의 사진이 만들어지는 길. 각 블록이 해당 챕터와 연결됩니다.</figcaption>
+  </figure>
+</section>
+
+<section class="home-section" style="padding-top:0">
+  <h2>이런 오해, 한 번쯤 해 보셨죠?</h2>
+  <p class="sub">이 교과서를 다 읽고 나면 아래 문장들이 왜 틀렸는지 설명할 수 있게 됩니다.</p>
+  <div class="myth">
+    <div><b>ISO를 올리면 센서가 빛을 더 잘 받는다</b>ISO는 들어온 빛을 키우는 '증폭'일 뿐, 빛 자체를 늘리지 않습니다. 노이즈의 진짜 원인은 빛의 부족입니다. <a href="chapters/iso.html">5장 →</a></div>
+    <div><b>망원 렌즈는 배경을 압축한다</b>압축감을 만드는 것은 초점거리가 아니라 '찍는 거리'입니다. <a href="chapters/focal.html">9장 →</a></div>
+    <div><b>f/2.8 렌즈면 어느 카메라에서나 배경 흐림이 같다</b>센서 크기가 달라지면 같은 화면을 위한 초점거리·거리가 바뀌고, 흐림 정도도 바뀝니다. <a href="chapters/aperture.html">3장 →</a></div>
+    <div><b>플래시는 어두울 때만 쓴다</b>한낮 역광의 그늘진 얼굴을 살리는 데 가장 유용합니다. <a href="chapters/flash.html">13장 →</a></div>
+    <div><b>자동 노출은 항상 '맞는' 밝기를 준다</b>카메라는 장면을 모두 18% 회색이라고 가정합니다. 눈밭은 회색으로 찍힙니다. <a href="chapters/modes.html">6장 →</a></div>
+    <div><b>RAW는 화질이 더 좋은 JPEG이다</b>RAW는 아직 '현상'하지 않은 데이터입니다. 화질보다는 '나중에 고칠 여유'가 핵심입니다. <a href="chapters/raw.html">11장 →</a></div>
+  </div>
+</section>
+
+<section class="home-section" style="padding-top:0">
+  <h2>챕터</h2>
+  <p class="sub">앞에서부터 차례로 읽어도 좋고, 궁금한 기능만 골라 읽어도 됩니다. 각 장에는 직접 조작하는 시뮬레이터와 확인 퀴즈가 있습니다.</p>
+  <div class="ch-grid" id="ch-grid"></div>
+</section>
+
+<section class="home-section" style="padding-top:0">
+  <h2>추천 학습 경로</h2>
+  <p class="sub">목적에 맞게 골라 읽으세요.</p>
+  <div class="paths">
+    <div class="path"><h3>📱 스마트폰으로만 찍어요</h3><p>폰 카메라가 내부에서 하는 일과, 프로 모드를 제대로 쓰는 법.</p><div class="steps"><a href="chapters/basics.html">01</a><a href="chapters/exposure.html">02</a><a href="chapters/histogram.html">07</a><a href="chapters/color.html">10</a><a href="chapters/smartphone.html">15</a></div></div>
+    <div class="path"><h3>📷 첫 카메라를 샀어요</h3><p>자동 모드를 졸업하는 가장 빠른 길. 노출 삼각형과 초점부터.</p><div class="steps"><a href="chapters/exposure.html">02</a><a href="chapters/aperture.html">03</a><a href="chapters/shutter.html">04</a><a href="chapters/iso.html">05</a><a href="chapters/modes.html">06</a><a href="chapters/focus.html">08</a><a href="chapters/playground.html">16</a></div></div>
+    <div class="path"><h3>👶 아이·반려동물·스포츠</h3><p>움직이는 피사체를 흔들림 없이, 초점 놓치지 않고.</p><div class="steps"><a href="chapters/shutter.html">04</a><a href="chapters/iso.html">05</a><a href="chapters/focus.html">08</a><a href="chapters/stabilization.html">12</a></div></div>
+    <div class="path"><h3>🎬 영상을 찍어요</h3><p>프레임 레이트, 셔터 각도, ND 필터, Log까지.</p><div class="steps"><a href="chapters/shutter.html">04</a><a href="chapters/color.html">10</a><a href="chapters/video.html">14</a></div></div>
+  </div>
+</section>
+
+<section class="home-section" style="padding-top:0">
+  <h2>더 깊이 들어가고 싶다면</h2>
+  <p class="sub">CameraBook은 "카메라를 쓰는 사람"의 눈높이에서 씁니다. 센서 내부의 물리와 회로가 궁금하면 자매 사이트로 이어 가세요.</p>
+  <div class="paths">
+    <div class="path"><h3>SensorBook — 이미지 센서 교과서</h3><p>광자가 전자가 되고 숫자가 되기까지. 픽셀 구조, 노이즈, ISP를 공학적으로.</p><div class="steps"><a href="https://sensorbook.euiyun.com/">sensorbook.euiyun.com ↗</a></div></div>
+    <div class="path"><h3>Mobile Image Sensor DB</h3><p>스마트폰 카메라에 들어간 센서의 크기·화소·픽셀 피치를 검색하고 비교.</p><div class="steps"><a href="https://sensors.euiyun.com/">sensors.euiyun.com ↗</a></div></div>
+  </div>
+</section>
+
+<script>
+(function () {
+  // 챕터 카드
+  document.getElementById("ch-grid").innerHTML = CB.CHAPTERS.map((c) =>
+    `<a class="ch-card" href="chapters/${c.slug}.html"><span class="num">CHAPTER ${c.num}</span><h3>${c.title}</h3><p>${c.desc}</p><div class="tags">${c.tags.map((t) => t === "sim" ? '<span class="t-sim">시뮬레이터</span>' : `<span>${t}</span>`).join("")}</div></a>`).join("");
+
+  // 히어로: 가상 카메라
+  const photo = CB.scenes.portrait(480, 300, { sceneEV: 11 });
+  const upd = CB.throttle(() => cv.redraw());
+  const ap = CB.steps("h-ap", CB.APERTURES, CB.fmtN, 2, upd);
+  const sh = CB.steps("h-sh", CB.SHUTTERS.filter((t) => t <= 1), CB.fmtT, 1 / 500, upd);
+  const iso = CB.steps("h-iso", CB.ISOS.filter((s) => s >= 100 && s <= 25600), (v) => v, 100, upd);
+  const cv = CB.canvas("#cv-hero", (ctx, w, h) => {
+    const p = { N: ap(), t: sh(), iso: iso(), focus: 2.5, focal: 85, blades: 9, noiseSeed: 1 };
+    photo.render(p);
+    photo.draw(ctx, 0, 0, w, h);
+    const st = photo.exposureStops(p) + Math.log2(p.iso / 100);
+    CB.hud(ctx, 0, h - 26, w, [CB.fmtT(p.t), CB.fmtN(p.N), "ISO " + p.iso, { text: (st >= 0 ? "+" : "") + st.toFixed(1) + " EV", color: Math.abs(st) < 0.5 ? "#7ee2a8" : "#ffb86b" }], { h: 26 });
+    document.getElementById("h-ev").textContent = CB.signed(st);
+    let m;
+    if (st > 1.2) m = "너무 밝아요. 셔터를 빠르게 하거나 조리개를 조여 보세요.";
+    else if (st < -1.2) m = "너무 어두워요. ISO를 올리거나 셔터를 느리게 해 보세요.";
+    else if (p.N <= 2.8) m = "적정 노출! 조리개를 활짝 열어 배경이 부드럽게 흐려졌어요.";
+    else if (p.N >= 11) m = "적정 노출! 조리개를 조여 배경까지 또렷해졌어요.";
+    else if (p.iso >= 3200) m = "밝기는 맞지만 ISO가 높아 자글자글한 노이즈가 보여요.";
+    else m = "적정 노출이에요. 이제 조리개만 바꿔 배경 흐림을 비교해 보세요.";
+    document.getElementById("h-msg").textContent = m;
+  }, { aspect: 0.625 });
+})();
+</script>
+</body>
+</html>

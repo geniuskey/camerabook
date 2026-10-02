@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>ISO와 노이즈 · CameraBook</title>
+<meta name="description" content="ISO는 감도가 아니라 증폭이다. 노이즈의 정체인 빛 알갱이의 들쭉날쭉함, ISO 불변성, 센서 크기와 노이즈, Auto ISO와 노이즈 감소를 시뮬레이터로 배운다.">
+<link rel="canonical" href="https://camerabook.euiyun.com/chapters/iso.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="ISO와 노이즈 · CameraBook">
+<meta property="og:description" content="ISO는 감도가 아니라 증폭이다. 노이즈의 정체인 빛 알갱이의 들쭉날쭉함, ISO 불변성, 센서 크기와 노이즈, Auto ISO와 노이즈 감소를 시뮬레이터로 배운다.">
+<meta property="og:url" content="https://camerabook.euiyun.com/chapters/iso.html">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"ISO와 노이즈","name":"ISO와 노이즈 · CameraBook","url":"https://camerabook.euiyun.com/chapters/iso.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/iso.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":5,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"ISO는 감도가 아니라 증폭이다. 노이즈의 정체인 빛 알갱이의 들쭉날쭉함, ISO 불변성, 센서 크기와 노이즈, Auto ISO와 노이즈 감소를 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"05 ISO와 노이즈","item":"https://camerabook.euiyun.com/chapters/iso.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .pair { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); padding: 12px; background: var(--canvas-bg); }
+  .pair canvas { width: 100%; display: block; border-radius: 8px; }
+  .pair .cap { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+</style>
+</head>
+<body data-chapter="iso">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 05</div>
+    <h1>ISO와 노이즈</h1>
+    <p class="lead">어두운 곳에서 찍은 사진이 자글자글한 이유를 많은 사람이 "ISO를 올려서"라고 말합니다. 반은 맞고 반은 틀립니다. 진짜 원인은 <b>빛이 모자라서</b>이고, ISO는 그 모자란 빛을 밝게 키워 보여 주었을 뿐입니다. 이 차이를 이해하면 어두운 곳에서 더 좋은 선택을 할 수 있습니다.</p>
+    <ul class="objectives">
+      <li>ISO가 센서의 '감도'를 바꾸는 것이 아니라 신호를 '증폭'한다는 것을 안다.</li>
+      <li>노이즈의 주된 원인이 빛 알갱이(광자) 수의 무작위성이라는 것을 이해한다.</li>
+      <li>ISO 불변성의 의미와 "노출을 먼저 확보하라"는 원칙을 안다.</li>
+      <li>센서 크기, 노이즈 감소, Auto ISO가 노이즈와 어떤 관계인지 안다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="what">
+    <h2>ISO는 볼륨 다이얼이다</h2>
+    <p>필름 시절의 ISO(ASA)는 필름 자체의 감도였습니다. ISO 400 필름은 ISO 100 필름보다 빛에 4배 민감하게 화학적으로 만들어졌죠. 디지털 카메라의 센서는 감도를 바꿀 수 없습니다. 센서가 빛을 전기로 바꾸는 효율은 고정되어 있습니다. 디지털의 ISO는 센서에서 나온 약한 전기 신호를 <b>얼마나 증폭해서 숫자로 바꿀지</b>를 정하는 설정입니다. 라디오의 볼륨 다이얼과 같습니다.</p>
+    <p>라디오 전파가 약하면 볼륨을 올려야 들리지만, 그러면 '지지직' 하는 잡음도 함께 커집니다. 잡음은 볼륨이 만든 것이 아니라 원래 약한 전파에 섞여 있던 것입니다. 사진도 같습니다.</p>
+
+    <div class="sim" id="sim-iso">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>어두운 실내에서 ISO 올리기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-iso"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>ISO <output id="is-iso-out"></output></span><input type="range" id="is-iso"></label>
+          <label class="ctrl"><span>셔터 <output id="is-t-out"></output></span><input type="range" id="is-t"></label>
+          <label class="check"><input type="checkbox" id="is-zoom" checked> 얼굴 100% 확대 보기</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">노출</span><span class="v" id="is-ev">—</span></div>
+        <div class="stat"><span class="k">픽셀당 빛 알갱이(중간 회색)</span><span class="v" id="is-ph">—</span></div>
+        <div class="stat"><span class="k">신호 대 잡음비(SNR)</span><span class="v" id="is-snr">—</span></div>
+      </div>
+      <div class="sim-note">장면은 저녁의 거실 정도(EV 6)이고 조리개는 f/2.8로 고정입니다. 셔터를 느리게 하면 빛이 늘어 노이즈가 줄지만 손떨림이 걱정됩니다. ISO를 올리면 밝아지지만 빛 알갱이 수는 그대로라 거칠어집니다. <b>같은 밝기라면 '빛 알갱이 수'가 화질을 결정</b>한다는 점에 주목하세요.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="shot">
+    <h2>노이즈의 정체: 빛 알갱이의 들쭉날쭉</h2>
+    <p>빛은 '광자'라는 알갱이로 되어 있습니다. 같은 밝기의 벽을 찍어도 각 픽셀에 떨어지는 광자 수는 비가 내릴 때 빗방울이 고르지 않듯 무작위로 들쭉날쭉합니다. 평균 100개가 떨어진다면 어떤 픽셀은 90개, 어떤 픽셀은 110개를 받습니다. 이 들쭉날쭉함이 <span class="term">광자 샷 노이즈</span><span class="en">(Photon Shot Noise)</span>이고, 일상적인 사진 노이즈의 대부분을 차지합니다.</p>
+    <div class="formula">$$\text{노이즈} = \sqrt{N}, \qquad \text{SNR} = \frac{N}{\sqrt{N}} = \sqrt{N}$$
+      <div class="where">\(N\): 픽셀이 받은 평균 광자(전자) 수. 빛이 4배가 되면 노이즈는 2배로 늘지만 신호가 4배라서 SNR(깨끗함)은 2배가 된다. 빛이 많을수록 상대적으로 깨끗해진다.</div>
+    </div>
+    <div class="sim" id="sim-photon">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>빛 알갱이로 그림 그리기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-photon"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>픽셀당 평균 광자 수 <output id="ph-n-out"></output></span><input type="range" id="ph-n" min="0" max="100" value="20"></label>
+          <button class="btn primary" id="ph-go">노출 시작 (빛을 서서히 모으기)</button>
+          <button class="btn" id="ph-re">다시 뿌리기</button>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">밝은 부분 평균</span><span class="v" id="ph-mean">—</span></div>
+        <div class="stat"><span class="k">들쭉날쭉(표준편차)</span><span class="v" id="ph-sd">—</span></div>
+        <div class="stat"><span class="k">SNR</span><span class="v" id="ph-snr">—</span></div>
+      </div>
+      <div class="sim-note">왼쪽은 각 픽셀이 받은 광자 수를 밝기로 표시한 것입니다(평균에 맞춰 밝기를 자동으로 키움 = ISO 증폭). 광자가 1~3개일 때는 그림을 알아보기 어렵고, 1,000개쯤 모이면 매끈해집니다. 광자 수가 4배가 될 때마다 SNR이 2배가 되는 것을 확인해 보세요.</div>
+    </div>
+    <p>여기에 센서 회로 자체의 잡음(<span class="term">읽기 노이즈</span>)과, 센서가 따뜻해지면 늘어나는 <span class="term">암전류 노이즈</span>가 더해집니다. 하지만 밝은 부분에서는 샷 노이즈가 압도적이고, 회로 잡음은 아주 어두운 그림자에서만 드러납니다. 노이즈의 물리를 더 깊이 알고 싶다면 <a href="https://sensorbook.euiyun.com/chapters/noise.html">SensorBook 7장</a>을 참고하세요.</p>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="invariance">
+    <h2>ISO 불변성: ISO를 올리지 않고 나중에 밝히면?</h2>
+    <p>ISO가 증폭일 뿐이라면, ISO 100으로 어둡게 찍고 나중에 컴퓨터에서 밝혀도 같지 않을까요? 최신 센서에서는 <b>거의 같습니다</b>. 이런 성질을 <span class="term">ISO 불변성</span><span class="en">(ISO Invariance)</span>이라 합니다. 다만 완전히 같지는 않습니다. 카메라 안의 아날로그 증폭은 회로 잡음이 끼어들기 전에 신호를 키우므로, 아주 어두운 그림자에서는 ISO를 올려 찍은 쪽이 조금 더 깨끗합니다.</p>
+    <div class="sim" id="sim-inv">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>ISO 6400 vs ISO 100 + 후보정</h3></div>
+      <div class="pair">
+        <div><canvas id="cv-inv-a"></canvas><div class="cap" id="cap-a"></div></div>
+        <div><canvas id="cv-inv-b"></canvas><div class="cap" id="cap-b"></div></div>
+      </div>
+      <div class="sim-controls">
+        <label class="ctrl"><span>부족한 빛(스톱) <output id="iv-s-out"></output></span><input type="range" id="iv-s" min="0" max="8" value="6" step="1"></label>
+        <label class="check"><input type="checkbox" id="iv-zoom" checked> 어두운 부분 확대</label>
+      </div>
+      <div class="sim-note">두 사진 모두 센서가 받은 빛은 같습니다(같은 조리개·셔터). 왼쪽은 카메라에서 ISO를 올렸고, 오른쪽은 ISO 100으로 찍어 RAW 현상에서 같은 만큼 밝혔습니다. 큰 차이는 '빛'이 정하고, ISO는 그림자 속 잡음에서 작은 차이만 만듭니다. 반면 노출 부족이 8스톱쯤 되면 둘 다 쓸 수 없게 됩니다.</div>
+    </div>
+    <div class="callout tip"><strong>실전 원칙: 빛을 먼저, ISO는 나중에</strong>노이즈를 줄이는 유일한 근본 방법은 센서에 빛을 더 많이 넣는 것입니다. 조리개를 열고, 흔들리지 않는 한계까지 셔터를 느리게 하고, 그래도 어두우면 그때 ISO를 올리세요. "ISO가 무서워 노출을 줄이는 것"이 가장 나쁜 선택입니다. 어둡게 찍고 밝히면 같은 노이즈에 하이라이트 여유만 낭비하게 됩니다.</div>
+    <div class="callout deep"><strong>듀얼 네이티브 ISO</strong>일부 카메라(특히 영상용)는 픽셀 회로에 두 가지 '변환 이득'을 두어, 예컨대 ISO 800 이상에서 회로 잡음이 확 줄어드는 두 번째 기준 ISO를 가집니다. 이런 카메라는 ISO 640보다 ISO 800이 오히려 깨끗할 수 있습니다. 사양표의 '듀얼 베이스 ISO'를 확인하세요.</div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="size">
+    <h2>센서 크기와 노이즈, 그리고 노이즈 감소</h2>
+    <p>같은 장면을 같은 화각·같은 F값·같은 셔터로 찍으면, 큰 센서는 면적이 넓은 만큼 전체적으로 더 많은 광자를 모읍니다. 사진을 같은 크기로 볼 때 노이즈를 결정하는 것은 이 '전체 광자 수'입니다. 풀프레임이 스마트폰보다 약 3~4스톱 깨끗한 이유입니다.</p>
+    <div class="sim" id="sim-size">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>센서 크기 × 노이즈 감소</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-size"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>센서</span><div class="seg" id="sz-s"><button data-value="864" class="on">풀프레임</button><button data-value="367">APS-C</button><button data-value="116">1형</button><button data-value="72">1/1.3형</button><button data-value="24">1/2.55형</button></div></div>
+          <label class="ctrl"><span>ISO(풀프레임 기준 동일 밝기) <output id="sz-iso-out"></output></span><input type="range" id="sz-iso"></label>
+          <label class="ctrl"><span>카메라 노이즈 감소 <output id="sz-nr-out"></output></span><input type="range" id="sz-nr" min="0" max="3" value="0" step="1"></label>
+        </div>
+      </div>
+      <div class="sim-note">노이즈 감소(NR)를 강하게 걸면 자글자글함은 사라지지만 머리카락과 셔츠 줄무늬 같은 미세한 디테일도 함께 뭉개져 '수채화'처럼 됩니다. 스마트폰은 이 문제를 여러 장을 합성하는 방법으로 피합니다(15장).</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 5 -->
+  <section id="auto">
+    <h2>Auto ISO 똑똑하게 쓰기</h2>
+    <p>요즘 카메라의 <span class="term">Auto ISO</span>는 꽤 영리합니다. 특히 M(수동) 모드에서 조리개와 셔터를 원하는 값으로 고정하고 ISO만 자동으로 두면, 표현은 내가 정하고 밝기는 카메라가 맞춰 주는 아주 실용적인 조합이 됩니다(6장). 설정에서 확인할 것은 세 가지입니다.</p>
+    <div class="table-wrap"><table>
+      <tr><th>설정</th><th>의미</th><th>권장</th></tr>
+      <tr><td>최대 ISO</td><td>자동으로 올라갈 상한</td><td>카메라가 '쓸 만하다'고 느끼는 한계(풀프레임 6400~12800, APS-C 3200~6400)</td></tr>
+      <tr><td>최저 셔터 속도</td><td>이보다 느려지기 전에 ISO를 먼저 올림</td><td>'자동'(초점거리 연동) 또는 움직이는 피사체면 1/250 이상</td></tr>
+      <tr><td>노출 보정</td><td>M 모드 + Auto ISO에서도 밝기 조절</td><td>역광·설경에서 ±로 활용</td></tr>
+    </table></div>
+    <div class="table-wrap"><table>
+      <tr><th>상황</th><th class="num">대략의 ISO (풀프레임)</th></tr>
+      <tr><td>맑은 야외</td><td class="num">100~200</td></tr>
+      <tr><td>흐린 날, 그늘</td><td class="num">200~800</td></tr>
+      <tr><td>밝은 실내, 카페</td><td class="num">800~3200</td></tr>
+      <tr><td>저녁 실내, 공연장, 실내 스포츠</td><td class="num">3200~12800</td></tr>
+      <tr><td>삼각대 없는 야경</td><td class="num">1600~6400</td></tr>
+      <tr><td>삼각대 야경·풍경</td><td class="num">100 (셔터를 길게)</td></tr>
+    </table></div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>디지털 ISO는 센서 감도가 아니라 신호 증폭이다. 빛을 늘리지 않는다.</li>
+      <li>노이즈의 주범은 광자 샷 노이즈. SNR = √(광자 수). 빛 4배 → 2배 깨끗.</li>
+      <li>최신 센서는 거의 ISO 불변이다. 중요한 것은 '얼마나 많은 빛을 받았나'이고, 노출을 아끼면 손해다.</li>
+      <li>큰 센서는 같은 조건에서 더 많은 빛을 모아 노이즈가 적다. 노이즈 감소는 디테일과 맞바꾸는 것이다.</li>
+      <li>M 모드 + Auto ISO + 최저 셔터 속도 설정은 실전에서 가장 유용한 조합 중 하나다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>디지털 카메라에서 ISO를 100에서 1600으로 올리면 실제로 무엇이 바뀌는가?</p><div class="opts">
+        <button class="opt">센서가 빛을 16배 잘 흡수한다</button>
+        <button class="opt" data-correct>센서 신호를 16배 증폭해 숫자로 바꾼다</button>
+        <button class="opt">렌즈가 16배 많은 빛을 통과시킨다</button>
+      </div><div class="quiz-exp">센서의 광전 변환 효율은 고정이다. ISO는 증폭률(이득)이다.</div></div>
+      <div class="quiz-q"><p>픽셀이 받는 평균 광자 수가 100개에서 400개로 늘면 SNR은?</p><div class="opts">
+        <button class="opt">그대로</button>
+        <button class="opt" data-correct>2배</button>
+        <button class="opt">4배</button>
+      </div><div class="quiz-exp">SNR = √N. √400/√100 = 20/10 = 2배.</div></div>
+      <div class="quiz-q"><p>어두운 실내에서 같은 조리개로 찍는다. 노이즈를 줄이는 가장 효과적인 방법은?</p><div class="opts">
+        <button class="opt">ISO를 낮추고 어둡게 찍은 뒤 나중에 밝힌다</button>
+        <button class="opt" data-correct>흔들리지 않는 한도에서 셔터를 느리게 해 빛을 더 받는다</button>
+        <button class="opt">JPEG 화질을 '최고'로 바꾼다</button>
+      </div><div class="quiz-exp">노이즈를 줄이는 근본 방법은 센서에 들어가는 빛을 늘리는 것이다. 어둡게 찍고 밝히면 빛은 그대로이므로 노이즈도 그대로다.</div></div>
+      <div class="quiz-q"><p>카메라의 노이즈 감소(NR)를 '강'으로 설정했을 때의 부작용은?</p><div class="opts">
+        <button class="opt">색이 반전된다</button>
+        <button class="opt" data-correct>미세한 디테일과 질감이 뭉개진다</button>
+        <button class="opt">셔터 속도가 느려진다</button>
+      </div><div class="quiz-exp">노이즈 감소는 주변 픽셀과 평균을 내는 방식이라 노이즈와 함께 진짜 디테일도 흐려진다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* 얼굴 확대 인셋: 원본 ImageData에서 잘라 nearest로 확대 */
+function zoomInset(ctx, photo, sx, sy, sw, sh, dx, dy, dw, dh, label) {
+  const c = photo._z || (photo._z = document.createElement("canvas"));
+  c.width = photo.w; c.height = photo.h; c.getContext("2d").putImageData(photo.last, 0, 0);
+  ctx.save();
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(c, sx, sy, sw, sh, dx, dy, dw, dh);
+  ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(dx, dy, dw, dh);
+  if (label) { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(dx, dy, 80, 18); ctx.fillStyle = "#fff"; ctx.font = "11px " + CB.color("font"); ctx.fillText(label, dx + 5, dy + 13); }
+  ctx.restore();
+}
+
+/* ---------------------------------------------------------------- 1. ISO 올리기 */
+(function () {
+  const photo = CB.scenes.portrait(440, 275, { sceneEV: 6 });
+  const upd = CB.throttle(() => cv.redraw());
+  const ISO = CB.steps("is-iso", CB.ISOS.filter((s) => s >= 100 && s <= 102400), (v) => v, 1600, upd);
+  const T = CB.steps("is-t", CB.SHUTTERS.filter((t) => t <= 1 / 2 && t >= 1 / 1000), CB.fmtT, 1 / 125, upd);
+  const zoom = CB.check("is-zoom", upd);
+  const FW = 9000;
+  const cv = CB.canvas("#cv-iso", (ctx, w, h) => {
+    const p = { N: 2.8, t: T(), iso: ISO(), focus: 2.5, focal: 50, fw: FW, noiseSeed: 7 };
+    photo.render(p);
+    photo.draw(ctx, 0, 0, w, h);
+    if (zoom()) zoomInset(ctx, photo, 159, 30, 52, 52, w - w * 0.36 - 8, 8, w * 0.36, w * 0.36, "100% 확대");
+    const st = photo.exposureStops(p) + Math.log2(p.iso / 100);
+    CB.hud(ctx, 0, h - 24, w, [CB.fmtT(p.t), "f/2.8", "ISO " + p.iso, { text: CB.signed(st) + " EV", color: Math.abs(st) < 0.5 ? "#7ee2a8" : "#ffb86b" }]);
+    // 중간 회색(선형 0.18)에 해당하는 광자 수
+    const e = 0.18 * Math.pow(2, photo.exposureStops(p)) * FW;
+    CB.stat("is-ev", Math.abs(st) < 0.17 ? '<span style="color:var(--ok)">적정</span>' : CB.signed(st) + "<small>스톱</small>");
+    CB.stat("is-ph", CB.fmt(e, 3) + "<small>개</small>");
+    CB.stat("is-snr", CB.fmt(e / Math.sqrt(e + 4), 3));
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 2. 광자 그림 */
+(function () {
+  const GW = 72, GH = 45;
+  // 패턴: 카메라 아이콘 실루엣(0..1 밝기)
+  const pat = CB.offscreen(GW, GH, (g, w, h) => {
+    g.fillStyle = "#222"; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#fff";
+    CB.draw.roundRect(g, w * 0.18, h * 0.3, w * 0.64, h * 0.52, 5); g.fill();
+    g.fillRect(w * 0.3, h * 0.2, w * 0.16, h * 0.12);
+    g.fillStyle = "#222"; g.beginPath(); g.arc(w * 0.5, h * 0.56, h * 0.19, 0, 7); g.fill();
+    g.fillStyle = "#999"; g.beginPath(); g.arc(w * 0.5, h * 0.56, h * 0.11, 0, 7); g.fill();
+  }).getContext("2d").getImageData(0, 0, GW, GH).data;
+  const lam = new Float32Array(GW * GH);
+  for (let i = 0; i < GW * GH; i++) lam[i] = 0.05 + 0.95 * (pat[i * 4] / 255);
+  const nOf = (v) => Math.round(Math.pow(10, (v / 100) * 3.3)); // 1 ~ 2000
+  const N = CB.range("ph-n", (v) => nOf(v) + "개", () => { counts = sample(nOf(N())); cv.redraw(); });
+  function sample(n) { const c = new Float32Array(GW * GH); for (let i = 0; i < c.length; i++) c[i] = CB.poisson(lam[i] * n); return c; }
+  let counts = sample(nOf(N())), anim = null;
+  const img = new ImageData(GW, GH), off = CB.offscreen(GW, GH);
+  const cv = CB.canvas("#cv-photon", (ctx, w, h) => {
+    const n = anim ? anim.n : nOf(N());
+    let s = 0, s2 = 0, k = 0;
+    for (let i = 0; i < GW * GH; i++) {
+      const v = CB.clamp(counts[i] / Math.max(n, 1e-6), 0, 1.4);
+      const g = Math.round(255 * CB.linToSrgb(Math.min(1, v * 0.85)));
+      img.data[i * 4] = img.data[i * 4 + 1] = img.data[i * 4 + 2] = g; img.data[i * 4 + 3] = 255;
+      if (lam[i] > 0.9) { s += counts[i]; s2 += counts[i] * counts[i]; k++; }
+    }
+    off.getContext("2d").putImageData(img, 0, 0);
+    const sc = Math.min(w / GW, h / GH);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(off, (w - GW * sc) / 2, (h - GH * sc) / 2, GW * sc, GH * sc);
+    const mean = s / k, sd = Math.sqrt(Math.max(0, s2 / k - mean * mean));
+    CB.stat("ph-mean", CB.fmt(mean, 3));
+    CB.stat("ph-sd", CB.fmt(sd, 3));
+    CB.stat("ph-snr", CB.fmt(mean / Math.max(sd, 1e-6), 3));
+    if (anim) { ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(8, 8, 150, 22); ctx.fillStyle = "#fff"; ctx.font = "12px " + CB.color("mono"); ctx.fillText("평균 " + CB.fmt(n, 3) + "개 모음", 14, 23); }
+  }, { aspect: 0.625, maxHeight: 360 });
+  document.getElementById("ph-re").addEventListener("click", () => { counts = sample(nOf(N())); cv.redraw(); });
+  document.getElementById("ph-go").addEventListener("click", () => {
+    const target = nOf(N());
+    anim = { n: 0, t: 0 };
+    counts = new Float32Array(GW * GH);
+    const loop = CB.loop(document.getElementById("cv-photon"), (dt) => {
+      if (!anim) return;
+      anim.t += dt;
+      const n1 = target * Math.min(1, Math.pow(anim.t / 3, 2));
+      const dn = n1 - anim.n;
+      for (let i = 0; i < counts.length; i++) counts[i] += CB.poisson(lam[i] * dn);
+      anim.n = n1;
+      cv.redraw();
+      if (anim.t >= 3) { anim = null; loop.stop(); cv.redraw(); }
+    });
+  });
+})();
+
+/* ---------------------------------------------------------------- 3. ISO 불변성 */
+(function () {
+  const photo = CB.scenes.portrait(440, 275, { sceneEV: 10 });
+  const upd = CB.throttle(() => { a.redraw(); b.redraw(); });
+  const S = CB.range("iv-s", (v) => v + "스톱", upd);
+  const zoom = CB.check("iv-zoom", upd);
+  const base = { focus: 2.5, focal: 50, N: 4, fw: 9000, noiseSeed: 8 };
+  function draw(ctx, w, h, which) {
+    const s = S();
+    const t = (4 * 4) / Math.pow(2, 10) / Math.pow(2, s); // s스톱 노출 부족
+    const iso = 100 * Math.pow(2, s);
+    if (which === "a") photo.render(Object.assign({}, base, { t, iso }));
+    else photo.render(Object.assign({}, base, { t, iso: 100, gain: Math.pow(2, s) }));
+    photo.draw(ctx, 0, 0, w, h);
+    if (zoom()) zoomInset(ctx, photo, 300, 150, 60, 60, w - w * 0.38 - 6, h - w * 0.38 - 30, w * 0.38, w * 0.38, "그림자 확대");
+    CB.hud(ctx, 0, h - 22, w, which === "a" ? [CB.fmtT(t), "ISO " + iso, "카메라에서 증폭"] : [CB.fmtT(t), "ISO 100", "현상에서 +" + s + "스톱"], { h: 22, size: 11 });
+  }
+  const a = CB.canvas("#cv-inv-a", (ctx, w, h) => draw(ctx, w, h, "a"), { aspect: 0.625 });
+  const b = CB.canvas("#cv-inv-b", (ctx, w, h) => draw(ctx, w, h, "b"), { aspect: 0.625 });
+  const caps = () => { document.getElementById("cap-a").textContent = `A: ISO ${100 * Math.pow(2, S())}로 촬영`; document.getElementById("cap-b").textContent = `B: ISO 100으로 ${S()}스톱 어둡게 찍고 후보정으로 밝힘`; };
+  S.el.addEventListener("input", caps); caps();
+})();
+
+/* ---------------------------------------------------------------- 4. 센서 크기 + NR */
+(function () {
+  const photo = CB.scenes.portrait(440, 275, { sceneEV: 7 });
+  const upd = CB.throttle(() => cv.redraw());
+  const sz = CB.seg("sz-s", upd);
+  const ISO = CB.steps("sz-iso", CB.ISOS.filter((s) => s >= 100 && s <= 25600), (v) => v, 3200, upd);
+  const NR = CB.range("sz-nr", (v) => ["끔", "약", "중", "강"][v], upd);
+  const names = { 864: "풀프레임", 367: "APS-C", 116: "1형", 72: "1/1.3형", 24: "1/2.55형" };
+  const cv = CB.canvas("#cv-size", (ctx, w, h) => {
+    const area = +sz(), iso = ISO();
+    const fw = 9000 * (area / 864); // 같은 화각·같은 F값·같은 셔터 → 모은 빛 ∝ 면적
+    const t = (2.8 * 2.8) / Math.pow(2, 7 + Math.log2(iso / 100));
+    const sw = Math.sqrt(area * 1.5); // 같은 화각: 초점거리도 센서 폭에 비례
+    photo.render({ N: 2.8, t, iso, focus: 2.5, focal: 50 * sw / 36, sensorW: sw, fw, nr: NR() * 0.3, noiseSeed: 9 });
+    photo.draw(ctx, 0, 0, w, h);
+    zoomInset(ctx, photo, 159, 30, 52, 52, w - w * 0.36 - 8, 8, w * 0.36, w * 0.36, "100% 확대");
+    const stops = Math.log2(864 / area);
+    CB.hud(ctx, 0, h - 24, w, [names[area], "ISO " + iso + " 밝기", stops > 0.1 ? `빛 −${stops.toFixed(1)}스톱` : "기준", "NR " + ["끔", "약", "중", "강"][NR()]]);
+  }, { aspect: 0.625 });
+})();
+</script>
+</body>
+</html>

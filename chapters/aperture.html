@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<title>조리개와 아웃포커스 · CameraBook</title>
+<meta name="description" content="F값의 정체, 피사계 심도를 바꾸는 네 가지 요인, 배경 흐림과 보케 모양, 회절과 렌즈의 최적 조리개, 센서 크기에 따른 등가 조리개를 시뮬레이터로 배운다.">
+<link rel="canonical" href="https://camerabook.euiyun.com/chapters/aperture.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="CameraBook">
+<meta property="og:title" content="조리개와 아웃포커스 · CameraBook">
+<meta property="og:description" content="F값의 정체, 피사계 심도를 바꾸는 네 가지 요인, 배경 흐림과 보케 모양, 회절과 렌즈의 최적 조리개, 센서 크기에 따른 등가 조리개를 시뮬레이터로 배운다.">
+<meta property="og:url" content="https://camerabook.euiyun.com/chapters/aperture.html">
+<meta property="og:image" content="https://camerabook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"조리개와 아웃포커스","name":"조리개와 아웃포커스 · CameraBook","url":"https://camerabook.euiyun.com/chapters/aperture.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/aperture.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":3,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"F값의 정체, 피사계 심도를 바꾸는 네 가지 요인, 배경 흐림과 보케 모양, 회절과 렌즈의 최적 조리개, 센서 크기에 따른 등가 조리개를 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"03 조리개와 아웃포커스","item":"https://camerabook.euiyun.com/chapters/aperture.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  #cv-dofbar { cursor: ew-resize; touch-action: pan-y; }
+</style>
+</head>
+<body data-chapter="aperture">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 03</div>
+    <h1>조리개와 아웃포커스</h1>
+    <p class="lead">인물 사진에서 배경이 크림처럼 녹아내리는 '아웃포커스', 풍경 사진에서 앞의 꽃부터 먼 산까지 모두 또렷한 '팬포커스'. 둘의 차이를 만드는 주인공이 조리개입니다. 조리개는 빛의 양을 조절하는 장치이지만, 사진가가 조리개를 돌리는 이유는 대부분 밝기보다 <b>심도</b> 때문입니다.</p>
+    <ul class="objectives">
+      <li>F값이 '초점거리 ÷ 구멍 지름'이며 숫자가 작을수록 구멍이 크다는 것을 안다.</li>
+      <li>피사계 심도를 바꾸는 네 요인(조리개, 거리, 초점거리, 센서 크기)을 구분한다.</li>
+      <li>보케의 모양이 조리개 날개와 관련 있음을 이해한다.</li>
+      <li>너무 조이면 회절로 오히려 흐려진다는 것과 렌즈의 '최적 조리개'를 안다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="fnumber">
+    <h2>F값의 정체</h2>
+    <p>렌즈 안에는 여러 장의 얇은 금속 날개가 겹쳐 만든 구멍이 있습니다. 이 구멍이 <span class="term">조리개</span><span class="en">(Aperture)</span>이고, 사람 눈의 동공처럼 크기가 변합니다. 구멍 크기는 mm가 아니라 <span class="term">F값</span><span class="en">(F-number)</span>으로 표시합니다.</p>
+    <div class="formula">$$N = \frac{f}{D}$$
+      <div class="where">\(N\): F값, \(f\): 초점거리(mm), \(D\): 렌즈 앞에서 본 조리개 구멍의 지름(입사동, mm). 50 mm 렌즈에서 지름이 25 mm면 f/2, 6.25 mm면 f/8이다.</div>
+    </div>
+    <p>왜 이렇게 복잡하게 표기할까요? 같은 지름의 구멍이라도 초점거리가 길면(망원) 상이 크게 퍼져 어두워지기 때문입니다. F값으로 표기하면 <b>렌즈 종류와 상관없이 같은 F값 = 같은 밝기</b>가 됩니다. 24 mm 광각의 f/4와 400 mm 망원의 f/4는 구멍 지름이 6 mm와 100 mm로 전혀 다르지만, 센서에 닿는 빛의 밝기는 같습니다. 그래서 노출 계산이 렌즈와 무관해집니다.</p>
+
+    <div class="sim" id="sim-iris">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>조리개 날개 들여다보기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-iris"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>F값 <output id="ir-n-out"></output></span><input type="range" id="ir-n"></label>
+          <label class="ctrl"><span>초점거리 <output id="ir-f-out"></output></span><input type="range" id="ir-f"></label>
+          <div class="ctrl"><span>날개 수</span><div class="seg" id="ir-b"><button data-value="5">5</button><button data-value="7">7</button><button data-value="9" class="on">9</button><button data-value="11">11</button></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">구멍 지름 D</span><span class="v" id="ir-d">—</span></div>
+        <div class="stat"><span class="k">최대 개방 대비 빛</span><span class="v" id="ir-l">—</span></div>
+        <div class="stat"><span class="k">최대 개방 대비</span><span class="v" id="ir-s">—</span></div>
+      </div>
+      <div class="sim-note">F값이 커질수록(조일수록) 구멍이 작아지고 날개가 만든 다각형 모양이 드러납니다. f/1.4 → f/2는 한 스톱, 빛이 절반입니다. 초점거리를 바꾸면 같은 F값이라도 실제 지름이 달라지는 것도 확인해 보세요.</div>
+    </div>
+    <div class="callout tip"><strong>"밝은 렌즈"의 뜻</strong>렌즈 이름의 "50mm F1.4"에서 F1.4는 그 렌즈가 열 수 있는 가장 큰 구멍(<b>최대 개방</b>)입니다. 최대 개방 F값이 작을수록 '밝은 렌즈'라 부르며, 어두운 곳에서 빠른 셔터를 쓸 수 있고 배경을 더 흐릴 수 있지만 크고 비쌉니다. 줌렌즈의 "F3.5-5.6"은 광각 쪽에서 f/3.5, 망원 쪽에서 f/5.6까지 열린다는 뜻입니다.</div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="dof">
+    <h2>피사계 심도: 또렷해 보이는 범위</h2>
+    <p>렌즈는 한 거리에만 정확히 초점을 맞춥니다. 그 앞뒤의 물체에서 온 빛은 센서 위에 점이 아니라 작은 원으로 퍼집니다. 이 원을 <span class="term">착란원</span><span class="en">(Circle of Confusion)</span>이라 하는데, 원이 충분히 작으면 우리 눈은 여전히 '선명하다'고 느낍니다. 이렇게 선명해 보이는 앞뒤 범위가 <span class="term">피사계 심도</span><span class="en">(Depth of Field, DoF)</span>입니다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 800 230" role="img" aria-label="조리개가 클수록 초점이 어긋난 점의 착란원이 커진다">
+        <g transform="translate(0,0)">
+          <text x="200" y="22" text-anchor="middle" class="t-acc">조리개 열림 (f/2)</text>
+          <ellipse cx="120" cy="115" rx="10" ry="70" class="f-acc-soft"/>
+          <path d="M20 115 L120 45 L330 140 M20 115 L120 185 L330 90" stroke="#e0443e" stroke-width="1.5" fill="none"/>
+          <path d="M60 115 L120 45 L300 115 M60 115 L120 185 L300 115" stroke="var(--accent-2)" stroke-width="1.5" fill="none"/>
+          <line x1="300" y1="40" x2="300" y2="190" stroke="var(--text-dim)" stroke-width="3"/>
+          <rect x="296" y="96" width="8" height="38" fill="#e0443e" opacity=".35"/>
+          <text x="300" y="212" text-anchor="middle" class="t-dim">센서: 빨강은 큰 원으로 번짐</text>
+        </g>
+        <g transform="translate(400,0)">
+          <text x="200" y="22" text-anchor="middle" class="t-acc">조리개 조임 (f/8)</text>
+          <rect x="114" y="40" width="12" height="57" fill="var(--text-dim)"/><rect x="114" y="133" width="12" height="57" fill="var(--text-dim)"/>
+          <ellipse cx="120" cy="115" rx="10" ry="70" class="f-acc-soft" opacity=".5"/>
+          <path d="M20 115 L120 98 L330 120 M20 115 L120 132 L330 110" stroke="#e0443e" stroke-width="1.5" fill="none"/>
+          <path d="M60 115 L120 98 L300 115 M60 115 L120 132 L300 115" stroke="var(--accent-2)" stroke-width="1.5" fill="none"/>
+          <line x1="300" y1="40" x2="300" y2="190" stroke="var(--text-dim)" stroke-width="3"/>
+          <rect x="296" y="110" width="8" height="10" fill="#e0443e" opacity=".5"/>
+          <text x="300" y="212" text-anchor="middle" class="t-dim">센서: 빨강의 번짐이 작아짐</text>
+        </g>
+        <text x="20" y="105" class="t-dim">먼 점</text><text x="60" y="140" class="t-dim">초점</text>
+      </svg>
+      <figcaption><b>그림 3-1.</b> 초점이 맞은 점(청록)은 조리개와 상관없이 한 점에 모인다. 초점이 어긋난 점(빨강)은 광선 다발의 폭이 조리개 지름에 비례하므로, 조이면 번짐 원이 작아져 심도가 깊어진다.</figcaption>
+    </figure>
+
+    <div class="sim" id="sim-dof">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>심도 가상 카메라</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-dof"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>조리개 <output id="df-n-out"></output></span><input type="range" id="df-n"></label>
+          <label class="ctrl"><span>초점 거리(피사체까지) <output id="df-s-out"></output></span><input type="range" id="df-s" min="0" max="100" value="30"></label>
+          <label class="ctrl"><span>렌즈 초점거리 <output id="df-f-out"></output></span><input type="range" id="df-f"></label>
+          <div class="ctrl"><span>센서</span><div class="seg" id="df-sensor"><button data-value="36" class="on">풀프레임</button><button data-value="23.5">APS-C</button><button data-value="13.2">1형</button><button data-value="9.8">폰 메인</button></div></div>
+        </div>
+      </div>
+      <div class="sim-view" style="border-top:1px solid var(--border)"><canvas id="cv-dofbar"></canvas></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">심도 앞 경계</span><span class="v" id="df-near">—</span></div>
+        <div class="stat"><span class="k">심도 뒤 경계</span><span class="v" id="df-far">—</span></div>
+        <div class="stat"><span class="k">심도 깊이</span><span class="v" id="df-tot">—</span></div>
+        <div class="stat"><span class="k">과초점 거리</span><span class="v" id="df-h">—</span></div>
+      </div>
+      <div class="sim-note">사진을 클릭하면 그 위치에 초점을 맞춥니다. 아래 막대는 위에서 내려다본 장면(인물 2.5 m, 벤치 6 m, 전구 14 m, 숲 40 m)과 선명한 범위(초록)입니다. 막대를 드래그해도 초점이 움직입니다. 센서를 바꿀 때는 같은 화각을 유지하도록 초점거리를 자동으로 바꿉니다.</div>
+    </div>
+
+    <p>시뮬레이터에서 확인했듯이 심도를 바꾸는 요인은 네 가지입니다.</p>
+    <div class="table-wrap"><table>
+      <tr><th>요인</th><th>심도가 얕아지는(배경이 더 흐려지는) 방향</th><th>체감 크기</th></tr>
+      <tr><td><b>조리개</b></td><td>열수록 (f/8 → f/1.8)</td><td>F값에 거의 비례</td></tr>
+      <tr><td><b>피사체까지 거리</b></td><td>가까울수록</td><td>거리의 제곱에 비례 — 가장 강력</td></tr>
+      <tr><td><b>초점거리</b></td><td>길수록(망원) — 같은 거리에서</td><td>강함</td></tr>
+      <tr><td><b>센서 크기</b></td><td>클수록 — 같은 화각·같은 F값에서</td><td>크롭 팩터에 비례</td></tr>
+    </table></div>
+    <div class="callout"><strong>배경을 확 날리는 실전 요령</strong>① 조리개를 최대로 연다. ② 피사체에 다가간다. ③ 망원 쪽으로 줌한다(85~135 mm). ④ <b>피사체를 배경에서 멀리 떨어뜨린다.</b> 마지막이 의외로 중요합니다. 배경이 피사체 바로 뒤 벽이면 f/1.4로도 별로 안 흐려지지만, 50 m 떨어진 숲이면 f/4로도 충분히 녹습니다.</div>
+    <div class="callout deep"><strong>과초점 거리</strong>초점을 어떤 거리 \(H\)에 맞추면 심도의 뒤 경계가 무한대에 닿고, 앞 경계는 \(H/2\)까지 내려옵니다. 이 \(H\)가 <span class="term">과초점 거리</span><span class="en">(Hyperfocal Distance)</span>입니다. $$H \approx \frac{f^2}{N\,c}$$ 풍경 사진에서 앞의 바위부터 먼 산까지 모두 선명하게 하고 싶을 때 쓰는 기법입니다. \(c\)는 허용 착란원으로 풀프레임에서 보통 0.03 mm를 씁니다.</div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="bokeh">
+    <h2>보케: 흐림의 '질'</h2>
+    <p>흐려진 부분의 모양과 느낌을 일본어에서 온 말로 <span class="term">보케</span><span class="en">(Bokeh)</span>라고 합니다. 특히 배경의 작은 불빛이 흐려지면 조리개 구멍 모양 그대로 빛망울이 됩니다. 조리개를 활짝 열면 날개가 렌즈 밖으로 숨어 동그란 망울이, 조이면 날개 수만큼 각진 다각형 망울이 생깁니다.</p>
+    <div class="sim" id="sim-bokeh">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>빛망울 모양 실험실</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-bokeh"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>조리개 <output id="bk-n-out"></output></span><input type="range" id="bk-n"></label>
+          <div class="ctrl"><span>조리개 날개</span><div class="seg" id="bk-b"><button data-value="0" class="on">원형</button><button data-value="6">6장</button><button data-value="7">7장</button><button data-value="9">9장</button></div></div>
+          <label class="check"><input type="checkbox" id="bk-rim"> 테두리가 밝은 '양파링' 보케</label>
+        </div>
+      </div>
+      <div class="sim-note">렌즈 설계에 따라 빛망울 가장자리가 밝은 '비눗방울' 보케, 가운데가 밝은 '부드러운' 보케가 됩니다. 원형 조리개 날개(곡선 날개)를 쓴 렌즈는 조금 조여도 망울이 둥글게 유지됩니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="diffraction">
+    <h2>너무 조이면 흐려진다: 회절과 최적 조리개</h2>
+    <p>심도를 깊게 하려고 f/22까지 조이면 모든 것이 최고로 선명할까요? 아닙니다. 1장의 바늘구멍처럼, 구멍이 작아지면 빛이 구멍 가장자리에서 퍼지는 <span class="term">회절</span>이 커져 사진 전체가 살짝 뿌옇게 됩니다. 반대로 최대 개방에서는 렌즈 설계의 한계(<span class="term">수차</span>)가 드러나 조금 무릅니다. 그래서 대부분의 렌즈는 최대 개방에서 2~3스톱 조인 f/5.6~f/8 근처에서 가장 선명합니다.</p>
+    <div class="sim" id="sim-sweet">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>렌즈 선명도 곡선과 확대 비교</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-sweet"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>조리개 <output id="sw-n-out"></output></span><input type="range" id="sw-n"></label>
+          <div class="ctrl"><span>센서 화소 피치</span><div class="seg" id="sw-p"><button data-value="6">6 µm (24MP FF)</button><button data-value="3.8" class="on">3.8 µm (60MP FF)</button><button data-value="0.8">0.8 µm (폰)</button></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">회절 번짐(에어리 원반)</span><span class="v" id="sw-airy">—</span></div>
+        <div class="stat"><span class="k">수차 번짐(가상 렌즈)</span><span class="v" id="sw-ab">—</span></div>
+        <div class="stat"><span class="k">합친 번짐 ÷ 픽셀</span><span class="v" id="sw-tot">—</span></div>
+      </div>
+      <div class="sim-note">곡선의 가장 낮은 지점이 최적 조리개입니다. 화소가 작은 센서일수록 회절이 일찍 보입니다. 스마트폰 카메라 대부분이 f/1.5~f/2.4 고정 조리개인 이유 중 하나가 이것입니다. 조일 수 있게 만들어도 회절 때문에 화질이 나빠지기 때문입니다.</div>
+    </div>
+    <div class="callout warn"><strong>그래도 f/16이 필요할 때</strong>회절은 '살짝 뿌연' 정도이고, 심도가 모자라 앞이 흐린 것은 '확 흐린' 것입니다. 앞뒤 모두 선명해야 하는 풍경이라면 회절을 감수하고 조이는 편이 낫습니다. 다만 f/22 이상은 꼭 필요할 때만 쓰세요. 또, 조일수록 센서 위의 먼지가 또렷한 점으로 찍힙니다.</div>
+  </section>
+
+  <!-- =============================================================== 5 -->
+  <section id="equiv">
+    <h2>센서 크기와 '등가 조리개'</h2>
+    <p>스마트폰 메인 카메라의 f/1.8은 풀프레임 f/1.8과 같을까요? <b>밝기(노출)</b>는 같습니다. 같은 F값이면 센서 단위 면적당 빛은 같으니까요. 하지만 <b>배경 흐림과 전체 빛의 양</b>은 다릅니다. 작은 센서는 같은 화각을 얻으려고 짧은 초점거리를 쓰고, 그러면 같은 F값이라도 실제 구멍 지름이 작아지기 때문입니다.</p>
+    <div class="formula">$$N_\text{등가} = N \times \text{크롭 팩터}$$
+      <div class="where">배경 흐림(심도)과 사진 전체의 노이즈를 비교할 때 쓰는 값. 노출 계산에는 그대로 \(N\)을 쓴다.</div>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>카메라</th><th class="num">실제 초점거리</th><th class="num">F값</th><th class="num">크롭</th><th class="num">35 mm 환산 화각</th><th class="num">심도 기준 등가 F값</th></tr>
+      <tr><td>풀프레임 + 50 mm</td><td class="num">50 mm</td><td class="num">f/1.8</td><td class="num">1.0</td><td class="num">50 mm</td><td class="num">f/1.8</td></tr>
+      <tr><td>APS-C + 35 mm</td><td class="num">35 mm</td><td class="num">f/1.8</td><td class="num">1.5</td><td class="num">52 mm</td><td class="num">f/2.7</td></tr>
+      <tr><td>1형 컴팩트</td><td class="num">18.5 mm</td><td class="num">f/1.8</td><td class="num">2.7</td><td class="num">50 mm</td><td class="num">f/4.9</td></tr>
+      <tr><td>스마트폰 메인(1/1.3형)</td><td class="num">6.9 mm</td><td class="num">f/1.8</td><td class="num">≈ 3.5</td><td class="num">24 mm</td><td class="num">≈ f/6.3</td></tr>
+    </table></div>
+    <p>그래서 스마트폰으로는 광학적으로 배경을 크게 흐리기 어렵고, 대신 깊이를 추정해 소프트웨어로 흐리는 '인물 모드'를 씁니다(15장).</p>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>F값 = 초점거리 ÷ 구멍 지름. 작을수록 구멍이 크고 밝다. 같은 F값이면 어떤 렌즈든 노출이 같다.</li>
+      <li>피사계 심도는 조리개(열수록 얕음), 거리(가까울수록 얕음), 초점거리(길수록 얕음), 센서(클수록 얕음)로 정해진다.</li>
+      <li>배경을 날리려면 피사체와 배경 사이 거리도 벌려야 한다.</li>
+      <li>점광원의 흐림은 조리개 모양을 닮는다. 조이면 날개 수만큼 각진 빛망울이 된다.</li>
+      <li>너무 조이면 회절로 전체가 뿌예진다. 렌즈의 최적 조리개는 보통 f/5.6~f/8. 작은 픽셀일수록 회절이 먼저 보인다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>100 mm 렌즈를 f/4로 설정했다. 조리개 구멍(입사동)의 지름은?</p><div class="opts">
+        <button class="opt">4 mm</button>
+        <button class="opt" data-correct>25 mm</button>
+        <button class="opt">400 mm</button>
+      </div><div class="quiz-exp">D = f/N = 100/4 = 25 mm.</div></div>
+      <div class="quiz-q"><p>배경을 더 흐리게 만드는 방법이 <b>아닌</b> 것은?</p><div class="opts">
+        <button class="opt">피사체에 더 가까이 다가간다</button>
+        <button class="opt">더 긴 초점거리를 쓴다</button>
+        <button class="opt" data-correct>조리개를 f/2.8에서 f/8로 바꾼다</button>
+        <button class="opt">피사체를 배경에서 멀리 세운다</button>
+      </div><div class="quiz-exp">F값을 키우면(조이면) 심도가 깊어져 배경이 더 선명해진다.</div></div>
+      <div class="quiz-q"><p>60 MP 풀프레임 카메라로 f/22에서 찍은 사진이 f/8보다 전체적으로 덜 선명해 보였다. 주된 원인은?</p><div class="opts">
+        <button class="opt">수차</button>
+        <button class="opt" data-correct>회절</button>
+        <button class="opt">손떨림</button>
+      </div><div class="quiz-exp">조리개를 많이 조이면 회절 번짐(에어리 원반)이 픽셀 여러 개 크기로 커진다. 화소가 많을수록 더 일찍 드러난다.</div></div>
+      <div class="quiz-q"><p>스마트폰(크롭 ≈ 3.5)의 f/1.8 사진과 비슷한 배경 흐림을 풀프레임으로 얻으려면 대략 어떤 F값을 쓰면 될까? (같은 화각·같은 거리)</p><div class="opts">
+        <button class="opt">f/1.8</button>
+        <button class="opt">f/3.5</button>
+        <button class="opt" data-correct>f/6.3</button>
+      </div><div class="quiz-exp">등가 F값 = 1.8 × 3.5 ≈ 6.3. 폰의 f/1.8은 밝기로는 f/1.8이지만 심도로는 풀프레임 f/6.3 정도다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------------------------------------------------------------- 공통: 조리개 다각형 그리기 */
+function irisPath(ctx, cx, cy, r, blades, rot = 0) {
+  ctx.beginPath();
+  if (!blades) { ctx.arc(cx, cy, r, 0, Math.PI * 2); return; }
+  for (let i = 0; i <= blades; i++) {
+    const a = rot + (i / blades) * Math.PI * 2;
+    i ? ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r) : ctx.moveTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+  }
+  ctx.closePath();
+}
+
+/* ---------------------------------------------------------------- 1. 조리개 날개 */
+(function () {
+  const upd = () => cv.redraw();
+  const N = CB.steps("ir-n", CB.APERTURES.filter((n) => n >= 1.4), CB.fmtN, 2.8, upd);
+  const F = CB.steps("ir-f", [24, 35, 50, 85, 135, 200], (v) => v + " mm", 50, upd);
+  const B = CB.seg("ir-b", upd);
+  const cv = CB.canvas("#cv-iris", (ctx, w, h) => {
+    const P = CB.palette();
+    const n = N(), f = F(), blades = +B();
+    const D = f / n, Dmax = f / 1.4;
+    const R = Math.min(w, h) * 0.42, cx = w * 0.5, cy = h * 0.5;
+    // 경통
+    ctx.fillStyle = "#1b1b1d"; ctx.beginPath(); ctx.arc(cx, cy, R + 14, 0, 7); ctx.fill();
+    ctx.strokeStyle = "#444"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, R + 8, 0, 7); ctx.stroke();
+    // 날개(겹친 금속)
+    ctx.fillStyle = "#2c2c30"; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill();
+    const r = R * (D / Dmax);
+    const full = n <= 1.45;
+    const rot = n * 0.35; // 조일수록 날개가 회전
+    // 날개 경계선
+    if (!full) {
+      ctx.strokeStyle = "#45454b"; ctx.lineWidth = 1.2;
+      for (let i = 0; i < blades; i++) {
+        const a = rot + (i / blades) * Math.PI * 2;
+        const x1 = cx + Math.cos(a) * r, y1 = cy + Math.sin(a) * r;
+        const b = a + Math.PI / 2 + 0.25;
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(x1 + Math.cos(b) * R * 0.5, y1 + Math.sin(b) * R * 0.5, cx + Math.cos(a + 1.2) * R, cy + Math.sin(a + 1.2) * R); ctx.stroke();
+      }
+    }
+    // 구멍(뒤 풍경이 보임)
+    ctx.save();
+    irisPath(ctx, cx, cy, r, full ? 0 : blades, rot);
+    ctx.clip();
+    const gr = ctx.createRadialGradient(cx, cy - r * 0.3, 2, cx, cy, Math.max(r, 4));
+    gr.addColorStop(0, "#cfe8ff"); gr.addColorStop(1, "#6fa3d8");
+    ctx.fillStyle = gr; ctx.fillRect(cx - r - 2, cy - r - 2, 2 * r + 4, 2 * r + 4);
+    ctx.restore();
+    ctx.strokeStyle = P.accent; ctx.lineWidth = 1.5;
+    irisPath(ctx, cx, cy, r, full ? 0 : blades, rot); ctx.stroke();
+    // 지름 표시
+    ctx.strokeStyle = P.text; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(cx - r, cy + R + 26); ctx.lineTo(cx + r, cy + R + 26); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = P.text; ctx.font = "12px " + CB.color("mono"); ctx.textAlign = "center";
+    ctx.fillText(`D = ${CB.fmt(D, 3)} mm`, cx, Math.min(h - 6, cy + R + 42));
+    ctx.textAlign = "left"; ctx.fillStyle = P.dim; ctx.font = "12px " + CB.color("font");
+    ctx.fillText(`${f} mm 렌즈 정면`, 10, 18);
+    const rel = Math.pow(1.4 / n, 2);
+    CB.stat("ir-d", CB.fmt(D, 3) + "<small>mm</small>");
+    CB.stat("ir-l", (rel * 100 >= 10 ? Math.round(rel * 100) : CB.fmt(rel * 100, 2)) + "<small>%</small>");
+    CB.stat("ir-s", "−" + (2 * Math.log2(n / 1.4)).toFixed(1) + "<small>스톱</small>");
+  }, { aspect: 0.62, minHeight: 300, maxHeight: 380 });
+})();
+
+/* ---------------------------------------------------------------- 2. 심도 */
+(function () {
+  const photo = CB.scenes.portrait(440, 275, { sceneEV: 10 });
+  const upd = CB.throttle(() => { cv.redraw(); bar.redraw(); });
+  const N = CB.steps("df-n", CB.APERTURES.filter((n) => n >= 1.2), CB.fmtN, 2, upd);
+  const sOf = (v) => 0.5 * Math.pow(100 / 0.5, v / 100); // 0.5~100 m
+  const S = CB.range("df-s", (v) => (sOf(v) >= 99 ? "∞" : CB.fmt(sOf(v), 2) + " m"), upd);
+  const F = CB.steps("df-f", [24, 28, 35, 50, 85, 105, 135], (v) => v + " mm", 85, upd);
+  const sensor = CB.seg("df-sensor", upd);
+  const DEPTHS = [[2.5, "인물"], [6, "벤치"], [14, "전구"], [40, "숲"]];
+  function params() {
+    const sw = +sensor(), crop = 36 / sw;
+    const f = F() / crop; // 같은 화각 유지(35 mm 환산 F() mm)
+    const c = 0.03 / crop;
+    return { N: N(), s: sOf(S()), f, sw, c, crop };
+  }
+  function limits(p) {
+    const H = (p.f * p.f) / (p.N * p.c) + p.f; // mm
+    const s = p.s * 1000;
+    const near = (s * (H - p.f)) / (H + s - 2 * p.f);
+    const far = s < H ? (s * (H - p.f)) / (H - s) : Infinity;
+    return { H: H / 1000, near: near / 1000, far: far / 1000 };
+  }
+  const cv = CB.canvas("#cv-dof", (ctx, w, h) => {
+    const p = params();
+    photo.render({ N: p.N, t: (p.N * p.N) / Math.pow(2, 10), iso: 100, focus: p.s, focal: p.f, sensorW: p.sw, blades: 9 });
+    photo.draw(ctx, 0, 0, w, h);
+    CB.hud(ctx, 0, h - 24, w, [CB.fmtN(p.N), `${CB.fmt(p.f, 3)} mm`, `초점 ${p.s >= 99 ? "∞" : CB.fmt(p.s, 2) + " m"}`, p.crop > 1.01 ? `크롭 ×${p.crop.toFixed(1)}` : "풀프레임"]);
+    const L = limits(p);
+    const fm = (x) => (!isFinite(x) || x > 999 ? "∞" : CB.fmt(x, 3) + "<small>m</small>");
+    CB.stat("df-near", fm(L.near));
+    CB.stat("df-far", fm(L.far));
+    CB.stat("df-tot", !isFinite(L.far) ? "∞" : CB.fmt(L.far - L.near, 2) + "<small>m</small>");
+    CB.stat("df-h", fm(L.H));
+  }, { aspect: 0.625 });
+  // 클릭으로 초점 맞추기
+  document.getElementById("cv-dof").addEventListener("click", (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const d = photo.depthAt(((e.clientX - r.left) / r.width) * photo.w, ((e.clientY - r.top) / r.height) * photo.h);
+    const s = isFinite(d) ? d : 100;
+    S.set(Math.round((Math.log(s / 0.5) / Math.log(200)) * 100));
+  });
+  // 위에서 본 거리 막대
+  const X = (w, m) => 30 + (Math.log(m / 0.5) / Math.log(200)) * (w - 60);
+  const bar = CB.canvas("#cv-dofbar", (ctx, w, h) => {
+    const P = CB.palette();
+    const p = params(), L = limits(p);
+    const y = h * 0.55;
+    ctx.strokeStyle = P.axis; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(w - 30, y); ctx.stroke();
+    const xn = X(w, CB.clamp(L.near, 0.5, 100)), xf = isFinite(L.far) ? X(w, CB.clamp(L.far, 0.5, 100)) : w - 30;
+    ctx.fillStyle = "rgba(63,207,127,0.28)"; ctx.fillRect(xn, y - 16, xf - xn, 32);
+    ctx.fillStyle = P.dim; ctx.font = "11px " + CB.color("mono"); ctx.textAlign = "center";
+    [0.5, 1, 2, 5, 10, 20, 50, 100].forEach((m) => { const x = X(w, m); ctx.fillRect(x, y - 3, 1, 6); ctx.fillText(m === 100 ? "∞" : m + "m", x, y + 28); });
+    DEPTHS.forEach(([d, n]) => { const x = X(w, d); ctx.fillStyle = P.text; ctx.beginPath(); ctx.arc(x, y, 4, 0, 7); ctx.fill(); ctx.font = "12px " + CB.color("font"); ctx.fillText(n, x, y - 22); });
+    ctx.fillStyle = P.accent; const xs = X(w, CB.clamp(p.s, 0.5, 100));
+    ctx.beginPath(); ctx.moveTo(xs, y - 18); ctx.lineTo(xs - 6, y - 28); ctx.lineTo(xs + 6, y - 28); ctx.fill();
+    ctx.fillRect(xs - 1, y - 18, 2, 36);
+    ctx.textAlign = "left"; ctx.fillStyle = P.dim; ctx.font = "11px " + CB.color("font");
+    ctx.fillText("📷 카메라", 4, 14);
+  }, { height: 86 });
+  const barEl = document.getElementById("cv-dofbar");
+  let dragging = false;
+  const fromX = (e) => { const r = barEl.getBoundingClientRect(); const x = e.clientX - r.left; const v = CB.clamp((x - 30) / (r.width - 60), 0, 1); S.set(Math.round(v * 100)); };
+  barEl.addEventListener("pointerdown", (e) => { dragging = true; barEl.setPointerCapture(e.pointerId); fromX(e); });
+  barEl.addEventListener("pointermove", (e) => dragging && fromX(e));
+  barEl.addEventListener("pointerup", () => (dragging = false));
+})();
+
+/* ---------------------------------------------------------------- 3. 보케 */
+(function () {
+  const W = 440, H = 275;
+  const photo = CB.Photo({
+    w: W, h: H, sceneEV: 6,
+    build(S) {
+      S.layer(Infinity, (g) => CB.draw.sky(g, W, H, "#0b1530", "#2a2340"));
+      const r = CB.rng(4), pts = [];
+      const cols = [[1, 0.75, 0.4], [1, 0.55, 0.3], [0.5, 0.75, 1], [1, 0.9, 0.6], [1, 0.4, 0.5]];
+      for (let i = 0; i < 26; i++) pts.push({ x: r.range(10, W - 10), y: r.range(15, H * 0.75), c: r.pick(cols), i: r.range(40, 120) });
+      S.lights(30, pts);
+      S.layer(1.2, (g) => {
+        // 유리컵과 촛불
+        g.fillStyle = "#5a3b28"; g.fillRect(0, H * 0.82, W, H);
+        g.fillStyle = "rgba(200,220,240,0.35)"; CB.draw.roundRect(g, W * 0.42, H * 0.45, W * 0.14, H * 0.37, 6); g.fill();
+        g.strokeStyle = "rgba(240,250,255,0.6)"; g.lineWidth = 2; g.stroke();
+        g.fillStyle = "#f3e6c8"; g.fillRect(W * 0.465, H * 0.6, W * 0.05, H * 0.2);
+        g.fillStyle = "#ffcf5a"; g.beginPath(); g.ellipse(W * 0.49, H * 0.56, 5, 10, 0, 0, 7); g.fill();
+      });
+    },
+  });
+  const upd = CB.throttle(() => cv.redraw());
+  const N = CB.steps("bk-n", CB.APERTURES.filter((n) => n >= 1.4 && n <= 11), CB.fmtN, 1.4, upd);
+  const B = CB.seg("bk-b", upd);
+  const rim = CB.check("bk-rim", upd);
+  const cv = CB.canvas("#cv-bokeh", (ctx, w, h) => {
+    const n = N(), b = +B();
+    // 최대 개방 근처에서는 날개가 숨어 둥글다: f/2 이하에서 원형
+    const blades = b && n > 1.9 ? b : 0;
+    photo.render({ N: n, t: (n * n) / Math.pow(2, 6), iso: 100, focus: 1.2, focal: 85, blades, bokehRim: rim(), noise: false });
+    photo.draw(ctx, 0, 0, w, h);
+    CB.hud(ctx, 0, h - 24, w, [CB.fmtN(n), blades ? blades + "각형 조리개" : "원형 개구", rim() ? "양파링" : "부드러움"]);
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 4. 회절 / 최적 조리개 */
+(function () {
+  const upd = CB.throttle(() => cv.redraw());
+  const LIST = CB.APERTURES.filter((n) => n >= 1.4 && n <= 22);
+  const N = CB.steps("sw-n", LIST, CB.fmtN, 8, upd);
+  const pitch = CB.seg("sw-p", upd);
+  const airy = (n) => 2.44 * 0.55 * n;              // µm
+  const aber = (n, p) => 14 * Math.pow(1.4 / n, 1.8) * (p < 1.5 ? 0.25 : 1); // µm, 개방에서 크고 조일수록 감소(폰 렌즈는 작아서 수차 µm도 작음)
+  const total = (n, p) => Math.hypot(airy(n) * 0.42, aber(n, p), p); // 에어리 원반의 반치폭 ≈ 0.42 × 지름
+  // 테스트 차트(글자) 오프스크린
+  const TW = 180, TH = 120;
+  const chart = CB.offscreen(TW, TH, (g, w, h) => {
+    g.fillStyle = "#f2f2f2"; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#111"; g.font = "700 22px sans-serif"; g.fillText("CAMERA", 12, 32);
+    g.font = "12px sans-serif"; g.fillText("The quick brown fox", 12, 54); g.font = "9px sans-serif"; g.fillText("jumps over the lazy dog 1234", 12, 70);
+    for (let i = 0; i < 18; i++) g.fillRect(12 + i * 4, 82, 2, 28);
+    for (let i = 0; i < 12; i++) g.fillRect(100 + i * 6, 82, 3, 28);
+  });
+  let key = "", blurred = null;
+  const cv = CB.canvas("#cv-sweet", (ctx, w, h) => {
+    const P = CB.palette();
+    const p = +pitch(), n = N();
+    const cw = w > 520 ? w * 0.6 : w;
+    const ch = w > 520 ? h : h * 0.55;
+    const data = LIST.map((x) => [x, total(x, p) / p]);
+    const best = data.reduce((a, b) => (b[1] < a[1] ? b : a));
+    const ymax = Math.max(...data.map((d) => d[1])) * 1.1;
+    CB.chart(ctx, { x: 50, y: 14, w: cw - 66, h: ch - 60 }, {
+      x: [1.4, 22], y: [0, ymax], logX: true, xTicks: [1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22], xFmt: (v) => "f/" + v,
+      xLabel: "조리개", yLabel: "번짐 ÷ 픽셀 (작을수록 선명)",
+      series: [
+        { data: LIST.map((x) => [x, airy(x) * 0.42 / p]), color: P.accent2, width: 1.5, dash: [4, 3] },
+        { data: LIST.map((x) => [x, aber(x, p) / p]), color: P.warn, width: 1.5, dash: [4, 3] },
+        { data, color: P.accent, width: 2.5 },
+      ],
+      vlines: [{ x: best[0], color: P.ok, label: "최적 " + CB.fmtN(best[0]) }],
+      points: [{ x: n, y: total(n, p) / p, color: P.accent, r: 5 }],
+    });
+    ctx.font = "11px " + CB.color("font"); ctx.textAlign = "left";
+    ctx.fillStyle = P.accent2; ctx.fillText("--- 회절", 60, ch - 52); ctx.fillStyle = P.warn; ctx.fillText("--- 수차", 120, ch - 52);
+    // 확대 크롭
+    const sigma = (total(n, p) / p) * 0.55;
+    const k = sigma.toFixed(2);
+    if (k !== key) { blurred = CB.blurCanvas(chart, sigma); key = k; }
+    const iw = w > 520 ? w - cw - 16 : Math.min(w - 32, 300), ih = iw * (TH / TW);
+    const ix = w > 520 ? cw + 4 : (w - iw) / 2, iy = w > 520 ? (h - ih) / 2 : ch + 10;
+    ctx.imageSmoothingEnabled = false; ctx.drawImage(blurred, ix, iy, iw, ih); ctx.imageSmoothingEnabled = true;
+    ctx.strokeStyle = P.border; ctx.strokeRect(ix, iy, iw, ih);
+    ctx.fillStyle = P.dim; ctx.fillText("100% 확대", ix, iy - 6);
+    CB.stat("sw-airy", CB.fmt(airy(n), 2) + "<small>µm</small>");
+    CB.stat("sw-ab", CB.fmt(aber(n, p), 2) + "<small>µm</small>");
+    CB.stat("sw-tot", "×" + (total(n, p) / p).toFixed(2));
+  }, { aspect: (w) => (w > 520 ? 0.5 : 1.25), minHeight: 330, maxHeight: 460 });
+})();
+</script>
+</body>
+</html>
