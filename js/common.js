@@ -396,6 +396,35 @@
     }
     return buf;
   };
+  /**
+   * 캔버스 이미지를 (선형 광량 기준으로) 흐리게 해서 새 캔버스로 돌려준다.
+   *   CB.blurCanvas(src, sigma, {gain, lenX, lenY}) → canvas
+   */
+  CB.blurCanvas = function (src, sigma, o = {}) {
+    const w = src.width, h = src.height;
+    const d = src.getContext("2d").getImageData(0, 0, w, h);
+    const lut = CB._lut || (CB._lut = Array.from({ length: 256 }, (_, i) => CB.srgbToLin(i / 255)));
+    const buf = new Float32Array(w * h * 4);
+    for (let i = 0; i < w * h * 4; i += 4) { const a = d.data[i + 3] / 255; buf[i] = lut[d.data[i]] * a; buf[i + 1] = lut[d.data[i + 1]] * a; buf[i + 2] = lut[d.data[i + 2]] * a; buf[i + 3] = a; }
+    const tmp = new Float32Array(buf.length);
+    if (sigma > 0.35) CB.gaussBlur(buf, w, h, Math.min(sigma, 80), tmp);
+    if (o.lenX || o.lenY) CB.motionBlur(buf, w, h, o.lenX || 0, o.lenY || 0, tmp);
+    const g = o.gain != null ? o.gain : 1;
+    for (let i = 0; i < w * h * 4; i += 4) {
+      const a = buf[i + 3], k = a > 1e-4 ? g / a : 0; // 프리멀티플라이 해제
+      for (let c = 0; c < 3; c++) d.data[i + c] = 255 * CB.linToSrgb(CB.clamp(buf[i + c] * k, 0, 1));
+      d.data[i + 3] = 255 * CB.clamp(a, 0, 1);
+    }
+    const out = document.createElement("canvas"); out.width = w; out.height = h;
+    out.getContext("2d").putImageData(d, 0, 0);
+    return out;
+  };
+  /** 오프스크린 캔버스를 만들고 draw(g,w,h)로 그린다 */
+  CB.offscreen = function (w, h, draw) {
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    if (draw) draw(c.getContext("2d"), w, h);
+    return c;
+  };
   /** 방향성(가로/세로) 모션 블러: 길이 len(px) */
   CB.motionBlur = function (buf, w, h, lenX, lenY, tmp) {
     tmp = tmp || new Float32Array(buf.length);
@@ -830,6 +859,7 @@
             g.fillStyle = "#3b3b3b"; g.fillRect(w * 0.64, h * 0.7, w * 0.012, h * 0.08); g.fillRect(w * 0.89, h * 0.7, w * 0.012, h * 0.08);
             D.flower(g, w * 0.12, h * 0.8, h * 0.12, "#e2563b", 9);
           });
+          if (o.mover) S.layer(7, (g) => D.cyclist(g, w * 0.78, h * 0.86, h * 0.3, { shirt: "#2563c9" }), { motion: [o.mover, 0], name: "mover" });
           S.layer(2.5, (g) => D.person(g, w * 0.42, h * 0.98, h * 0.82, { shirt: "#d9622b", longHair: true }), { name: "subject" });
           S.layer(1.2, (g) => { // 전경 풀
             const r = CB.rng(77); g.strokeStyle = "#2f5a2a"; g.lineCap = "round";
