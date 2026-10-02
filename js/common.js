@@ -42,6 +42,14 @@
     while (v === 0) v = Math.random();
     return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
   };
+  CB.poisson = function (lambda) {
+    if (lambda <= 0) return 0;
+    if (lambda > 40) return Math.max(0, Math.round(lambda + Math.sqrt(lambda) * CB.randn()));
+    const L = Math.exp(-lambda);
+    let k = 0, p = 1;
+    do { k++; p *= Math.random(); } while (p > L);
+    return k - 1;
+  };
   /** 시드 고정 난수 (장면 텍스처가 매번 같게) */
   CB.rng = function (seed = 1) {
     let s = seed >>> 0 || 1;
