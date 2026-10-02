@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>스마트폰 카메라 · CameraBook</title>
+<meta name="description" content="스마트폰의 멀티 카메라와 줌, 여러 장을 합치는 야간 모드, 깊이를 추정해 흐리는 인물 모드, 스마트 HDR, 프로 모드 활용법을 시뮬레이터로 배운다.">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  .zoombar { display: flex; gap: 6px; justify-content: center; padding: 10px; background: #0c0b0a; }
+  .zoombar button { font: inherit; font-family: var(--mono); font-size: 13px; font-weight: 700; width: 46px; height: 46px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.12); color: #ddd; cursor: pointer; }
+  .zoombar button.on { background: rgba(255,255,255,0.22); color: #ffd34d; }
+</style>
+</head>
+<body data-chapter="smartphone">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 15</div>
+    <h1>스마트폰 카메라</h1>
+    <p class="lead">스마트폰 카메라의 센서는 풀프레임의 1/10~1/30 크기이고, 조리개는 고정이며, 렌즈 두께는 1 cm도 되지 않습니다. 그런데도 밤하늘과 인물 사진을 놀랍도록 잘 찍습니다. 비결은 하드웨어의 한계를 '연산'으로 메우는 <b>컴퓨테이셔널 포토그래피</b>입니다. 앞에서 배운 원리로 그 속을 들여다봅시다.</p>
+    <ul class="objectives">
+      <li>여러 개의 카메라 모듈과 '×배율'의 관계, 광학 줌과 디지털 줌의 차이를 안다.</li>
+      <li>야간 모드가 여러 장을 정렬·합성해 노이즈를 줄이는 원리를 이해한다.</li>
+      <li>인물 모드가 깊이를 추정해 배경을 흐리는 방식과 그 한계를 안다.</li>
+      <li>프로(수동) 모드에서 쓸 수 있는 것과 없는 것을 구분하고 잘 활용한다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="zoom">
+    <h2>렌즈 3~4개, 그리고 '×배율'</h2>
+    <p>스마트폰 뒷면의 동그라미들은 서로 다른 초점거리의 카메라입니다. 보통 초광각(0.5×, 환산 13~16 mm), 메인(1×, 23~26 mm), 망원(3×, 5×, 환산 70~120 mm)으로 구성됩니다. 5× 이상의 망원은 두께 안에 긴 초점거리를 넣으려고 빛을 프리즘으로 90° 꺾어 옆으로 눕힌 <span class="term">잠망경(폴디드) 렌즈</span>를 씁니다.</p>
+    <p>카메라 앱의 줌 버튼 사이 배율(예: 2×)은 대부분 메인 카메라 사진의 가운데를 잘라 확대하는 <b>디지털 줌</b>입니다. 9장에서 보았듯 잘라내기는 화소 수를 줄일 뿐입니다. 다만 고화소 메인 센서(48~200 MP)는 가운데를 잘라도 1200만 화소가 남으므로 2× 정도는 '광학 수준'이라고 홍보합니다.</p>
+    <div class="sim" id="sim-zoom">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>폰 카메라 줌</h3></div>
+      <div class="sim-view photo"><canvas id="cv-zoom"></canvas></div>
+      <div class="zoombar" id="zb"><button data-z="0.5">.5</button><button data-z="1" class="on">1×</button><button data-z="2">2</button><button data-z="3">3</button><button data-z="5">5</button><button data-z="10">10</button></div>
+      <div class="sim-controls" style="grid-template-columns:1fr"><label class="ctrl"><span>줌 <output id="zm-out"></output></span><input type="range" id="zm" min="0" max="1000" value="301"></label></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">사용 중인 카메라</span><span class="v" id="zm-cam">—</span></div>
+        <div class="stat"><span class="k">35 mm 환산</span><span class="v" id="zm-eq">—</span></div>
+        <div class="stat"><span class="k">실제로 쓰는 화소</span><span class="v" id="zm-mp">—</span></div>
+      </div>
+      <div class="sim-note">이 폰의 구성: 0.5× 초광각(12 MP), 1× 메인(48 MP, 평소 12 MP로 묶어 저장), 5× 잠망경 망원(12 MP). 1×와 5× 사이에서는 메인 카메라를 잘라 쓰고, 5×를 넘으면 망원을 잘라 씁니다. 실제 화소가 줄어들수록 디테일이 뭉개지는 것을 확인하세요. 어두운 곳에서는 망원 대신 밝은 메인을 잘라 쓰는 폰도 많습니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="night">
+    <h2>야간 모드: 한 장 대신 열 장</h2>
+    <p>작은 센서의 가장 큰 약점은 노이즈입니다(5장). 빛을 더 모으려면 셔터를 길게 해야 하지만 손으로 들고 1초를 버틸 수는 없습니다. 야간 모드는 짧은 노출(예: 1/15초)로 여러 장을 연속 촬영한 뒤, 손떨림만큼 어긋난 사진들을 <b>정렬</b>하고 <b>평균</b>냅니다. 무작위 노이즈는 평균을 낼수록 상쇄되므로, N장을 합치면 노이즈가 1/√N로 줄어듭니다. 16장이면 노이즈 1/4, 2스톱 더 밝게 찍은 것과 같습니다.</p>
+    <div class="sim" id="sim-night">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>다중 프레임 합성</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-night"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>합성할 장수 <output id="nt-n-out"></output></span><input type="range" id="nt-n" min="0" max="5" value="0"></label>
+          <label class="check"><input type="checkbox" id="nt-align" checked> 정렬(손떨림 보정)</label>
+          <label class="check"><input type="checkbox" id="nt-move"> 움직이는 자전거 있음</label>
+          <label class="check"><input type="checkbox" id="nt-zoom" checked> 얼굴 확대</label>
+        </div>
+      </div>
+      <div class="sim-note">한 장(1/15초, 작은 센서에 높은 ISO)은 노이즈가 심합니다. 장수를 늘리면 점점 깨끗해집니다. 정렬을 끄면 손떨림으로 어긋난 사진들이 겹쳐 흐려집니다. 움직이는 피사체는 프레임마다 위치가 달라 반투명한 유령이 생기는데, 실제 폰은 움직인 부분을 감지해 한두 장만 쓰는 '강건한 병합'으로 이를 줄입니다.</div>
+    </div>
+    <p>같은 원리가 낮에도 쓰입니다. 셔터를 누르기 전부터 카메라는 계속 사진을 찍어 버퍼에 담아 두고(제로 셔터 랙), 누르는 순간 앞뒤 여러 장을 합쳐 노이즈를 줄이고 다이내믹 레인지를 넓힙니다(스마트 HDR, 딥 퓨전, HDR+ 등). 7장의 브라케팅 HDR을 자동으로, 고스트 없이 하는 셈입니다. 원리를 더 깊이 알고 싶다면 <a href="https://sensorbook.euiyun.com/chapters/computational.html">SensorBook 11장</a>을 참고하세요.</p>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="portrait">
+    <h2>인물 모드: 계산으로 만든 배경 흐림</h2>
+    <p>3장에서 보았듯 작은 센서로는 광학적으로 배경을 크게 흐리기 어렵습니다. 인물 모드는 ① 두 카메라의 시차, 듀얼 픽셀 위상차, 라이다(LiDAR), AI 인물 인식 등을 이용해 장면의 <b>깊이 지도</b>를 만들고, ② 피사체와 거리가 먼 부분일수록 많이 흐리게 그립니다. 사진을 찍은 뒤에 'F값'을 바꿀 수 있는 이유입니다.</p>
+    <div class="sim" id="sim-port">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>인물 모드의 속사정</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-port"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>보기</span><div class="seg" id="pt-v"><button data-value="photo" class="on">결과 사진</button><button data-value="depth">깊이 지도</button><button data-value="orig">원본(폰 광학)</button></div></div>
+          <label class="ctrl"><span>가상 조리개 <output id="pt-n-out"></output></span><input type="range" id="pt-n"></label>
+          <label class="ctrl"><span>깊이 추정 정확도 <output id="pt-q-out"></output></span><input type="range" id="pt-q" min="0" max="2" value="1" step="1"></label>
+        </div>
+      </div>
+      <div class="sim-note">깊이 지도에서 밝을수록 가깝습니다. 정확도를 '낮음'으로 두면 머리카락과 팔 주변의 경계를 잘못 판단해, 배경이 또렷하게 남거나 몸 일부가 흐려지는 '오려 붙인' 느낌이 납니다. 안경테, 머리카락, 유리컵, 철망처럼 경계가 복잡하거나 투명한 것이 인물 모드의 약점입니다. 반면 진짜 광학 보케는 깊이를 '추정'할 필요가 없어 이런 실수가 없습니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="pro">
+    <h2>프로 모드 제대로 쓰기</h2>
+    <p>대부분의 폰 카메라 앱에는 수동 설정을 할 수 있는 '프로'(전문가) 모드가 있습니다. 이 책에서 배운 개념이 거의 그대로 적용되지만, 폰만의 차이도 있습니다.</p>
+    <div class="table-wrap"><table>
+      <tr><th>설정</th><th>폰에서</th><th>참고 장</th></tr>
+      <tr><td>조리개</td><td>대부분 <b>고정</b>(f/1.5~2.8). 노출은 셔터·ISO로만 조절</td><td>3장</td></tr>
+      <tr><td>셔터 속도</td><td>1/10000 ~ 30초. 야경·빛 궤적은 거치대와 함께 길게</td><td>4장</td></tr>
+      <tr><td>ISO</td><td>50~3200 정도. 기본 ISO가 가장 깨끗</td><td>5장</td></tr>
+      <tr><td>노출 보정(EV)</td><td>화면을 탭한 뒤 해·밝기 막대를 위아래로 끌기</td><td>6장</td></tr>
+      <tr><td>초점</td><td>탭으로 지정, 길게 눌러 AE/AF 잠금. 수동 초점 + 피킹 지원 앱도 많음</td><td>8장</td></tr>
+      <tr><td>화이트 밸런스</td><td>K 단위 지정 가능. 노을·실내 분위기 유지에 유용</td><td>10장</td></tr>
+      <tr><td>RAW</td><td>DNG·ProRAW 등. 연산 처리 일부를 거친 'RAW'도 있음</td><td>11장</td></tr>
+    </table></div>
+    <div class="callout warn"><strong>프로 모드를 켜면 사라지는 것</strong>수동 모드에서는 야간 모드·스마트 HDR 같은 다중 프레임 합성이 꺼지는 경우가 많습니다. 그래서 어두운 곳에서는 자동(야간) 모드가 프로 모드보다 깨끗한 결과를 주기도 합니다. 프로 모드는 '연산을 끄고 내가 통제하고 싶을 때' 쓰세요. 장노출 빛 궤적, 의도적인 WB, 정확한 노출 고정 같은 경우입니다.</div>
+    <div class="cards">
+      <div><b>렌즈를 닦자</b>폰 사진이 뿌옇고 불빛 주변이 번지는 가장 흔한 원인은 지문 묻은 렌즈입니다.</div>
+      <div><b>탭해서 노출 맞추기</b>역광에서 얼굴을 탭하면 얼굴 기준으로 측광·초점(6장 스팟 측광).</div>
+      <div><b>디지털 줌보다 다가가기</b>광학 배율(1×, 3×, 5×) 버튼을 쓰고, 그 사이 배율은 가급적 피하세요.</div>
+      <div><b>격자선 켜기</b>수평을 맞추고 삼분할 구도를 잡기 쉬워집니다.</div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>폰의 0.5×·1×·3×·5× 버튼은 서로 다른 카메라다. 그 사이 배율은 디지털 크롭이다.</li>
+      <li>야간 모드는 짧은 노출 여러 장을 정렬해 평균 낸다. N장이면 노이즈 1/√N.</li>
+      <li>스마트 HDR은 셔터 전부터 찍어 둔 프레임들을 합쳐 노이즈와 다이내믹 레인지 문제를 함께 푼다.</li>
+      <li>인물 모드는 깊이 지도로 배경을 흐린다. 머리카락·안경·투명한 물체 경계에서 실수하기 쉽다.</li>
+      <li>프로 모드는 조리개가 고정이고, 켜면 다중 프레임 합성이 꺼질 수 있다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>1×(메인)와 5×(망원) 카메라만 있는 폰에서 3×로 찍으면 보통 어떻게 될까?</p><div class="opts">
+        <button class="opt">망원 카메라가 광학적으로 3×로 바뀐다</button>
+        <button class="opt" data-correct>메인 카메라 사진의 가운데를 잘라 확대한다</button>
+        <button class="opt">두 카메라의 사진을 이어 붙인다</button>
+      </div><div class="quiz-exp">렌즈의 초점거리는 고정이므로, 사이 배율은 넓은 쪽 카메라를 잘라 쓰는 디지털 줌이다(일부 폰은 망원 화질과 섞기도 한다).</div></div>
+      <div class="quiz-q"><p>야간 모드가 9장을 합성하면 한 장 대비 노이즈는?</p><div class="opts">
+        <button class="opt">1/9</button>
+        <button class="opt" data-correct>1/3</button>
+        <button class="opt">그대로</button>
+      </div><div class="quiz-exp">무작위 노이즈는 평균을 내면 1/√N으로 줄어든다. √9 = 3.</div></div>
+      <div class="quiz-q"><p>인물 모드 사진에서 머리카락 주변 배경이 또렷하게 남는 이유는?</p><div class="opts">
+        <button class="opt">렌즈의 수차</button>
+        <button class="opt" data-correct>깊이 지도가 가는 머리카락의 경계를 잘못 추정해서</button>
+        <button class="opt">셔터 속도가 느려서</button>
+      </div><div class="quiz-exp">소프트웨어 보케는 깊이 지도의 정확도에 달려 있다. 가늘고 복잡한 경계는 깊이 추정이 어렵다.</div></div>
+      <div class="quiz-q"><p>폰의 프로 모드에서 직접 바꿀 수 없는 경우가 많은 것은?</p><div class="opts">
+        <button class="opt">ISO</button>
+        <button class="opt">셔터 속도</button>
+        <button class="opt" data-correct>조리개</button>
+      </div><div class="quiz-exp">대부분의 폰 카메라는 고정 조리개다(일부 기종만 2단 가변). 노출은 셔터와 ISO로 맞춘다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------------------------------------------------------------- 1. 폰 줌 */
+(function () {
+  const World = CB.World();
+  const MODS = [{ z: 0.5, name: "초광각 0.5×", mp: 12 }, { z: 1, name: "메인 1×", mp: 48 }, { z: 5, name: "망원 5× (잠망경)", mp: 12 }];
+  const zOf = (v) => 0.5 * Math.pow(20, v / 1000); // 0.5 ~ 10×
+  const vOf = (z) => Math.round((Math.log(z / 0.5) / Math.log(20)) * 1000);
+  const upd = CB.throttle(() => cv.redraw());
+  const Z = CB.range("zm", (v) => zOf(v).toFixed(1) + "×", () => { syncBtns(); upd(); });
+  const btns = [...document.querySelectorAll("#zb button")];
+  function syncBtns() { const z = zOf(Z()); btns.forEach((b) => b.classList.toggle("on", Math.abs(Math.log(+b.dataset.z / z)) < 0.05)); }
+  btns.forEach((b) => b.addEventListener("click", () => Z.set(vOf(+b.dataset.z))));
+  const off = document.createElement("canvas");
+  const cv = CB.canvas("#cv-zoom", (ctx, w, h) => {
+    const z = zOf(Z());
+    const mod = z >= 5 ? MODS[2] : z >= 1 ? MODS[1] : MODS[0];
+    const crop = z / mod.z;
+    const effMP = mod.name.startsWith("메인") ? Math.min(12, mod.mp / (crop * crop)) : mod.mp / (crop * crop);
+    // 표시 해상도를 실제 화소에 비례해 낮춰 디테일 손실을 보여 줌
+    const sw = Math.round(CB.clamp(w * Math.sqrt(effMP / 12), 40, w)), sh = Math.round(sw * h / w);
+    off.width = sw; off.height = sh;
+    World.draw(off.getContext("2d"), sw, sh, { f: 24 * z, sw: 36, subjectZ: 9 });
+    ctx.imageSmoothingEnabled = true; ctx.drawImage(off, 0, 0, w, h);
+    CB.hud(ctx, 0, 0, w, [mod.name, crop > 1.02 ? "디지털 ×" + crop.toFixed(1) : "광학", Math.round(24 * z) + " mm"]);
+    CB.stat("zm-cam", mod.name);
+    CB.stat("zm-eq", Math.round(24 * z) + "<small>mm</small>");
+    CB.stat("zm-mp", CB.fmt(effMP, 2) + "<small>MP</small>");
+  }, { aspect: 0.6 });
+  syncBtns();
+})();
+
+/* ---------------------------------------------------------------- 2. 야간 모드 */
+(function () {
+  const W = 400, H = 250;
+  const photo = CB.scenes.portrait(W, H, { sceneEV: 3, mover: 200 });
+  const mover = photo.layers.find((l) => l.name === "mover");
+  const upd = CB.throttle(() => cv.redraw());
+  const NS = [1, 2, 4, 8, 16, 32];
+  const Nn = CB.range("nt-n", (v) => NS[v] + "장", upd);
+  const align = CB.check("nt-align", upd);
+  const move = CB.check("nt-move", upd);
+  const zoom = CB.check("nt-zoom", upd);
+  const acc = new Float32Array(W * H * 3), out = new ImageData(W, H), off = CB.offscreen(W, H);
+  const frames = {}; // 프레임 캐시: 시드별 렌더 결과(선형 아님, 8비트)
+  const FW = 9000 / 12; // 폰 센서: 풀프레임 대비 약 1/12 면적
+  function frame(i, withMover) {
+    const k = i + "|" + withMover;
+    if (frames[k]) return frames[k];
+    mover.any = withMover; photo.invalidate();
+    if (withMover) { // 프레임마다 자전거 위치 이동(버퍼를 가로로 밀기)
+      const b = mover.buf0 || (mover.buf0 = new Float32Array(mover.buf)), cp = new Float32Array(b.length), sh = Math.round(i * 9);
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const sx = x - sh; if (sx < 0) continue; const a = (y * W + x) * 4, c = (y * W + sx) * 4; cp[a] = b[c]; cp[a + 1] = b[c + 1]; cp[a + 2] = b[c + 2]; cp[a + 3] = b[c + 3]; }
+      mover.buf = cp;
+    } else if (mover.buf0) mover.buf = mover.buf0;
+    photo.render({ N: 1.8, t: 1 / 15, iso: 100 * Math.pow(2, CB.ev(1.8, 1 / 15, 100) - 3), focus: 2.5, focal: 26 / 3.5 * 1, sensorW: 36 / 3.5, fw: FW, noiseSeed: 100 + i });
+    return (frames[k] = new Uint8ClampedArray(photo.last.data));
+  }
+  const shakes = Array.from({ length: 32 }, (_, i) => (i ? [Math.round(CB.randn() * 4), Math.round(CB.randn() * 3)] : [0, 0]));
+  const cv = CB.canvas("#cv-night", (ctx, w, h) => {
+    const n = NS[Nn()], al = align(), mv = move();
+    acc.fill(0);
+    for (let k = 0; k < n; k++) {
+      const f = frame(k, mv), [dx, dy] = al ? [0, 0] : shakes[k];
+      for (let y = 0; y < H; y++) { const sy = CB.clamp(y + dy, 0, H - 1); for (let x = 0; x < W; x++) { const sx = CB.clamp(x + dx, 0, W - 1), a = (y * W + x) * 3, b = (sy * W + sx) * 4; acc[a] += f[b]; acc[a + 1] += f[b + 1]; acc[a + 2] += f[b + 2]; } }
+    }
+    for (let i = 0; i < W * H; i++) { out.data[i * 4] = acc[i * 3] / n; out.data[i * 4 + 1] = acc[i * 3 + 1] / n; out.data[i * 4 + 2] = acc[i * 3 + 2] / n; out.data[i * 4 + 3] = 255; }
+    off.getContext("2d").putImageData(out, 0, 0);
+    ctx.drawImage(off, 0, 0, w, h);
+    if (zoom()) { ctx.imageSmoothingEnabled = false; const s = w * 0.34; ctx.drawImage(off, 145, 28, 48, 48, w - s - 8, 8, s, s); ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(w - s - 8, 8, s, s); ctx.imageSmoothingEnabled = true; }
+    CB.hud(ctx, 0, h - 24, w, ["1/15 × " + n + "장", "총 " + CB.fmtT(n / 15), "노이즈 ×" + (1 / Math.sqrt(n)).toFixed(2), al ? "정렬 켬" : "정렬 끔"]);
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 3. 인물 모드 */
+(function () {
+  const W = 400, H = 250;
+  const photo = CB.scenes.portrait(W, H, { sceneEV: 11 });
+  // 폰 광학 원본: 작은 센서라 배경이 거의 또렷
+  photo.render({ N: 1.8, t: 3.24 / 2048, iso: 100, focus: 2.5, focal: 26 / 3.5 * 2, sensorW: 36 / 3.5, noise: false, blades: 0 });
+  const orig = CB.offscreen(W, H, (g) => g.putImageData(photo.last, 0, 0));
+  // 실제 깊이(레이어)로 만든 깊이 지도
+  const depth = new Float32Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) depth[y * W + x] = photo.depthAt(x, y);
+  const subjMask = new Float32Array(W * H);
+  const subj = photo.layers.find((l) => l.name === "subject");
+  for (let i = 0; i < W * H; i++) subjMask[i] = subj.buf[i * 4 + 3];
+  const upd = CB.throttle(() => cv.redraw());
+  const view = CB.seg("pt-v", upd);
+  const N = CB.steps("pt-n", [1.4, 2, 2.8, 4, 5.6, 8, 11, 16], CB.fmtN, 2, upd);
+  const Q = CB.range("pt-q", (v) => ["낮음", "보통", "높음"][v], upd);
+  const r = CB.rng(5);
+  const noiseMap = Float32Array.from({ length: W * H }, () => r());
+  function estMask(q) { // 추정된 '인물' 마스크: 정확도가 낮을수록 경계가 들쭉날쭉하고 머리카락 부분을 놓침
+    const m = new Float32Array(W * H);
+    const blur = [6, 2.5, 0.8][q], err = [0.45, 0.15, 0.03][q];
+    const tmp = new Float32Array(W * H * 4); for (let i = 0; i < W * H; i++) tmp[i * 4] = subjMask[i];
+    CB.gaussBlur(tmp, W, H, blur);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x, v = tmp[i * 4];
+      const hair = y < H * 0.36 ? 0.18 * (2 - q) : 0; // 머리 쪽이 더 어려움
+      m[i] = v + (noiseMap[i] - 0.5) * err * 2 > 0.5 + hair ? 1 : 0;
+    }
+    // 마스크 경계를 살짝 부드럽게
+    const t2 = new Float32Array(W * H * 4); for (let i = 0; i < W * H; i++) t2[i * 4] = m[i];
+    CB.gaussBlur(t2, W, H, 0.8); for (let i = 0; i < W * H; i++) m[i] = t2[i * 4];
+    return m;
+  }
+  const masks = {};
+  const out = new ImageData(W, H), off = CB.offscreen(W, H);
+  const cv = CB.canvas("#cv-port", (ctx, w, h) => {
+    const v = view();
+    if (v === "orig") { ctx.drawImage(orig, 0, 0, w, h); CB.hud(ctx, 0, h - 24, w, ["폰 광학 그대로", "f/1.8 (환산 ≈ f/6.3)"]); return; }
+    const q = Q(), m = masks[q] || (masks[q] = estMask(q));
+    if (v === "depth") {
+      for (let i = 0; i < W * H; i++) { const d = depth[i], g = 255 * CB.clamp(1 - Math.log(Math.min(d, 60) / 1) / Math.log(60), 0, 1) * (0.35 + 0.65 * m[i]) + 40 * m[i]; out.data[i * 4] = out.data[i * 4 + 1] = out.data[i * 4 + 2] = CB.clamp(g, 0, 255); out.data[i * 4 + 3] = 255; }
+      off.getContext("2d").putImageData(out, 0, 0); ctx.drawImage(off, 0, 0, w, h);
+      CB.hud(ctx, 0, h - 24, w, ["추정 깊이 지도", "밝을수록 가까움", "정확도 " + ["낮음", "보통", "높음"][q]]);
+      return;
+    }
+    // 합성: 배경을 가상 조리개에 맞게 흐린 뒤, 추정 마스크로 인물을 덮음
+    const sigma = 24 / N();
+    const bg = CB.blurCanvas(orig, sigma);
+    const bd = bg.getContext("2d").getImageData(0, 0, W, H).data, od = orig.getContext("2d").getImageData(0, 0, W, H).data;
+    for (let i = 0; i < W * H; i++) { const a = m[i]; for (let c = 0; c < 3; c++) out.data[i * 4 + c] = od[i * 4 + c] * a + bd[i * 4 + c] * (1 - a); out.data[i * 4 + 3] = 255; }
+    off.getContext("2d").putImageData(out, 0, 0); ctx.drawImage(off, 0, 0, w, h);
+    CB.hud(ctx, 0, h - 24, w, ["인물 모드", "가상 " + CB.fmtN(N()), "깊이 정확도 " + ["낮음", "보통", "높음"][q]]);
+  }, { aspect: 0.625 });
+})();
+</script>
+</body>
+</html>
