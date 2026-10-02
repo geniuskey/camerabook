@@ -876,6 +876,27 @@
         },
       });
     },
+    /** 창가 역광: 바깥(창)이 실내보다 3스톱 밝다. o.sun이면 창밖에 해(매우 밝은 점) 추가 */
+    backlit(w = 480, h = 300, o = {}) {
+      const W = w, H = h;
+      return CB.Photo({
+        w, h, sceneEV: o.sceneEV != null ? o.sceneEV : 9,
+        build(S) {
+          S.layer(Infinity, (g) => { D.sky(g, W, H, "#bcd8f2", "#f3f6ee", H); D.mountains(g, W, H * 0.62, H * 0.12, "#c7d3dc", 6); g.fillStyle = "#c9dcb8"; g.fillRect(0, H * 0.6, W, H); });
+          if (o.sun) S.lights(Infinity, [{ x: W * 0.74, y: H * 0.24, c: [1, 0.95, 0.85], i: 2600 }]);
+          S.layer(5, (g) => {
+            g.fillStyle = "#c8b9a6"; g.fillRect(0, 0, W, H);
+            g.clearRect(W * 0.12, H * 0.08, W * 0.76, H * 0.62);
+            g.fillStyle = "#6b5845"; g.fillRect(W * 0.49, H * 0.08, W * 0.02, H * 0.62); g.fillRect(W * 0.12, H * 0.38, W * 0.76, H * 0.015);
+            g.strokeStyle = "#6b5845"; g.lineWidth = 6; g.strokeRect(W * 0.12, H * 0.08, W * 0.76, H * 0.62);
+            g.fillStyle = "#8a6d52"; g.fillRect(0, H * 0.82, W, H);
+            g.fillStyle = "#5a4636"; g.fillRect(W * 0.7, H * 0.72, W * 0.26, H * 0.1); // 어두운 탁자(그림자)
+            g.fillStyle = "#3a2c22"; g.fillRect(W * 0.72, H * 0.82, W * 0.02, H * 0.18); g.fillRect(W * 0.92, H * 0.82, W * 0.02, H * 0.18);
+          }, { gain: 0.125 });
+          S.layer(2, (g) => D.person(g, W * 0.36, H * 1.02, H * 0.8, { shirt: "#3b6ea8", longHair: true }), { gain: 0.125, name: "subject" });
+        },
+      });
+    },
     street(w = 480, h = 300, o = {}) {
       const speed = o.speed != null ? o.speed : w * 0.9; // px/s
       return CB.Photo({
