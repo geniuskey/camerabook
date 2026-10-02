@@ -497,7 +497,7 @@
       const r = Math.max(0.7, coc / 2);
       const blades = p.blades || 0;
       const mv = L.motion && p.t ? [L.motion[0] * p.t, L.motion[1] * p.t] : [0, 0];
-      const steps = Math.max(1, Math.min(40, Math.round(Math.hypot(mv[0], mv[1]) / Math.max(1, r))));
+      const steps = Math.max(1, Math.min(600, Math.round(Math.hypot(mv[0], mv[1]) / Math.max(0.8, r * 0.7))));
       for (const pt of L.pts) {
         const area = Math.PI * r * r;
         const scale = (pt.i || 1) / Math.max(1, area) / steps;
