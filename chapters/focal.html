@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>초점거리와 화각 · CameraBook</title>
+<meta name="description" content="초점거리와 화각의 관계, 크롭 팩터와 35mm 환산, 원근감과 망원 압축 효과의 진실(돌리 줌), 셀카 얼굴 왜곡, 줌과 단렌즈, 렌즈 왜곡을 시뮬레이터로 배운다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+</head>
+<body data-chapter="focal">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 09</div>
+    <h1>초점거리와 화각</h1>
+    <p class="lead">렌즈에 적힌 "24-70mm", "85mm" 같은 숫자가 초점거리입니다. 초점거리는 얼마나 넓게(또는 좁게) 보이는지, 즉 <b>화각</b>을 정합니다. 그런데 흔히 말하는 "망원은 배경을 압축한다", "광각은 얼굴을 왜곡한다"는 사실 초점거리가 아니라 다른 것 때문입니다. 이 장에서 그 정체를 밝힙니다.</p>
+    <ul class="objectives">
+      <li>초점거리·센서 크기·화각의 관계와 35 mm 환산 초점거리를 이해한다.</li>
+      <li>원근감(압축·과장)을 만드는 것은 촬영 거리라는 것을 돌리 줌으로 확인한다.</li>
+      <li>인물 사진에 85 mm 근처가 사랑받는 이유를 설명한다.</li>
+      <li>줌렌즈와 단렌즈의 장단점, 배럴·핀쿠션 왜곡을 안다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="fov">
+    <h2>초점거리 = 얼마나 크게 확대하는가</h2>
+    <p><span class="term">초점거리</span><span class="en">(Focal Length)</span>는 무한히 먼 곳에 초점을 맞췄을 때 렌즈(정확히는 주점)에서 센서까지의 거리입니다. 초점거리가 길수록 상이 크게 맺혀서, 같은 크기의 센서에는 장면의 좁은 부분만 담깁니다. 센서가 담는 각도를 <span class="term">화각</span><span class="en">(Angle of View)</span>이라 합니다.</p>
+    <div class="formula">$$\text{화각} = 2\arctan\frac{\text{센서 폭}}{2f}$$
+      <div class="where">풀프레임(폭 36 mm)에서 50 mm는 가로 약 40°, 24 mm는 74°, 200 mm는 10°. 초점거리를 2배로 하면 화각은 대략 절반이 되고, 같은 거리의 물체는 2배 크게 찍힌다.</div>
+    </div>
+    <div class="sim" id="sim-fov">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>줌 링을 돌려 보세요</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-fov"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>초점거리(실제) <output id="fv-f-out"></output></span><input type="range" id="fv-f"></label>
+          <div class="ctrl"><span>센서</span><div class="seg" id="fv-s"><button data-value="36" class="on">풀프레임</button><button data-value="23.5">APS-C</button><button data-value="17.3">포서드</button><button data-value="9.8">폰 1/1.3형</button></div></div>
+        </div>
+      </div>
+      <div class="sim-view" style="border-top:1px solid var(--border)"><canvas id="cv-fovmap"></canvas></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">가로 화각</span><span class="v" id="fv-a">—</span></div>
+        <div class="stat"><span class="k">35 mm 환산</span><span class="v" id="fv-eq">—</span></div>
+        <div class="stat"><span class="k">분류</span><span class="v" id="fv-c">—</span></div>
+      </div>
+      <div class="sim-note">아래 그림은 위에서 내려다본 화각입니다. 카메라는 제자리에 있고 초점거리만 바꿉니다. 센서를 작은 것으로 바꾸면 같은 렌즈인데도 화각이 좁아집니다. 폰 메인 카메라의 실제 초점거리는 6~7 mm 남짓이지만 환산하면 24~26 mm 광각입니다.</div>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>35 mm 환산</th><th>분류</th><th>느낌과 주 용도</th></tr>
+      <tr><td class="num">14~24 mm</td><td>초광각·광각</td><td>넓은 풍경, 실내, 건축. 가까운 것은 크게, 먼 것은 작게(원근 과장)</td></tr>
+      <tr><td class="num">28~35 mm</td><td>준광각</td><td>스냅, 거리 사진, 스마트폰 기본 카메라 근처</td></tr>
+      <tr><td class="num">40~58 mm</td><td>표준</td><td>사람 눈의 '주의를 기울이는 범위'와 비슷한 자연스러운 원근</td></tr>
+      <tr><td class="num">70~135 mm</td><td>중망원</td><td>인물(85 mm가 대표), 무대, 디테일</td></tr>
+      <tr><td class="num">200 mm 이상</td><td>망원·초망원</td><td>스포츠, 야생, 새, 달</td></tr>
+    </table></div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="crop">
+    <h2>크롭 팩터와 '환산 초점거리'</h2>
+    <p>같은 50 mm 렌즈라도 작은 센서에 끼우면 센서가 상의 가운데만 잘라(crop) 보므로 화각이 좁아집니다. 그래서 작은 센서 카메라에서는 실제 초점거리에 크롭 팩터를 곱한 <span class="term">35 mm 환산 초점거리</span>로 화각을 이야기합니다. APS-C(×1.5)에 50 mm를 끼우면 풀프레임 75 mm와 비슷한 화각입니다.</p>
+    <div class="callout warn"><strong>렌즈가 바뀌는 게 아니다</strong>크롭은 '확대'가 아니라 '잘라내기'입니다. 50 mm 렌즈의 원근감, 렌즈 자체의 성질은 그대로이고 센서가 가장자리를 버릴 뿐입니다. 그래서 APS-C의 50 mm는 풀프레임 75 mm와 화각은 같아도 심도는 다릅니다(3장의 등가 조리개).</div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="perspective">
+    <h2>원근감은 '거리'가 만든다</h2>
+    <p>망원으로 찍은 사진은 배경이 피사체 바로 뒤에 바짝 붙은 것처럼 '압축'되어 보이고, 광각으로 찍은 사진은 가까운 것과 먼 것의 크기 차이가 과장됩니다. 그래서 흔히 렌즈가 원근감을 바꾼다고 말하지만, 사실 원근감을 정하는 것은 <b>카메라와 피사체 사이의 거리</b>뿐입니다.</p>
+    <p>망원으로 찍을 때는 같은 크기로 담으려고 멀리 물러나게 되고, 광각으로 찍을 때는 다가가게 됩니다. 멀리서 보면 피사체(5 m → 50 m)와 배경(50 m → 95 m)의 거리 비율이 1에 가까워져 크기 차이가 줄어듭니다. 이것이 압축의 정체입니다. 아래 시뮬레이터에서 '피사체 크기 유지'를 켜고 거리를 바꿔 보세요. 영화의 유명한 기법 <span class="term">돌리 줌</span><span class="en">(Dolly Zoom, 버티고 효과)</span>이 됩니다.</p>
+    <div class="sim" id="sim-dolly">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>돌리 줌: 압축 효과의 진짜 원인</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-dolly"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>피사체까지 거리 <output id="dz-d-out"></output></span><input type="range" id="dz-d" min="0" max="100" value="35"></label>
+          <label class="check"><input type="checkbox" id="dz-keep" checked> 피사체 크기 유지(초점거리 자동)</label>
+          <label class="ctrl"><span>초점거리 <output id="dz-f-out"></output></span><input type="range" id="dz-f"></label>
+          <button class="btn" id="dz-play">돌리 줌 재생</button>
+        </div>
+      </div>
+      <div class="sim-view" style="border-top:1px solid var(--border)"><canvas id="cv-dollymap"></canvas></div>
+      <div class="sim-note">인물의 크기는 그대로인데, 뒤의 나무와 건물은 거리를 늘릴수록(망원) 커지고 가까워 보입니다. '피사체 크기 유지'를 끄고 거리만 그대로 둔 채 초점거리를 바꾸면? 사진 전체가 같은 비율로 커질 뿐, 인물과 배경의 크기 비는 변하지 않습니다. 즉 같은 자리에서 찍은 광각 사진의 가운데를 잘라내면 망원 사진과 원근감이 똑같습니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="face">
+    <h2>셀카의 큰 코, 인물은 85 mm</h2>
+    <p>같은 원리로, 얼굴에 아주 가까이 다가가 찍으면 카메라에 가까운 코는 크게, 먼 귀는 작게 찍힙니다. 팔 길이(약 40 cm)에서 찍는 셀카에서 코가 커 보이고 얼굴이 길쭉해 보이는 이유입니다. 1.5~3 m쯤 떨어지면 이 차이가 거의 사라지고, 그 거리에서 상반신이 화면을 채우는 초점거리가 85 mm 안팎입니다.</p>
+    <div class="sim" id="sim-face">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>촬영 거리와 얼굴 비율</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-face"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>얼굴까지 거리 <output id="fc-d-out"></output></span><input type="range" id="fc-d" min="25" max="400" value="35"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">같은 얼굴 크기 위한 초점거리</span><span class="v" id="fc-f">—</span></div>
+        <div class="stat"><span class="k">코 확대율(귀 대비)</span><span class="v" id="fc-r">—</span></div>
+      </div>
+      <div class="sim-note">코끝은 귀보다 약 10 cm 카메라에 가깝습니다. 30 cm 거리에서는 그 차이가 상대적으로 커서 코가 귀보다 1.6배 이상 확대되지만, 2 m에서는 약 1.06배로 거의 자연스럽습니다. 얼굴 크기를 맞추려 초점거리는 자동으로 바뀝니다.</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 5 -->
+  <section id="zoom">
+    <h2>줌렌즈 vs 단렌즈</h2>
+    <div class="table-wrap"><table>
+      <tr><th></th><th>줌렌즈 (예: 24-70mm F2.8)</th><th>단렌즈 (예: 35mm F1.4)</th></tr>
+      <tr><td>장점</td><td>렌즈 하나로 다양한 화각, 상황 대응이 빠름</td><td>밝음(작은 F값), 작고 가벼움, 대체로 선명, 저렴한 것도 많음</td></tr>
+      <tr><td>단점</td><td>크고 무거움, 밝은 줌은 비쌈, 최대 개방이 어두운 경우가 많음</td><td>화각을 바꾸려면 직접 걸어야 함('발줌')</td></tr>
+      <tr><td>추천</td><td>여행, 행사, 처음 렌즈</td><td>인물, 실내, 야간, 사진 공부</td></tr>
+    </table></div>
+    <p>스마트폰의 '줌'은 대부분 서로 다른 초점거리의 카메라 여러 개를 바꿔 쓰는 방식이고, 그 사이 배율은 디지털로 잘라내 채웁니다(15장). 디지털 줌은 크롭과 같으므로 화소가 줄어들 뿐 원근감은 같은 자리 광각과 똑같습니다.</p>
+  </section>
+
+  <!-- =============================================================== 6 -->
+  <section id="distortion">
+    <h2>렌즈 왜곡</h2>
+    <p>이상적인 렌즈는 직선을 직선으로 찍지만, 실제 렌즈는 화면 가장자리에서 직선이 휩니다. 바깥으로 부푸는 <span class="term">배럴 왜곡</span>은 광각에서, 안으로 오므라드는 <span class="term">핀쿠션 왜곡</span>은 망원에서 흔합니다. 요즘은 카메라나 현상 프로그램이 렌즈 정보를 이용해 자동으로 펴 주며, 스마트폰 광각의 '왜곡 보정' 옵션도 이것입니다.</p>
+    <div class="sim" id="sim-dist">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>배럴·핀쿠션 왜곡과 보정</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cv-dist"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>왜곡 <output id="ds-k-out"></output></span><input type="range" id="ds-k" min="-30" max="30" value="-18"></label>
+          <label class="check"><input type="checkbox" id="ds-fix"> 프로파일 보정 켜기</label>
+        </div>
+      </div>
+      <div class="sim-note">보정은 휜 상을 반대로 휘어 펴는 작업입니다. 배럴 왜곡을 펴면 귀퉁이에 있던 내용이 화면 밖으로 밀려나 잘리므로, 보정된 광각 사진은 원래보다 화각이 약간 좁아집니다. 핀쿠션 왜곡을 펴면 반대로 가장자리가 비어서 조금 확대해 잘라내야 합니다. 점선은 찍힌 원본 테두리가 보정 후 놓이는 위치입니다. 어안 렌즈는 이 왜곡을 일부러 극대화해 180° 가까이 담는 렌즈입니다.</div>
+    </div>
+    <div class="callout"><strong>건물이 뒤로 넘어가 보이는 것은 왜곡이 아니다</strong>높은 건물을 올려다보며 찍으면 세로선이 위로 모입니다. 이는 렌즈 왜곡이 아니라 카메라를 기울인 데서 오는 원근(키스톤)입니다. 카메라를 수평으로 두고 찍은 뒤 위를 잘라내거나, 시프트 렌즈를 쓰거나, 후보정의 원근 보정으로 바로잡습니다.</div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>초점거리가 길수록 화각이 좁고 크게 찍힌다. 화각 = 2·arctan(센서폭/2f).</li>
+      <li>작은 센서는 같은 렌즈로 더 좁게 본다. 화각 비교에는 35 mm 환산 초점거리를 쓴다.</li>
+      <li>원근감(압축·과장)은 촬영 거리가 정한다. 망원은 멀리서 찍게 만들 뿐이다.</li>
+      <li>인물은 1.5~3 m 거리가 자연스럽고, 그 거리에서 화면을 채우는 렌즈가 85 mm 안팎이다.</li>
+      <li>광각은 배럴, 망원은 핀쿠션 왜곡이 흔하고 프로파일로 보정한다. 위로 모이는 건물선은 왜곡이 아니라 기울인 원근이다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>마이크로 포서드(크롭 2.0) 카메라에 25 mm 렌즈를 끼웠다. 풀프레임 기준으로 비슷한 화각은?</p><div class="opts">
+        <button class="opt">12.5 mm</button>
+        <button class="opt" data-correct>50 mm</button>
+        <button class="opt">25 mm</button>
+      </div><div class="quiz-exp">환산 초점거리 = 25 × 2.0 = 50 mm.</div></div>
+      <div class="quiz-q"><p>멀리 있는 산이 인물 뒤에 크게 '압축'되어 보이는 사진을 찍고 싶다. 핵심은?</p><div class="opts">
+        <button class="opt">광각 렌즈로 인물에 바짝 다가간다</button>
+        <button class="opt" data-correct>인물에게서 멀리 떨어진 뒤 망원으로 인물을 크게 담는다</button>
+        <button class="opt">조리개를 조인다</button>
+      </div><div class="quiz-exp">압축은 촬영 거리가 멀어질 때 생긴다. 멀리서 찍으면서 인물을 적당히 크게 담으려니 망원이 필요한 것이다.</div></div>
+      <div class="quiz-q"><p>같은 자리에서 24 mm로 찍은 사진의 가운데를 잘라 확대한 것과 100 mm로 찍은 사진의 원근감 비교로 옳은 것은?</p><div class="opts">
+        <button class="opt" data-correct>원근감은 같고, 잘라낸 쪽의 화소가 적을 뿐이다</button>
+        <button class="opt">100 mm 쪽이 더 압축되어 보인다</button>
+        <button class="opt">24 mm 쪽이 더 압축되어 보인다</button>
+      </div><div class="quiz-exp">같은 위치 = 같은 원근. 초점거리는 '어디까지 담는가'만 정한다.</div></div>
+      <div class="quiz-q"><p>광각으로 찍은 사진에서 화면 가장자리의 직선이 바깥으로 불룩하게 휘었다. 이 현상은?</p><div class="opts">
+        <button class="opt">핀쿠션 왜곡</button>
+        <button class="opt" data-correct>배럴 왜곡</button>
+        <button class="opt">키스톤(원근) 왜곡</button>
+      </div><div class="quiz-exp">통(barrel)처럼 바깥으로 부푸는 왜곡이다. 광각 렌즈에서 흔하다.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ======================================================= 간이 원근 투영 렌더러
+   세계 좌표: X(오른쪽), Y(위), Z(앞, 카메라가 바라보는 방향). 카메라 높이 1.6 m.
+   스프라이트는 실제 높이(m)를 가진 그림. 산은 무한대 거리(방위각 함수). */
+const World = (function () {
+  const D = CB.draw;
+  const spr = (wpx, hpx, draw) => ({ img: CB.offscreen(wpx, hpx, draw), wpx, hpx });
+  const S = {
+    person: spr(80, 170, (g) => D.person(g, 40, 168, 165, { shirt: "#d9622b", longHair: true })),
+    tree: spr(160, 200, (g) => D.tree(g, 80, 198, 200, "#3f7d3a", "#5b4033", 7)),
+    tree2: spr(160, 200, (g) => D.tree(g, 80, 198, 190, "#4f8a45", "#5b4033", 12)),
+    bldg: spr(120, 200, (g) => D.building(g, 0, 200, 120, 200, "#b9a58e", "#f2e2b0", 0.2, 3)),
+    bldg2: spr(120, 200, (g) => D.building(g, 0, 200, 120, 200, "#9fb0bf", "#f2e2b0", 0.2, 8)),
+    lamp: spr(30, 200, (g) => { g.fillStyle = "#444"; g.fillRect(13, 10, 4, 190); g.fillRect(13, 10, 14, 4); g.fillStyle = "#ffe9a8"; g.fillRect(22, 14, 6, 6); }),
+  };
+  // 물체: [스프라이트, X, Z, 높이m, 폭m]
+  const OBJ = [];
+  const r = CB.rng(31);
+  for (let i = 0; i < 14; i++) OBJ.push([i % 2 ? S.tree : S.tree2, r.range(-30, 30), r.range(18, 45), r.range(6, 9), 0]);
+  for (let i = 0; i < 9; i++) OBJ.push([i % 2 ? S.bldg : S.bldg2, -120 + i * 30 + r.range(-5, 5), r.range(110, 150), r.range(22, 40), 18]);
+  for (let z = 13; z < 80; z += 9) OBJ.push([S.lamp, 2.6, z, 4, 0.3]);
+  function mountainElev(azDeg) { // 산 능선의 고도각(도)
+    return 2.2 + 1.3 * Math.sin(azDeg * 0.21) + 0.8 * Math.sin(azDeg * 0.57 + 1) + 0.4 * Math.sin(azDeg * 1.9);
+  }
+  /**
+   * draw(ctx, w, h, {f, sw, camZ, subjectZ, showSubject})
+   */
+  function draw(ctx, w, h, o) {
+    const fpx = (o.f / o.sw) * w, cy = h * 0.55, camH = 1.6, camZ = o.camZ || 0;
+    // 하늘
+    const g = ctx.createLinearGradient(0, 0, 0, cy); g.addColorStop(0, "#6fa3dc"); g.addColorStop(1, "#d8e6f2");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, cy);
+    // 산(무한대)
+    ctx.fillStyle = "#8d9ab8"; ctx.beginPath(); ctx.moveTo(0, cy);
+    for (let x = 0; x <= w; x += 2) { const az = Math.atan((x - w / 2) / fpx) * 57.3; ctx.lineTo(x, cy - Math.tan(mountainElev(az) / 57.3) * fpx); }
+    ctx.lineTo(w, cy); ctx.fill();
+    // 땅
+    ctx.fillStyle = "#86a46e"; ctx.fillRect(0, cy, w, h - cy);
+    // 길(소실점으로 모이는 선)
+    const proj = (X, Y, Z) => { const zr = Z - camZ; return [w / 2 + (X / zr) * fpx, cy + ((camH - Y) / zr) * fpx]; };
+    ctx.fillStyle = "#c9b48f";
+    ctx.beginPath();
+    const zn = Math.max(camZ + 0.3, camZ + 0.3), zf = camZ + 2000;
+    let p1 = proj(-1.2, 0, zn), p2 = proj(1.2, 0, zn), p3 = proj(1.2, 0, zf), p4 = proj(-1.2, 0, zf);
+    ctx.moveTo(...p1); ctx.lineTo(...p2); ctx.lineTo(...p3); ctx.lineTo(...p4); ctx.fill();
+    ctx.fillStyle = "#e9dcc0";
+    for (let z = Math.ceil(camZ) + 1; z < camZ + 300; z += 3) { const a = proj(-0.08, 0, z), b = proj(0.08, 0, z + 1.2); if (a[1] - b[1] < 0.3) continue; ctx.fillRect(a[0], b[1], b[0] - a[0], a[1] - b[1]); }
+    // 물체: 먼 것부터
+    const items = OBJ.map((o2) => ({ s: o2[0], X: o2[1], Z: o2[2], H: o2[3] }));
+    if (o.showSubject !== false) items.push({ s: S.person, X: -0.4, Z: o.subjectZ || 5, H: 1.7 });
+    items.sort((a, b) => b.Z - a.Z);
+    items.forEach((it) => {
+      const zr = it.Z - camZ; if (zr < 0.3) return;
+      const hh = (it.H / zr) * fpx, ww = hh * (it.s.wpx / it.s.hpx);
+      const [x, yb] = proj(it.X, 0, it.Z);
+      if (x + ww < -50 || x - ww > w + 50) return;
+      ctx.drawImage(it.s.img, x - ww / 2, yb - hh, ww, hh);
+    });
+  }
+  function map(ctx, w, h, o) { // 위에서 본 지도
+    const P = CB.palette();
+    const zMax = o.zMax || 160, camZ = o.camZ || 0;
+    const sc = (h - 16) / zMax, x0 = w / 2, y0 = h - 8;
+    const X = (x) => x0 + x * sc * 1.2, Y = (z) => y0 - (z - Math.min(0, camZ)) * sc;
+    ctx.fillStyle = P.surface; ctx.fillRect(0, 0, w, h);
+    OBJ.forEach((ob) => { if (ob[2] > zMax) return; ctx.fillStyle = ob[0] === S.lamp ? P.dim : ob[3] > 15 ? "#9a8a78" : "#4f8a45"; ctx.beginPath(); ctx.arc(X(ob[1]), Y(ob[2]), ob[3] > 15 ? 3 : 2.5, 0, 7); ctx.fill(); });
+    ctx.fillStyle = "#d9622b"; ctx.beginPath(); ctx.arc(X(-0.4), Y(o.subjectZ || 5), 4, 0, 7); ctx.fill();
+    const half = Math.atan(o.sw / 2 / o.f);
+    ctx.fillStyle = "rgba(255,138,76,0.18)"; ctx.strokeStyle = P.accent; ctx.lineWidth = 1.2;
+    const L = zMax * 1.5;
+    ctx.beginPath(); ctx.moveTo(X(0), Y(camZ)); ctx.lineTo(X(-Math.tan(half) * L), Y(camZ + L)); ctx.lineTo(X(Math.tan(half) * L), Y(camZ + L)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = P.text; ctx.beginPath(); ctx.arc(X(0), Y(camZ), 4, 0, 7); ctx.fill();
+    ctx.font = "11px " + CB.color("font"); ctx.fillStyle = P.dim; ctx.textAlign = "left"; ctx.fillText("위에서 본 모습 · 📷 카메라 · 🟠 인물", 8, 14);
+  }
+  return { draw, map };
+})();
+
+/* ---------------------------------------------------------------- 1. 화각 */
+(function () {
+  const FL = [6, 8, 10, 12, 14, 16, 18, 20, 24, 28, 35, 40, 50, 60, 70, 85, 100, 135, 200, 300, 400, 600];
+  const upd = CB.throttle(() => { cv.redraw(); mp.redraw(); });
+  const F = CB.steps("fv-f", FL, (v) => v + " mm", 24, upd);
+  const S = CB.seg("fv-s", upd);
+  const cv = CB.canvas("#cv-fov", (ctx, w, h) => {
+    const f = F(), sw = +S();
+    World.draw(ctx, w, h, { f, sw, subjectZ: 8 });
+    const eq = f * (36 / sw), ang = 2 * Math.atan(sw / 2 / f) * 57.3;
+    CB.hud(ctx, 0, h - 24, w, [f + " mm (실제)", "환산 " + Math.round(eq) + " mm", "화각 " + ang.toFixed(0) + "°"]);
+    CB.stat("fv-a", ang.toFixed(1) + "°");
+    CB.stat("fv-eq", Math.round(eq) + "<small>mm</small>");
+    CB.stat("fv-c", eq < 24 ? "초광각" : eq < 35 ? "광각" : eq < 40 ? "준광각" : eq < 60 ? "표준" : eq < 150 ? "중망원" : "망원");
+  }, { aspect: 0.6 });
+  const mp = CB.canvas("#cv-fovmap", (ctx, w, h) => World.map(ctx, w, h, { f: F(), sw: +S(), subjectZ: 8, zMax: 60 }), { height: 150 });
+})();
+
+/* ---------------------------------------------------------------- 2. 돌리 줌 */
+(function () {
+  const FL = []; for (let f = 12; f <= 600; f *= 1.06) FL.push(Math.round(f));
+  const SUBJ = 5, REF = { d: 4, f: 35 }; // 4 m에서 35 mm일 때의 인물 크기를 유지
+  const dOf = (v) => 1.2 * Math.pow(80 / 1.2, v / 100);
+  const upd = CB.throttle(() => { cv.redraw(); mp.redraw(); });
+  const keep = CB.check("dz-keep", upd);
+  const F = CB.steps("dz-f", FL, (v) => v + " mm", 35, () => { if (keep()) keep.set(false); upd(); });
+  const D = CB.range("dz-d", (v) => CB.fmt(dOf(v), 2) + " m", () => { if (keep()) F.set(REF.f * dOf(D()) / REF.d, false); upd(); });
+  F.set(REF.f * dOf(D()) / REF.d, false);
+  const cv = CB.canvas("#cv-dolly", (ctx, w, h) => {
+    const d = dOf(D()), f = F();
+    World.draw(ctx, w, h, { f, sw: 36, camZ: SUBJ - d, subjectZ: SUBJ });
+    CB.hud(ctx, 0, h - 24, w, ["거리 " + CB.fmt(d, 2) + " m", f + " mm", keep() ? "크기 유지" : "줌만"]);
+  }, { aspect: 0.6 });
+  const mp = CB.canvas("#cv-dollymap", (ctx, w, h) => World.map(ctx, w, h, { f: F(), sw: 36, camZ: SUBJ - dOf(D()), subjectZ: SUBJ, zMax: 140 }), { height: 150 });
+  let anim = null;
+  document.getElementById("dz-play").addEventListener("click", () => { keep.set(true); anim = { t: 0 }; });
+  CB.loop(document.getElementById("cv-dolly"), (dt) => {
+    if (!anim) return;
+    anim.t += dt;
+    const u = (1 - Math.cos(Math.min(1, anim.t / 4) * Math.PI * 2)) / 2; // 왕복
+    D.set(Math.round(5 + u * 90));
+    if (anim.t >= 4) anim = null;
+  });
+})();
+
+/* ---------------------------------------------------------------- 3. 얼굴 */
+(function () {
+  const Dd = CB.range("fc-d", (v) => (v >= 100 ? (v / 100).toFixed(1) + " m" : v + " cm"), () => cv.redraw());
+  const cv = CB.canvas("#cv-face", (ctx, w, h) => {
+    const P = CB.palette();
+    const d = Dd() / 100; // m, 카메라~얼굴 중심(귀 평면 근처)
+    // 깊이: 코끝 −0.10 m(카메라 쪽), 눈 −0.05, 볼 −0.04, 귀 +0.02, 머리 윤곽 0
+    const k = (dz) => d / (d + dz); // 같은 얼굴 크기로 맞췄을 때 상대 배율
+    const cx = w / 2, cy = h * 0.52, S = Math.min(w, h) * 0.32;
+    const sc = (dz) => k(dz) * S;
+    // 머리 윤곽
+    ctx.fillStyle = "#2b1d16"; ctx.beginPath(); ctx.ellipse(cx, cy - sc(0.02) * 0.25, sc(0.02) * 0.82, sc(0.02) * 1.0, 0, 0, 7); ctx.fill();
+    // 귀
+    ctx.fillStyle = "#dca686";
+    ctx.beginPath(); ctx.ellipse(cx - sc(0.02) * 0.74, cy, sc(0.02) * 0.12, sc(0.02) * 0.2, 0, 0, 7); ctx.ellipse(cx + sc(0.02) * 0.74, cy, sc(0.02) * 0.12, sc(0.02) * 0.2, 0, 0, 7); ctx.fill();
+    // 얼굴(볼)
+    ctx.fillStyle = "#ebbf9f"; ctx.beginPath(); ctx.ellipse(cx, cy + sc(-0.04) * 0.08, sc(-0.04) * 0.66, sc(-0.04) * 0.86, 0, 0, 7); ctx.fill();
+    // 앞머리
+    ctx.fillStyle = "#2b1d16"; ctx.beginPath(); ctx.ellipse(cx, cy - sc(-0.03) * 0.62, sc(-0.03) * 0.66, sc(-0.03) * 0.32, 0, Math.PI, Math.PI * 2); ctx.fill();
+    // 눈
+    ctx.fillStyle = "#fff"; const ex = sc(-0.05) * 0.26, ey = cy - sc(-0.05) * 0.12;
+    ctx.beginPath(); ctx.ellipse(cx - ex, ey, sc(-0.05) * 0.1, sc(-0.05) * 0.055, 0, 0, 7); ctx.ellipse(cx + ex, ey, sc(-0.05) * 0.1, sc(-0.05) * 0.055, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = "#2a1a12"; ctx.beginPath(); ctx.arc(cx - ex, ey, sc(-0.05) * 0.04, 0, 7); ctx.arc(cx + ex, ey, sc(-0.05) * 0.04, 0, 7); ctx.fill();
+    // 코
+    ctx.fillStyle = "#d9a07e"; ctx.beginPath(); ctx.ellipse(cx, cy + sc(-0.1) * 0.12, sc(-0.1) * 0.1, sc(-0.1) * 0.17, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = "#b9785a"; ctx.beginPath(); ctx.arc(cx - sc(-0.1) * 0.045, cy + sc(-0.1) * 0.24, sc(-0.1) * 0.025, 0, 7); ctx.arc(cx + sc(-0.1) * 0.045, cy + sc(-0.1) * 0.24, sc(-0.1) * 0.025, 0, 7); ctx.fill();
+    // 입
+    ctx.strokeStyle = "#a8524a"; ctx.lineWidth = Math.max(1.5, sc(-0.07) * 0.025);
+    ctx.beginPath(); ctx.arc(cx, cy + sc(-0.07) * 0.36, sc(-0.07) * 0.14, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    ctx.fillStyle = P.dim; ctx.font = "12px " + CB.color("font"); ctx.textAlign = "left";
+    ctx.fillText(d < 0.6 ? "셀카 거리: 코가 크고 귀가 작아 보임" : d < 1.4 ? "약간의 과장" : "자연스러운 비율", 10, 18);
+    const f = 50 * d / 1.2; // 얼굴이 화면에 같은 크기가 되도록 하는 대략의 초점거리(풀프레임)
+    CB.stat("fc-f", Math.round(f) + "<small>mm</small>");
+    CB.stat("fc-r", "×" + (k(-0.1) / k(0.02)).toFixed(2));
+  }, { aspect: 0.62, maxHeight: 380 });
+})();
+
+/* ---------------------------------------------------------------- 4. 왜곡 */
+(function () {
+  const upd = CB.throttle(() => cv.redraw());
+  const K = CB.range("ds-k", (v) => (v < 0 ? "배럴 " : v > 0 ? "핀쿠션 " : "") + Math.abs(v) + "%", upd);
+  const fix = CB.check("ds-fix", upd);
+  const cv = CB.canvas("#cv-dist", (ctx, w, h) => {
+    const P = CB.palette();
+    const k = fix() ? 0 : K() / 100;
+    const cx = w / 2, cy = h / 2, R = Math.hypot(w, h) / 2;
+    const map = (x, y) => { const dx = (x - cx) / R, dy = (y - cy) / R, r2 = dx * dx + dy * dy, s = 1 + k * r2 * 1.6; return [cx + dx * s * R, cy + dy * s * R]; };
+    // 건물 정면(창문 격자)
+    ctx.fillStyle = "#d8cbb7"; ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "#5b4b3b"; ctx.lineWidth = 1.5;
+    const nx = 12, ny = 8;
+    for (let i = 0; i <= nx; i++) { ctx.beginPath(); for (let j = 0; j <= 40; j++) { const [x, y] = map((i / nx) * w, (j / 40) * h); j ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); }
+    for (let j = 0; j <= ny; j++) { ctx.beginPath(); for (let i = 0; i <= 60; i++) { const [x, y] = map((i / 60) * w, (j / ny) * h); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.stroke(); }
+    // 창문
+    ctx.fillStyle = "rgba(90,130,170,0.55)";
+    for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
+      const pts = [[0.25, 0.2], [0.75, 0.2], [0.75, 0.8], [0.25, 0.8]].map(([a, b]) => map(((i + a) / nx) * w, ((j + b) / ny) * h));
+      ctx.beginPath(); pts.forEach((p, q) => (q ? ctx.lineTo(...p) : ctx.moveTo(...p))); ctx.fill();
+    }
+    if (fix() && K() !== 0) {
+      const k0 = K() / 100;
+      // 찍힌 이미지의 테두리가 보정 후 어디로 가는지: r_s(1 + 1.6·k·r_s²) = r_b 를 뉴턴법으로 풂
+      const inv = (x, y) => { const dx = (x - cx) / R, dy = (y - cy) / R, rb = Math.hypot(dx, dy); if (rb < 1e-6) return [x, y]; let r = rb; for (let n = 0; n < 8; n++) { const fr = r * (1 + 1.6 * k0 * r * r) - rb, df = 1 + 4.8 * k0 * r * r; r -= fr / df; } const s2 = r / rb; return [cx + dx * s2 * R, cy + dy * s2 * R]; };
+      const border = [];
+      for (let t = 0; t <= 60; t++) border.push(inv((t / 60) * w, 0));
+      for (let t = 0; t <= 40; t++) border.push(inv(w, (t / 40) * h));
+      for (let t = 60; t >= 0; t--) border.push(inv((t / 60) * w, h));
+      for (let t = 40; t >= 0; t--) border.push(inv(0, (t / 40) * h));
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, 0, w, h); border.forEach((p, q) => (q ? ctx.lineTo(...p) : ctx.moveTo(...p))); ctx.closePath();
+      ctx.fillStyle = "rgba(20,20,20,0.85)"; ctx.fill("evenodd");
+      ctx.strokeStyle = P.accent; ctx.setLineDash([6, 4]); ctx.lineWidth = 2; ctx.beginPath(); border.forEach((p, q) => (q ? ctx.lineTo(...p) : ctx.moveTo(...p))); ctx.closePath(); ctx.stroke();
+      ctx.restore();
+      ctx.fillStyle = "rgba(0,0,0,0.65)"; ctx.fillRect(8, 8, 270, 22); ctx.fillStyle = "#fff"; ctx.font = "12px " + CB.color("font");
+      ctx.fillText(k0 < 0 ? "배럴 보정: 귀퉁이 내용이 화면 밖으로 밀려나 잘림" : "핀쿠션 보정: 가장자리가 비어 확대·크롭 필요", 14, 23);
+    }
+  }, { aspect: 0.62, maxHeight: 380 });
+})();
+</script>
+</body>
+</html>
