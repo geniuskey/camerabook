@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>화이트 밸런스와 색 · CameraBook</title>
+<meta name="description" content="빛의 색온도와 켈빈, 화이트 밸런스 프리셋과 자동 WB, 회색 카드로 맞추기, 혼합광, 픽처 스타일과 색 공간을 시뮬레이터로 배운다.">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<style>
+  #cv-wb { cursor: crosshair; }
+  .kbar { height: 18px; border-radius: 9px; margin: 4px 18px 0; background: linear-gradient(90deg, #ff8a1f, #ffb35c, #ffd9a8, #fff1e0, #f4f6ff, #dbe6ff, #bfd2ff); }
+  .klabels { display: flex; justify-content: space-between; margin: 2px 18px 12px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+</style>
+</head>
+<body data-chapter="color">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 10</div>
+    <h1>화이트 밸런스와 색</h1>
+    <p class="lead">전구 아래서 찍은 사진이 누렇게, 그늘에서 찍은 사진이 파랗게 나온 적이 있을 겁니다. 눈으로 볼 때는 분명 하얀 벽이었는데요. 우리 뇌는 조명의 색을 자동으로 지워 주지만, 카메라는 누군가 '무엇이 흰색인지' 알려 줘야 합니다. 그 설정이 <b>화이트 밸런스</b>입니다.</p>
+    <ul class="objectives">
+      <li>빛에도 색이 있고, 이를 색온도(K)로 나타낸다는 것을 안다.</li>
+      <li>화이트 밸런스 프리셋, 자동 WB, 켈빈 직접 지정, 회색 카드 맞춤을 상황에 맞게 쓴다.</li>
+      <li>혼합광에서 WB가 한 번에 맞지 않는 이유와 대처법을 안다.</li>
+      <li>픽처 스타일과 색 공간이 사진에 미치는 영향을 안다.</li>
+    </ul>
+  </header>
+
+  <!-- =============================================================== 1 -->
+  <section id="kelvin">
+    <h2>빛의 색: 색온도</h2>
+    <p>쇳덩이를 가열하면 처음엔 붉게, 더 뜨거워지면 노랗게, 아주 뜨거우면 하얗고 푸르스름하게 빛납니다. 빛의 색을 '그 색으로 빛나는 물체의 온도'로 표현한 것이 <span class="term">색온도</span><span class="en">(Color Temperature)</span>이고, 단위는 켈빈(K)입니다. 헷갈리기 쉬운 점: <b>숫자가 낮을수록 따뜻한(주황) 빛, 높을수록 차가운(파랑) 빛</b>입니다.</p>
+    <div class="kbar"></div>
+    <div class="klabels"><span>1,900K 촛불</span><span>3,000K 전구</span><span>4,000K 형광등</span><span>5,500K 한낮</span><span>7,000K 그늘</span><span>10,000K 파란 하늘</span></div>
+    <div class="table-wrap"><table>
+      <tr><th class="num">색온도</th><th>광원</th><th>보정하지 않으면</th></tr>
+      <tr><td class="num">1,800~2,000K</td><td>촛불, 모닥불</td><td>강한 주황</td></tr>
+      <tr><td class="num">2,700~3,200K</td><td>백열전구, 따뜻한 LED</td><td>노랑·주황</td></tr>
+      <tr><td class="num">4,000~4,500K</td><td>형광등, 주광색이 아닌 LED</td><td>약간 노랑 + 초록 기운</td></tr>
+      <tr><td class="num">5,000~5,500K</td><td>한낮의 햇빛, 플래시</td><td>중립(기준)</td></tr>
+      <tr><td class="num">6,500~7,500K</td><td>흐린 날, 그늘</td><td>파랑</td></tr>
+      <tr><td class="num">9,000K 이상</td><td>맑은 날 그늘의 하늘빛, 블루 아워</td><td>진한 파랑</td></tr>
+    </table></div>
+  </section>
+
+  <!-- =============================================================== 2 -->
+  <section id="wb">
+    <h2>화이트 밸런스 맞추기</h2>
+    <p>화이트 밸런스(WB)는 "이 조명 아래에서 흰색은 이 색으로 찍힌다"는 정보를 카메라에 알려 주어, 그 색을 흰색으로 되돌리는 보정입니다. 원리는 간단합니다. 전구 빛이 빨강을 많이, 파랑을 적게 비추었다면 빨강 채널을 줄이고 파랑 채널을 키웁니다.</p>
+    <div class="sim" id="sim-wb">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>화이트 밸런스 실험실</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-wb"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>실제 조명</span><div class="seg" id="wb-light"><button data-value="2700,0">전구</button><button data-value="4000,0.6">형광등</button><button data-value="5500,0" class="on">햇빛</button><button data-value="7500,0">그늘</button><button data-value="2000,0">촛불</button></div></div>
+          <div class="ctrl"><span>카메라 WB</span><div class="seg" id="wb-mode"><button data-value="awb" class="on">AWB</button><button data-value="preset">프리셋</button><button data-value="k">켈빈</button><button data-value="card">회색 카드</button></div></div>
+          <div class="ctrl" id="wb-preset-c"><span>프리셋</span><div class="seg" id="wb-preset"><button data-value="3200">💡 전구</button><button data-value="4000">형광등</button><button data-value="5500" class="on">☀ 맑음</button><button data-value="6500">☁ 흐림</button><button data-value="7500">그늘</button></div></div>
+          <label class="ctrl" id="wb-k-c"><span>색온도 <output id="wb-k-out"></output></span><input type="range" id="wb-k" min="2000" max="10000" step="100" value="5500"></label>
+          <label class="ctrl" id="wb-t-c"><span>틴트(초록↔마젠타) <output id="wb-t-out"></output></span><input type="range" id="wb-t" min="-10" max="10" step="1" value="0"></label>
+          <div class="kbd-hint" id="wb-hint">회색 카드 모드: 사진 속 회색 카드를 클릭하세요.</div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">회색 카드의 R : G : B</span><span class="v" id="wb-rgb">—</span></div>
+        <div class="stat"><span class="k">판정</span><span class="v" id="wb-judge">—</span></div>
+      </div>
+      <div class="sim-note">① 조명을 '전구'로 바꾸고 WB를 '프리셋 → 맑음'으로 두면 사진 전체가 주황색이 됩니다. ② '전구' 프리셋을 고르면 바로잡힙니다. ③ 켈빈 슬라이더는 '이 숫자의 빛을 흰색으로 보정하라'는 뜻이라, 실제 조명보다 높게 잡으면 더 따뜻하게, 낮게 잡으면 더 차갑게 찍힙니다. ④ 가장 정확한 방법은 회색 카드를 클릭하는 것(커스텀 WB)입니다.</div>
+    </div>
+    <div class="callout tip"><strong>켈빈 숫자의 방향이 헷갈린다면</strong>카메라의 켈빈 설정은 "조명이 몇 K라고 가정할까"입니다. 3,200K로 설정하면 카메라는 "주황빛 조명이구나" 하고 파랗게 보정합니다. 그래서 햇빛 아래에서 3,200K로 설정하면 사진이 파래집니다. 노을을 더 붉게 찍고 싶다면 오히려 숫자를 높이(6,500~8,000K) 잡으세요.</div>
+    <div class="callout"><strong>AWB는 언제 틀리나</strong>자동 WB는 "장면의 평균(또는 가장 밝은 부분)은 무채색일 것"이라는, 6장 측광과 비슷한 가정을 씁니다. 그래서 한 가지 색이 화면을 채우면(노을, 단풍 숲, 파란 바다) 그 색을 '조명 탓'으로 오해해 지워 버립니다. 노을이 밋밋하게 나왔다면 AWB 대신 '맑음' 프리셋을 써 보세요. 반대로 전구 조명에서는 분위기를 살리려고 일부러 약간 따뜻하게 남기는 카메라가 많습니다.</div>
+  </section>
+
+  <!-- =============================================================== 3 -->
+  <section id="mixed">
+    <h2>혼합광: WB가 하나로 안 맞을 때</h2>
+    <p>창가에서 햇빛(5,500K)을 받는 얼굴의 반대편을 실내 전구(2,700K)가 비춘다면? WB는 사진 전체에 하나만 적용되므로, 한쪽을 맞추면 다른 쪽이 틀어집니다. 이런 <span class="term">혼합광</span><span class="en">(Mixed Lighting)</span>은 실내 촬영에서 가장 흔한 색 문제입니다.</p>
+    <div class="sim" id="sim-mix">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>창문 햇빛 + 실내 전구</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-mix"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>카메라 WB <output id="mx-k-out"></output></span><input type="range" id="mx-k" min="2500" max="7000" step="100" value="4000"></label>
+          <label class="check"><input type="checkbox" id="mx-gel"> 전구 끄기(한 종류 빛만)</label>
+        </div>
+      </div>
+      <div class="sim-note">왼쪽은 창 햇빛, 오른쪽은 전구가 지배합니다. 어느 값으로 맞춰도 한쪽은 파랗거나 주황색입니다. 해결책: ① 한쪽 조명을 끈다. ② 플래시나 조명에 색 필터(CTO 젤)를 씌워 색온도를 통일한다. ③ 절충값으로 두고 분위기로 받아들인다. ④ RAW로 찍어 부분 보정한다(11장).</div>
+    </div>
+  </section>
+
+  <!-- =============================================================== 4 -->
+  <section id="style">
+    <h2>픽처 스타일: 카메라의 '맛'</h2>
+    <p>같은 RAW 데이터도 어떤 톤 곡선과 채도를 적용하느냐에 따라 느낌이 크게 달라집니다. 카메라 회사마다 이름이 다른데(픽처 스타일, 픽처 컨트롤, 크리에이티브 룩, 필름 시뮬레이션), 모두 JPEG을 만들 때 쓰는 '레시피'입니다. RAW로 찍으면 나중에 바꿀 수 있습니다.</p>
+    <div class="sim" id="sim-style">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>픽처 스타일 비교</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view photo"><canvas id="cv-style"></canvas></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>스타일</span><div class="seg" id="st-s"><button data-value="std" class="on">표준</button><button data-value="portrait">인물</button><button data-value="vivid">풍경(선명)</button><button data-value="flat">뉴트럴</button><button data-value="mono">흑백</button><button data-value="log">Log</button></div></div>
+          <label class="ctrl"><span>채도 <output id="st-sat-out"></output></span><input type="range" id="st-sat" min="-4" max="4" value="0"></label>
+        </div>
+      </div>
+      <div class="sim-note">'Log'는 동영상용으로, 넓은 밝기 범위를 담기 위해 일부러 회색빛으로 납작하게 기록한 뒤 편집에서 색을 입히는(컬러 그레이딩) 방식입니다(14장). 흑백은 색 대신 밝기 차이로 형태를 보여 주므로, 색이 달라도 밝기가 비슷한 것끼리는 구분이 어려워집니다.</div>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>색 공간</th><th>특징</th><th>언제</th></tr>
+      <tr><td><b>sRGB</b></td><td>웹·모니터·스마트폰의 표준. 범위가 가장 좁지만 어디서나 같게 보임</td><td>기본값으로 두면 됨. SNS, 웹</td></tr>
+      <tr><td><b>Adobe RGB</b></td><td>초록·청록 영역이 넓음</td><td>전문 인쇄, 색 관리가 되는 작업 환경</td></tr>
+      <tr><td><b>Display P3</b></td><td>최신 휴대폰·모니터의 넓은 색 영역</td><td>아이폰 등에서 찍고 같은 기기에서 볼 때</td></tr>
+    </table></div>
+    <p>JPEG의 색 공간 설정은 RAW에는 영향이 없습니다. 잘 모르겠다면 sRGB로 두세요. Adobe RGB 파일을 색 관리가 안 되는 웹에 올리면 오히려 색이 칙칙해 보입니다.</p>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>빛에는 색이 있다. 색온도(K)가 낮으면 주황, 높으면 파랑.</li>
+      <li>WB는 조명의 색을 지워 흰색을 흰색으로 만드는 보정이다. 켈빈 설정은 '조명이 몇 K인지' 알려 주는 것이다.</li>
+      <li>AWB는 장면이 평균 회색이라고 가정하므로 노을·단풍처럼 한 색이 지배하는 장면에서 틀린다. 가장 정확한 것은 회색 카드 커스텀 WB.</li>
+      <li>혼합광은 WB 하나로 해결되지 않는다. 조명을 통일하거나 부분 보정한다.</li>
+      <li>픽처 스타일은 JPEG의 레시피. 색 공간은 잘 모르면 sRGB.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q"><p>백열전구 아래에서 '맑음(5,500K)' WB로 찍으면 사진은?</p><div class="opts">
+        <button class="opt" data-correct>주황빛이 돈다</button>
+        <button class="opt">파란빛이 돈다</button>
+        <button class="opt">초록빛이 돈다</button>
+      </div><div class="quiz-exp">전구(약 2,700K)는 햇빛보다 붉은 빛이다. 햇빛 기준 WB로는 그 붉은 기가 그대로 남는다.</div></div>
+      <div class="quiz-q"><p>노을 사진을 더 붉고 따뜻하게 만들고 싶다. 켈빈 WB를 어떻게 바꿀까?</p><div class="opts">
+        <button class="opt">3,000K로 낮춘다</button>
+        <button class="opt" data-correct>7,000K 정도로 높인다</button>
+        <button class="opt">AWB로 둔다</button>
+      </div><div class="quiz-exp">높은 K로 설정하면 카메라는 '파란 조명'으로 가정하고 붉게 보정하므로 사진이 따뜻해진다. AWB는 붉은 기를 지우려 한다.</div></div>
+      <div class="quiz-q"><p>사무실 형광등 아래 사진에 초록빛이 돈다. 색온도 외에 조절할 것은?</p><div class="opts">
+        <button class="opt" data-correct>틴트(초록↔마젠타)</button>
+        <button class="opt">노출 보정</button>
+        <button class="opt">ISO</button>
+      </div><div class="quiz-exp">형광등·일부 LED는 흑체 궤적에서 벗어나 초록 기운이 있다. 색온도 축과 수직인 틴트 축을 마젠타 쪽으로 옮겨 보정한다.</div></div>
+      <div class="quiz-q"><p>창가 햇빛과 실내 전구가 섞인 방에서 인물의 양쪽 볼 색이 다르다. 가장 근본적인 해결책은?</p><div class="opts">
+        <button class="opt">AWB를 켠다</button>
+        <button class="opt" data-correct>조명 하나를 끄거나 색 필터로 조명 색온도를 통일한다</button>
+        <button class="opt">흑백으로 찍는다(만 해결)</button>
+      </div><div class="quiz-exp">WB는 사진 전체에 하나만 적용된다. 조명 색을 통일하는 것이 근본 해결이다(흑백은 '피하는' 방법).</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* 정물 장면: 벽, 탁자, 흰 머그, 과일, 책, 18% 회색 카드 */
+function stillLife(W, H, sceneEV) {
+  const D = CB.draw;
+  return CB.Photo({ w: W, h: H, sceneEV, build(S) {
+    S.layer(4, (g) => { g.fillStyle = "#e9e4dc"; g.fillRect(0, 0, W, H); g.fillStyle = "rgba(0,0,0,0.04)"; for (let x = 0; x < W; x += 24) g.fillRect(x, 0, 2, H * 0.62); });
+    S.layer(1.4, (g) => {
+      g.fillStyle = "#9a6b45"; g.fillRect(0, H * 0.62, W, H); g.fillStyle = "rgba(0,0,0,0.08)"; for (let y = H * 0.66; y < H; y += 12) g.fillRect(0, y, W, 2);
+      // 책(파랑)
+      g.fillStyle = "#2f5aa8"; g.fillRect(W * 0.62, H * 0.5, W * 0.3, H * 0.14); g.fillStyle = "#f3eee4"; g.fillRect(W * 0.62, H * 0.6, W * 0.3, H * 0.025);
+      g.fillStyle = "#c23a3a"; g.fillRect(W * 0.64, H * 0.41, W * 0.26, H * 0.09);
+      // 흰 머그
+      g.fillStyle = "#fbfbfb"; D.roundRect(g, W * 0.1, H * 0.38, W * 0.14, H * 0.26, 6); g.fill();
+      g.strokeStyle = "#fbfbfb"; g.lineWidth = 7; g.beginPath(); g.arc(W * 0.25, H * 0.5, H * 0.06, -1.3, 1.3); g.stroke();
+      g.fillStyle = "#d8d8d8"; g.fillRect(W * 0.1, H * 0.38, W * 0.14, H * 0.02);
+      // 과일
+      g.fillStyle = "#f08a1c"; g.beginPath(); g.arc(W * 0.36, H * 0.6, H * 0.075, 0, 7); g.fill();
+      g.fillStyle = "#d7262b"; g.beginPath(); g.arc(W * 0.47, H * 0.6, H * 0.07, 0, 7); g.fill();
+      g.fillStyle = "#f2d230"; g.beginPath(); g.ellipse(W * 0.55, H * 0.63, H * 0.07, H * 0.045, 0.2, 0, 7); g.fill();
+      g.fillStyle = "#6aa83a"; g.beginPath(); g.ellipse(W * 0.47, H * 0.53, 6, 3, -0.6, 0, 7); g.fill();
+      // 18% 회색 카드 (sRGB 118)
+      g.fillStyle = "#767676"; g.fillRect(W * 0.04, H * 0.7, W * 0.2, H * 0.22);
+      g.fillStyle = "#ffffff"; g.font = "700 11px sans-serif"; g.fillText("18% GRAY", W * 0.055, H * 0.89);
+    });
+  } });
+}
+const GRAY_AT = [0.13, 0.8]; // 회색 카드 위치(비율)
+
+/* ---------------------------------------------------------------- 1. WB 실험실 */
+(function () {
+  const W = 440, H = 275;
+  const photo = stillLife(W, H, 8);
+  const upd = CB.throttle(() => { syncUI(); cv.redraw(); });
+  const light = CB.seg("wb-light", upd);
+  const mode = CB.seg("wb-mode", upd);
+  const preset = CB.seg("wb-preset", upd);
+  const K = CB.range("wb-k", (v) => v + " K", upd);
+  const T = CB.range("wb-t", (v) => (v > 0 ? "G+" + v : v < 0 ? "M+" + -v : "0"), upd);
+  let cardGains = null;
+  function syncUI() {
+    const m = mode();
+    document.getElementById("wb-preset-c").style.display = m === "preset" ? "" : "none";
+    document.getElementById("wb-k-c").style.display = m === "k" ? "" : "none";
+    document.getElementById("wb-t-c").style.display = m === "k" ? "" : "none";
+    document.getElementById("wb-hint").style.display = m === "card" ? "" : "none";
+  }
+  function rawAt(fx, fy) { // WB 미적용 선형값
+    const [sk, st] = light().split(",").map(Number);
+    photo.render({ N: 4, t: 16 / 256, iso: 100, focus: 1.4, focal: 50, noise: false, sceneK: sk, sceneTint: st, wbGains: [1, 1, 1], light: 0.6 });
+    const x = Math.round(fx * W), y = Math.round(fy * H); let r = 0, g = 0, b = 0, n = 0;
+    for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) { const i = ((y + dy) * W + (x + dx)) * 3; r += photo.lin[i]; g += photo.lin[i + 1]; b += photo.lin[i + 2]; n++; }
+    return [r / n, g / n, b / n];
+  }
+  function awbGains() { // 밝은 부분(흰 벽·머그)을 흰색으로 가정 + 전구 분위기는 일부 남김
+    const [sk, st] = light().split(",").map(Number);
+    photo.render({ N: 4, t: 16 / 256, iso: 100, focus: 1.4, focal: 50, noise: false, sceneK: sk, sceneTint: st, wbGains: [1, 1, 1], light: 0.6 });
+    const L = photo.lin, n = W * H, lum = new Float32Array(n);
+    for (let i = 0; i < n; i++) lum[i] = L[i * 3] + L[i * 3 + 1] + L[i * 3 + 2];
+    const thr = Float32Array.from(lum).sort()[Math.floor(n * 0.9)]; // 상위 10%
+    let r = 0, g = 0, b = 0;
+    for (let i = 0; i < n; i++) if (lum[i] >= thr) { r += L[i * 3]; g += L[i * 3 + 1]; b += L[i * 3 + 2]; }
+    const keep = sk < 3500 ? 0.25 : 0;
+    return [Math.pow(g / r, 1 - keep), 1, Math.pow(g / b, 1 - keep)];
+  }
+  const el = document.getElementById("cv-wb");
+  el.addEventListener("click", (e) => {
+    if (mode() !== "card") mode.set("card");
+    const r = el.getBoundingClientRect();
+    const [R, G, B] = rawAt((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+    cardGains = [G / R, 1, G / B];
+    cv.redraw();
+  });
+  const cv = CB.canvas("#cv-wb", (ctx, w, h) => {
+    const [sk, st] = light().split(",").map(Number), m = mode();
+    let p = { N: 4, t: 16 / 256, iso: 100, focus: 1.4, focal: 50, noiseSeed: 30, sceneK: sk, sceneTint: st, light: 0.6, gain: 1.4 }; // 따뜻한 조명에서 흰색 R 채널이 포화되지 않도록 노출을 약간 낮춰 받고 밝힘
+    let label;
+    if (m === "awb") { p.wbGains = awbGains(); label = "AWB"; }
+    else if (m === "preset") { p.wbK = +preset(); p.wbTint = +preset() === 4000 ? 0.6 : 0; label = "프리셋 " + preset() + "K"; }
+    else if (m === "k") { p.wbK = K(); p.wbTint = T() / 10 * 1.0; label = K() + "K " + (T() ? (T() > 0 ? "G" : "M") + Math.abs(T()) : ""); }
+    else { p.wbGains = cardGains || [1, 1, 1]; label = cardGains ? "커스텀(회색 카드)" : "회색 카드를 클릭!"; }
+    photo.render(p);
+    photo.draw(ctx, 0, 0, w, h);
+    // 회색 카드 측정
+    const x = Math.round(GRAY_AT[0] * W), y = Math.round(GRAY_AT[1] * H), i = (y * W + x) * 4, d = photo.last.data;
+    const R = d[i], G = d[i + 1], B = d[i + 2], mx = Math.max(R, G, B);
+    CB.hud(ctx, 0, h - 24, w, ["조명 " + sk + "K" + (st ? " (초록 기)" : ""), "WB: " + label]);
+    CB.stat("wb-rgb", `${R} : ${G} : ${B}`);
+    const dev = Math.max(Math.abs(R - G), Math.abs(B - G)) / Math.max(1, mx);
+    const warm = R - B;
+    CB.stat("wb-judge", dev < 0.06 ? '<span style="color:var(--ok)">중립 회색 ✓</span>' : warm > 0 ? '<span style="color:var(--warn)">따뜻함(주황)</span>' : G > R && G > B ? '<span style="color:var(--ok)">초록 기</span>' : '<span style="color:var(--accent-2)">차가움(파랑)</span>');
+  }, { aspect: 0.625 });
+  syncUI();
+})();
+
+/* ---------------------------------------------------------------- 2. 혼합광 */
+(function () {
+  const W = 440, H = 275;
+  const photo = CB.scenes.portrait(W, H, { sceneEV: 9 });
+  const upd = CB.throttle(() => cv.redraw());
+  const K = CB.range("mx-k", (v) => v + " K", upd);
+  const off = CB.check("mx-gel", upd);
+  const out = new ImageData(W, H), oc = CB.offscreen(W, H);
+  const cv = CB.canvas("#cv-mix", (ctx, w, h) => {
+    const base = { N: 2.8, t: 7.84 / 512, iso: 100, focus: 2.5, focal: 50, noiseSeed: 31, wbK: K(), wbTint: 0 };
+    photo.render(Object.assign({}, base, { sceneK: 5500 }));
+    const A = new Uint8ClampedArray(photo.last.data);
+    photo.render(Object.assign({}, base, { sceneK: 2700 }));
+    const B = photo.last.data;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
+      const wB = off() ? 0 : CB.smooth(0.25, 0.75, x / W); // 오른쪽으로 갈수록 전구 비중
+      for (let c = 0; c < 3; c++) out.data[i + c] = A[i + c] * (1 - wB) + B[i + c] * wB;
+      out.data[i + 3] = 255;
+    }
+    oc.getContext("2d").putImageData(out, 0, 0);
+    ctx.drawImage(oc, 0, 0, w, h);
+    ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(8, 8, 112, 20); ctx.fillRect(w - 120, 8, 112, 20);
+    ctx.fillStyle = "#fff"; ctx.font = "12px " + CB.color("font");
+    ctx.fillText("☀ 창 햇빛 5500K", 14, 22);
+    if (!off()) ctx.fillText("💡 전구 2700K", w - 112, 22);
+    CB.hud(ctx, 0, h - 24, w, ["카메라 WB " + K() + "K", off() ? "햇빛만" : "혼합광"]);
+  }, { aspect: 0.625 });
+})();
+
+/* ---------------------------------------------------------------- 3. 픽처 스타일 */
+(function () {
+  const W = 440, H = 275;
+  const photo = CB.scenes.portrait(W, H, { sceneEV: 12 });
+  const upd = CB.throttle(() => cv.redraw());
+  const st = CB.seg("st-s", upd);
+  const sat = CB.range("st-sat", (v) => CB.signed(v, 0), upd);
+  const STY = { std: { tone: "std", sat: 1 }, portrait: { tone: "flat", sat: 0.9, warm: 6000 }, vivid: { tone: "vivid", sat: 1.35 }, flat: { tone: "flat", sat: 0.85 }, mono: { tone: "vivid", sat: 0 }, log: { tone: "log", sat: 0.6 } };
+  const cv = CB.canvas("#cv-style", (ctx, w, h) => {
+    const s = STY[st()];
+    const satv = s.sat === 0 ? 0 : s.sat * (1 + sat() * 0.12);
+    photo.render({ N: 2.8, t: 7.84 / 4096, iso: 100, focus: 2.5, focal: 85, noiseSeed: 32, tone: s.tone, sat: satv, wbK: s.warm || null, blades: 9 });
+    photo.draw(ctx, 0, 0, w, h);
+    CB.hud(ctx, 0, h - 24, w, [{ std: "표준", portrait: "인물", vivid: "풍경", flat: "뉴트럴", mono: "흑백", log: "Log" }[st()], "채도 " + CB.signed(sat(), 0)]);
+  }, { aspect: 0.625 });
+})();
+</script>
+</body>
+</html>

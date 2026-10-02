@@ -446,7 +446,7 @@
   /**
    * 가상 장면을 "촬영"하는 엔진. 장면은 깊이(m)를 가진 레이어들과 점광원으로 이루어진다.
    *   const P = CB.Photo({ w:480, h:300, sceneEV:12, build(S){ S.layer(depth, (ctx,w,h)=>{...}, {gain, motion:[vx,vy]}); S.lights(depth, [{x,y,c:[r,g,b],i}]) } });
-   *   const img = P.render({ N, t, iso, focus, focal, sensorW, wbK, sceneK, shake:[px,py], fw, ... });  → ImageData
+   *   const img = P.render({ N, t, iso, focus, focal, sensorW, wbK, sceneK, sceneTint, wbTint, wbGains, shake:[px,py], fw, ... });  → ImageData
    *   P.draw(ctx, x, y, w, h)  마지막 렌더 결과를 그린다.
    * 노출: 장면 색은 "적정 노출(EV=sceneEV)일 때 보이는 모습"으로 그린다.
    */
@@ -583,10 +583,9 @@
         const sceneK = p.sceneK || api.sceneK;
         const ill = CB.kelvin(sceneK), ref = CB.kelvin(5500);
         const wb = CB.kelvin(p.wbK || sceneK);
-        const cg = [ill[0] / ref[0] / (wb[0] / ref[0]), 1, ill[2] / ref[2] / (wb[2] / ref[2])];
-        const cast = [ill[0] / ref[0], 1, ill[2] / ref[2]];
-        const wbg = [ref[0] / wb[0], 1, ref[2] / wb[2]];
-        void cg;
+        // 조명 색(cast)과 카메라 WB 보정(wbg). tint: +면 초록(형광등), −면 마젠타
+        const cast = [ill[0] / ref[0], Math.pow(2, (p.sceneTint || 0) * 0.45), ill[2] / ref[2]];
+        const wbg = p.wbGains ? p.wbGains.slice() : [ref[0] / wb[0], Math.pow(2, -(p.wbTint != null ? p.wbTint : p.wbK ? 0 : p.sceneTint || 0) * 0.45), ref[2] / wb[2]];
         const doNoise = p.noise && isFinite(fw);
         const seed = p.noiseSeed || 0;
         if (doNoise && seed !== noiseSeedKey) { for (let i = 0; i < noiseField.length; i++) noiseField[i] = CB.randn(); noiseSeedKey = seed; }
