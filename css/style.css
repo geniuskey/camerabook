@@ -142,6 +142,8 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 48px 0; }
   .sb-topbar .series-link { width: 36px; padding: 0; }
   .sb-topbar .series-link span { display: none; }
 }
+@media (max-width: 620px) { .sb-topbar .sb-logo small { display: none; } }
+@media (max-width: 420px) { .sb-topbar .sb-logo span { display: none; } }
 .sb-progress { position: absolute; left: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); width: 0; }
 
 /* Drawer (chapter list) */

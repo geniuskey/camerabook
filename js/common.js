@@ -1022,6 +1022,7 @@
     const root = body.dataset.root != null ? body.dataset.root : body.dataset.chapter ? "../" : "";
     const curSlug = body.dataset.chapter || "";
     const href = (slug) => (slug ? `${root}chapters/${slug}.html` : `${root}index.html`);
+    const feedbackUrl = "https://books.euiyun.com/feedback.html?book=camerabook&page=" + encodeURIComponent(location.href);
 
     const bar = document.createElement("header");
     bar.className = "sb-topbar";
@@ -1032,6 +1033,13 @@
       <a class="sb-btn series-link" href="https://books.euiyun.com/" aria-label="전체 책 보기" title="전체 책 보기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h6v14H4zM10 5.5h6v14h-6zM17 7l3-1 2 13-3 1z"/></svg><span>전체 책</span></a>
       <button class="sb-btn icon" id="sb-theme" aria-label="테마 전환"></button>
       <div class="sb-progress" id="sb-progress"></div>`;
+    const feedbackButton = document.createElement("a");
+    feedbackButton.className = bar.className.replace("-topbar", "-btn") + " icon feedback-button";
+    feedbackButton.href = feedbackUrl;
+    feedbackButton.setAttribute("aria-label", "독자 의견 보내기");
+    feedbackButton.title = "독자 의견 보내기";
+    feedbackButton.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 4V6a2 2 0 0 1 2-2z"/><path d="M8 9h8M8 13h5"/></svg>';
+    bar.querySelector("[id$='-theme']").before(feedbackButton);
     body.prepend(bar);
 
     const drawer = document.createElement("nav");
@@ -1110,8 +1118,8 @@
       코드 <a href="https://github.com/geniuskey/camerabook/blob/main/LICENSE-MIT">MIT</a> ·
       <a href="https://github.com/geniuskey/camerabook/blob/main/LICENSE.md">라이선스 안내</a>`;
     const feedbackLink = document.createElement("a");
-    feedbackLink.href = "https://books.euiyun.com/feedback.html?book=camerabook&page=" + encodeURIComponent(location.href);
-    feedbackLink.textContent = "오류·질문·제안";
+    feedbackLink.href = feedbackUrl;
+    feedbackLink.textContent = "독자 의견";
     foot.append(" · ", feedbackLink);
     body.appendChild(foot);
 
