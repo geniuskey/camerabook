@@ -136,6 +136,12 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 48px 0; }
 }
 .sb-btn:hover { border-color: var(--accent); }
 .sb-btn.icon { width: 36px; padding: 0; }
+.sb-topbar .series-link { white-space: nowrap; text-decoration: none; }
+@media (max-width: 360px) { .sb-topbar .sb-logo span { display: none; } }
+@media (max-width: 560px) {
+  .sb-topbar .series-link { width: 36px; padding: 0; }
+  .sb-topbar .series-link span { display: none; }
+}
 .sb-progress { position: absolute; left: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); width: 0; }
 
 /* Drawer (chapter list) */
