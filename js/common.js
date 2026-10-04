@@ -1109,6 +1109,10 @@
       콘텐츠 <a href="https://creativecommons.org/licenses/by/4.0/deed.ko" rel="license">CC BY 4.0</a> ·
       코드 <a href="https://github.com/geniuskey/camerabook/blob/main/LICENSE-MIT">MIT</a> ·
       <a href="https://github.com/geniuskey/camerabook/blob/main/LICENSE.md">라이선스 안내</a>`;
+    const feedbackLink = document.createElement("a");
+    feedbackLink.href = "https://books.euiyun.com/feedback.html?book=camerabook&page=" + encodeURIComponent(location.href);
+    feedbackLink.textContent = "오류·질문·제안";
+    foot.append(" · ", feedbackLink);
     body.appendChild(foot);
 
     document.querySelectorAll(".quiz-q").forEach((q) => {
