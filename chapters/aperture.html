@@ -18,7 +18,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"조리개와 아웃포커스","name":"조리개와 아웃포커스 · CameraBook","url":"https://camerabook.euiyun.com/chapters/aperture.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/aperture.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":3,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"F값의 정체, 피사계 심도를 바꾸는 네 가지 요인, 배경 흐림과 보케 모양, 회절과 렌즈의 최적 조리개, 센서 크기에 따른 등가 조리개를 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"03 조리개와 아웃포커스","item":"https://camerabook.euiyun.com/chapters/aperture.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"조리개와 아웃포커스","name":"조리개와 아웃포커스 · CameraBook","url":"https://camerabook.euiyun.com/chapters/aperture.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/aperture.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":3,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"F값의 정체, 피사계 심도를 바꾸는 네 가지 요인, 배경 흐림과 보케 모양, 회절과 렌즈의 최적 조리개, 센서 크기에 따른 등가 조리개를 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"03 조리개와 아웃포커스","item":"https://camerabook.euiyun.com/chapters/aperture.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -69,7 +69,7 @@
         <div class="stat"><span class="k">최대 개방 대비 빛</span><span class="v" id="ir-l">—</span></div>
         <div class="stat"><span class="k">최대 개방 대비</span><span class="v" id="ir-s">—</span></div>
       </div>
-      <div class="sim-note">F값이 커질수록(조일수록) 구멍이 작아지고 날개가 만든 다각형 모양이 드러납니다. f/1.4 → f/2는 한 스톱, 빛이 절반입니다. 초점거리를 바꾸면 같은 F값이라도 실제 지름이 달라지는 것도 확인해 보세요.</div>
+      <div class="sim-note">F값이 커질수록(조일수록) 구멍이 작아지고 날개가 만든 다각형 모양이 드러납니다. f/1.4 → f/2는 한 스톱, 빛이 절반입니다. 초점거리를 바꾸면 같은 F값이라도 실제 구멍 지름이 초점거리에 비례해 커지고 작아집니다(모든 렌즈를 같은 축척으로 그림). 24 mm f/2.8의 구멍은 200 mm f/2.8보다 훨씬 작지만, 상도 그만큼 작게 맺히므로 밝기는 같습니다.</div>
     </div>
     <div class="callout tip"><strong>"밝은 렌즈"의 뜻</strong>렌즈 이름의 "50mm F1.4"에서 F1.4는 그 렌즈가 열 수 있는 가장 큰 구멍(<b>최대 개방</b>)입니다. 최대 개방 F값이 작을수록 '밝은 렌즈'라 부르며, 어두운 곳에서 빠른 셔터를 쓸 수 있고 배경을 더 흐릴 수 있지만 크고 비쌉니다. 줌렌즈의 "F3.5-5.6"은 광각 쪽에서 f/3.5, 망원 쪽에서 f/5.6까지 열린다는 뜻입니다.</div>
   </section>
@@ -140,40 +140,43 @@
   <!-- =============================================================== 3 -->
   <section id="bokeh">
     <h2>보케: 흐림의 '질'</h2>
-    <p>흐려진 부분의 모양과 느낌을 일본어에서 온 말로 <span class="term">보케</span><span class="en">(Bokeh)</span>라고 합니다. 특히 배경의 작은 불빛이 흐려지면 조리개 구멍 모양 그대로 빛망울이 됩니다. 조리개를 활짝 열면 날개가 렌즈 밖으로 숨어 동그란 망울이, 조이면 날개 수만큼 각진 다각형 망울이 생깁니다.</p>
+    <p>흐려진 부분의 모양과 느낌을 일본어에서 온 말로 <span class="term">보케</span><span class="en">(Bokeh)</span>라고 합니다. 특히 배경의 작은 불빛이 흐려지면 조리개 구멍 모양 그대로 빛망울이 됩니다. 조리개를 최대 개방으로 열면 날개가 경통 밖으로 숨어 동그란 망울이, 조이면 날개 수만큼 각진 다각형 망울이 생깁니다.</p>
     <div class="sim" id="sim-bokeh">
       <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>빛망울 모양 실험실</h3></div>
       <div class="sim-body side">
         <div class="sim-view photo"><canvas id="cv-bokeh"></canvas></div>
         <div class="sim-controls">
           <label class="ctrl"><span>조리개 <output id="bk-n-out"></output></span><input type="range" id="bk-n"></label>
-          <div class="ctrl"><span>조리개 날개</span><div class="seg" id="bk-b"><button data-value="0" class="on">원형</button><button data-value="6">6장</button><button data-value="7">7장</button><button data-value="9">9장</button></div></div>
+          <div class="ctrl"><span>조리개 날개</span><div class="seg" id="bk-b"><button data-value="0" class="on">원형(곡선)</button><button data-value="6">6장</button><button data-value="7">7장</button><button data-value="9">9장</button></div></div>
           <label class="check"><input type="checkbox" id="bk-rim"> 테두리가 밝은 '양파링' 보케</label>
         </div>
       </div>
-      <div class="sim-note">렌즈 설계에 따라 빛망울 가장자리가 밝은 '비눗방울' 보케, 가운데가 밝은 '부드러운' 보케가 됩니다. 원형 조리개 날개(곡선 날개)를 쓴 렌즈는 조금 조여도 망울이 둥글게 유지됩니다.</div>
+      <div class="sim-note">이 가상 렌즈의 최대 개방은 f/1.4입니다. 최대 개방에서는 날개가 완전히 물러나 날개 수와 상관없이 망울이 둥글고, 1/3스톱만 조여도 날개가 들어와 다각형이 드러나기 시작합니다. 'f/2 이하면 둥글다'가 아니라 '그 렌즈의 최대 개방이면 둥글다'입니다(f/2.8 렌즈라면 f/2.8에서 둥긂). 곡선 날개를 쓴 렌즈는 1~2스톱 조여도 둥글게 유지됩니다. 렌즈 설계에 따라 가장자리가 밝은 '비눗방울' 보케, 가운데가 밝은 '부드러운' 보케가 됩니다.</div>
     </div>
   </section>
 
   <!-- =============================================================== 4 -->
   <section id="diffraction">
     <h2>너무 조이면 흐려진다: 회절과 최적 조리개</h2>
-    <p>심도를 깊게 하려고 f/22까지 조이면 모든 것이 최고로 선명할까요? 아닙니다. 1장의 바늘구멍처럼, 구멍이 작아지면 빛이 구멍 가장자리에서 퍼지는 <span class="term">회절</span>이 커져 사진 전체가 살짝 뿌옇게 됩니다. 반대로 최대 개방에서는 렌즈 설계의 한계(<span class="term">수차</span>)가 드러나 조금 무릅니다. 그래서 대부분의 렌즈는 최대 개방에서 2~3스톱 조인 f/5.6~f/8 근처에서 가장 선명합니다.</p>
+    <p>심도를 깊게 하려고 f/22까지 조이면 모든 것이 최고로 선명할까요? 아닙니다. 1장의 바늘구멍처럼, 구멍이 작아지면 빛이 구멍 가장자리에서 퍼지는 <span class="term">회절</span>이 커져 사진 전체가 살짝 뿌옇게 됩니다. 반대로 최대 개방에서는 렌즈 설계의 한계(<span class="term">수차</span>)가 드러나 조금 무릅니다. 그래서 풀프레임용 렌즈 대부분은 최대 개방에서 2~3스톱 조인 f/5.6~f/8 근처에서 가장 선명합니다.</p>
+    <p>이 '최적 조리개'를 정하는 것은 화소 피치가 아니라 <b>렌즈와 센서 크기(판형)</b>입니다. 회절 번짐의 크기(µm)는 F값만으로 정해지므로, 같은 f/16이라도 작은 센서에서는 사진 전체에 비해 상대적으로 더 큰 번짐이 됩니다. 반면 같은 판형에서 화소만 늘리면 회절이 픽셀 단위로 <b>더 일찍 눈에 띌</b> 뿐, 같은 크기로 보면 고화소가 저화소보다 나빠지지 않고 최적 조리개도 변하지 않습니다. 흔히 말하는 '회절 한계 조리개(DLA)'는 100% 확대에서 회절이 보이기 시작하는 지점이지, 그보다 조이면 사진이 저화소 카메라보다 나빠진다는 뜻이 아닙니다.</p>
     <div class="sim" id="sim-sweet">
       <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>렌즈 선명도 곡선과 확대 비교</h3></div>
       <div class="sim-body side">
         <div class="sim-view"><canvas id="cv-sweet"></canvas></div>
         <div class="sim-controls">
           <label class="ctrl"><span>조리개 <output id="sw-n-out"></output></span><input type="range" id="sw-n"></label>
-          <div class="ctrl"><span>센서 화소 피치</span><div class="seg" id="sw-p"><button data-value="6">6 µm (24MP FF)</button><button data-value="3.8" class="on">3.8 µm (60MP FF)</button><button data-value="0.8">0.8 µm (폰)</button></div></div>
+          <div class="ctrl"><span>센서 크기(판형)</span><div class="seg" id="sw-fmt"><button data-value="1" class="on">풀프레임</button><button data-value="1.53">APS-C</button><button data-value="2.7">1형</button><button data-value="3.5">폰 1/1.3형</button></div></div>
+          <div class="ctrl"><span>화소 수</span><div class="seg" id="sw-mp"><button data-value="12">12 MP</button><button data-value="24" class="on">24 MP</button><button data-value="60">60 MP</button></div></div>
         </div>
       </div>
       <div class="sim-readout">
-        <div class="stat"><span class="k">회절 번짐(에어리 원반)</span><span class="v" id="sw-airy">—</span></div>
-        <div class="stat"><span class="k">수차 번짐(가상 렌즈)</span><span class="v" id="sw-ab">—</span></div>
-        <div class="stat"><span class="k">합친 번짐 ÷ 픽셀</span><span class="v" id="sw-tot">—</span></div>
+        <div class="stat"><span class="k">센서 위 회절 번짐(에어리 원반)</span><span class="v" id="sw-airy">—</span></div>
+        <div class="stat"><span class="k">화소 피치</span><span class="v" id="sw-pitch">—</span></div>
+        <div class="stat"><span class="k">합친 번짐(풀프레임 환산)</span><span class="v" id="sw-tot">—</span></div>
+        <div class="stat"><span class="k">100% 확대에서 회절이 보이기 시작</span><span class="v" id="sw-dla">—</span></div>
       </div>
-      <div class="sim-note">곡선의 가장 낮은 지점이 최적 조리개입니다. 화소가 작은 센서일수록 회절이 일찍 보입니다. 스마트폰 카메라 대부분이 f/1.5~f/2.4 고정 조리개인 이유 중 하나가 이것입니다. 조일 수 있게 만들어도 회절 때문에 화질이 나빠지기 때문입니다.</div>
+      <div class="sim-note">곡선의 가장 낮은 지점이 최적 조리개입니다. 번짐은 사진을 같은 크기로 볼 때를 기준으로(풀프레임 환산 µm) 나타냈습니다. ① 화소 수를 24 MP ↔ 60 MP로 바꿔 보세요. 곡선 전체가 위아래로만 움직이고 <b>최적 조리개는 그대로</b>입니다. ② 센서 크기를 바꾸면 최적 조리개가 움직입니다. 회절 번짐은 F값만으로 정해지는 µm 크기라서, 작은 센서일수록 사진 크기에 비해 상대적으로 커지기 때문입니다. 스마트폰 카메라가 대부분 f/1.5~f/2.4 고정 조리개인 이유 중 하나입니다.</div>
     </div>
     <div class="callout warn"><strong>그래도 f/16이 필요할 때</strong>회절은 '살짝 뿌연' 정도이고, 심도가 모자라 앞이 흐린 것은 '확 흐린' 것입니다. 앞뒤 모두 선명해야 하는 풍경이라면 회절을 감수하고 조이는 편이 낫습니다. 다만 f/22 이상은 꼭 필요할 때만 쓰세요. 또, 조일수록 센서 위의 먼지가 또렷한 점으로 찍힙니다.</div>
   </section>
@@ -202,7 +205,7 @@
       <li>피사계 심도는 조리개(열수록 얕음), 거리(가까울수록 얕음), 초점거리(길수록 얕음), 센서(클수록 얕음)로 정해진다.</li>
       <li>배경을 날리려면 피사체와 배경 사이 거리도 벌려야 한다.</li>
       <li>점광원의 흐림은 조리개 모양을 닮는다. 조이면 날개 수만큼 각진 빛망울이 된다.</li>
-      <li>너무 조이면 회절로 전체가 뿌예진다. 렌즈의 최적 조리개는 보통 f/5.6~f/8. 작은 픽셀일수록 회절이 먼저 보인다.</li>
+      <li>너무 조이면 회절로 전체가 뿌예진다. 최적 조리개는 렌즈와 판형이 정하며 풀프레임에서 보통 f/5.6~f/8. 화소가 많으면 100% 확대에서 회절이 먼저 보일 뿐, 최적 조리개는 같다.</li>
     </ol>
   </section>
 
@@ -224,7 +227,7 @@
         <button class="opt">수차</button>
         <button class="opt" data-correct>회절</button>
         <button class="opt">손떨림</button>
-      </div><div class="quiz-exp">조리개를 많이 조이면 회절 번짐(에어리 원반)이 픽셀 여러 개 크기로 커진다. 화소가 많을수록 더 일찍 드러난다.</div></div>
+      </div><div class="quiz-exp">조리개를 많이 조이면 회절 번짐(에어리 원반)이 픽셀 여러 개 크기로 커진다. 화소가 많을수록 100% 확대에서 더 일찍 드러나지만, 같은 크기로 보면 24 MP보다 나빠지지는 않는다.</div></div>
       <div class="quiz-q"><p>스마트폰(크롭 ≈ 3.5)의 f/1.8 사진과 비슷한 배경 흐림을 풀프레임으로 얻으려면 대략 어떤 F값을 쓰면 될까? (같은 화각·같은 거리)</p><div class="opts">
         <button class="opt">f/1.8</button>
         <button class="opt">f/3.5</button>
@@ -255,14 +258,16 @@ function irisPath(ctx, cx, cy, r, blades, rot = 0) {
   const cv = CB.canvas("#cv-iris", (ctx, w, h) => {
     const P = CB.palette();
     const n = N(), f = F(), blades = +B();
-    const D = f / n, Dmax = f / 1.4;
-    const R = Math.min(w, h) * 0.42, cx = w * 0.5, cy = h * 0.5;
+    const D = f / n;
+    // 모든 렌즈를 같은 축척으로 그린다: 200 mm f/1.4의 구멍(약 143 mm)이 화면에 꽉 차는 크기
+    const Rv = Math.min(w, h) * 0.42, cx = w * 0.5, cy = h * 0.5, Dref = 200 / 1.4;
+    const R = Math.max(6, Rv * (f / 1.4) / Dref); // 이 렌즈의 최대 개방(f/1.4) 구멍 반지름
     // 경통
     ctx.fillStyle = "#1b1b1d"; ctx.beginPath(); ctx.arc(cx, cy, R + 14, 0, 7); ctx.fill();
     ctx.strokeStyle = "#444"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, R + 8, 0, 7); ctx.stroke();
     // 날개(겹친 금속)
     ctx.fillStyle = "#2c2c30"; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill();
-    const r = R * (D / Dmax);
+    const r = Rv * D / Dref;
     const full = n <= 1.45;
     const rot = n * 0.35; // 조일수록 날개가 회전
     // 날개 경계선
@@ -287,11 +292,12 @@ function irisPath(ctx, cx, cy, r, blades, rot = 0) {
     irisPath(ctx, cx, cy, r, full ? 0 : blades, rot); ctx.stroke();
     // 지름 표시
     ctx.strokeStyle = P.text; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-    ctx.beginPath(); ctx.moveTo(cx - r, cy + R + 26); ctx.lineTo(cx + r, cy + R + 26); ctx.stroke(); ctx.setLineDash([]);
+    const ly = Math.min(h - 26, cy + R + 26);
+    ctx.beginPath(); ctx.moveTo(cx - r, ly); ctx.lineTo(cx + r, ly); ctx.stroke(); ctx.setLineDash([]);
     ctx.fillStyle = P.text; ctx.font = "12px " + CB.color("mono"); ctx.textAlign = "center";
-    ctx.fillText(`D = ${CB.fmt(D, 3)} mm`, cx, Math.min(h - 6, cy + R + 42));
+    ctx.fillText(`D = ${CB.fmt(D, 3)} mm`, cx, ly + 16);
     ctx.textAlign = "left"; ctx.fillStyle = P.dim; ctx.font = "12px " + CB.color("font");
-    ctx.fillText(`${f} mm 렌즈 정면`, 10, 18);
+    ctx.fillText(`${f} mm 렌즈 정면 (모든 렌즈 같은 축척)`, 10, 18);
     const rel = Math.pow(1.4 / n, 2);
     CB.stat("ir-d", CB.fmt(D, 3) + "<small>mm</small>");
     CB.stat("ir-l", (rel * 100 >= 10 ? Math.round(rel * 100) : CB.fmt(rel * 100, 2)) + "<small>%</small>");
@@ -394,11 +400,15 @@ function irisPath(ctx, cx, cy, r, blades, rot = 0) {
   const rim = CB.check("bk-rim", upd);
   const cv = CB.canvas("#cv-bokeh", (ctx, w, h) => {
     const n = N(), b = +B();
-    // 최대 개방 근처에서는 날개가 숨어 둥글다: f/2 이하에서 원형
-    const blades = b && n > 1.9 ? b : 0;
-    photo.render({ N: n, t: (n * n) / Math.pow(2, 6), iso: 100, focus: 1.2, focal: 85, blades, bokehRim: rim(), noise: false });
+    // 가상 렌즈는 85 mm f/1.4. 최대 개방에서는 날개가 경통 밖으로 완전히 물러나 원형 테두리가 구멍을 정한다.
+    // 조이기 시작하면 날개가 들어와 '원 ∩ 다각형'이 되고, 곧 다각형만 남는다(곧은 날개 기준).
+    // 다각형 내접원 = 개방 원 × (1.4/N) 이라 두면 원 반지름 ÷ 외접원 반지름 = (N/1.4)·cos(π/날개 수)
+    const blades = b && n > 1.45 ? b : 0;
+    const bladeCircle = blades ? (n / 1.4) * Math.cos(Math.PI / blades) : 0;
+    photo.render({ N: n, t: (n * n) / Math.pow(2, 6), iso: 100, focus: 1.2, focal: 85, blades, bladeCircle, bokehRim: rim(), noise: false });
     photo.draw(ctx, 0, 0, w, h);
-    CB.hud(ctx, 0, h - 24, w, [CB.fmtN(n), blades ? blades + "각형 조리개" : "원형 개구", rim() ? "양파링" : "부드러움"]);
+    const shape = !b ? "원형(곡선) 날개" : !blades ? "최대 개방: 원형" : bladeCircle < 1 ? blades + "각형(모서리 둥긂)" : blades + "각형 조리개";
+    CB.hud(ctx, 0, h - 24, w, [CB.fmtN(n), shape, rim() ? "양파링" : "부드러움"]);
   }, { aspect: 0.625 });
 })();
 
@@ -407,10 +417,15 @@ function irisPath(ctx, cx, cy, r, blades, rot = 0) {
   const upd = CB.throttle(() => cv.redraw());
   const LIST = CB.APERTURES.filter((n) => n >= 1.4 && n <= 22);
   const N = CB.steps("sw-n", LIST, CB.fmtN, 8, upd);
-  const pitch = CB.seg("sw-p", upd);
-  const airy = (n) => 2.44 * 0.55 * n;              // µm
-  const aber = (n, p) => 14 * Math.pow(1.4 / n, 1.8) * (p < 1.5 ? 0.25 : 1); // µm, 개방에서 크고 조일수록 감소(폰 렌즈는 작아서 수차 µm도 작음)
-  const total = (n, p) => Math.hypot(airy(n) * 0.42, aber(n, p), p); // 에어리 원반의 반치폭 ≈ 0.42 × 지름
+  const fmt = CB.seg("sw-fmt", upd);
+  const mpx = CB.seg("sw-mp", upd);
+  // 모든 번짐은 '풀프레임 환산 µm'(센서 위 µm × 크롭)로 비교한다 = 사진을 같은 크기로 볼 때의 번짐.
+  const airy = (n) => 2.44 * 0.55 * n;                                // 센서 위 에어리 원반 지름(µm): F값만으로 정해짐
+  const LQ = { 1: 1, 1.53: 1, 2.7: 0.7, 3.5: 0.25 };                  // 판형별 가상 렌즈의 수차(폰 렌즈는 개방에서 최고가 되도록 설계)
+  const diffE = (n, c) => airy(n) * 0.42 * c;                         // 반치폭 ≈ 0.42 × 지름, 환산하면 크롭배
+  const aberE = (n, c) => 30 * LQ[c] * Math.pow(1.4 / n, 1.8);        // 개방에서 크고 조일수록 감소(환산 µm)
+  const pixE = (mp) => Math.sqrt(864 / mp);                           // 환산 화소 피치: 판형과 무관, 화소 수만으로 정해짐
+  const total = (n, c, mp) => Math.hypot(diffE(n, c), aberE(n, c), pixE(mp));
   // 테스트 차트(글자) 오프스크린
   const TW = 180, TH = 120;
   const chart = CB.offscreen(TW, TH, (g, w, h) => {
@@ -423,37 +438,42 @@ function irisPath(ctx, cx, cy, r, blades, rot = 0) {
   let key = "", blurred = null;
   const cv = CB.canvas("#cv-sweet", (ctx, w, h) => {
     const P = CB.palette();
-    const p = +pitch(), n = N();
+    const c = +fmt(), mp = +mpx(), n = N();
+    const pitch = pixE(mp) / c;                                        // 실제 화소 피치(µm)
     const cw = w > 520 ? w * 0.6 : w;
     const ch = w > 520 ? h : h * 0.55;
-    const data = LIST.map((x) => [x, total(x, p) / p]);
+    const data = LIST.map((x) => [x, total(x, c, mp)]);
     const best = data.reduce((a, b) => (b[1] < a[1] ? b : a));
-    const ymax = Math.max(...data.map((d) => d[1])) * 1.1;
+    const ymax = 34;
     CB.chart(ctx, { x: 50, y: 14, w: cw - 66, h: ch - 60 }, {
       x: [1.4, 22], y: [0, ymax], logX: true, xTicks: [1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22], xFmt: (v) => "f/" + v,
-      xLabel: "조리개", yLabel: "번짐 ÷ 픽셀 (작을수록 선명)",
+      xLabel: "조리개", yLabel: "번짐, 풀프레임 환산 µm (작을수록 선명)",
       series: [
-        { data: LIST.map((x) => [x, airy(x) * 0.42 / p]), color: P.accent2, width: 1.5, dash: [4, 3] },
-        { data: LIST.map((x) => [x, aber(x, p) / p]), color: P.warn, width: 1.5, dash: [4, 3] },
-        { data, color: P.accent, width: 2.5 },
+        { data: LIST.map((x) => [x, Math.min(ymax, diffE(x, c))]), color: P.accent2, width: 1.5, dash: [4, 3] },
+        { data: LIST.map((x) => [x, Math.min(ymax, aberE(x, c))]), color: P.warn, width: 1.5, dash: [4, 3] },
+        { data: LIST.map((x) => [x, pixE(mp)]), color: P.dim, width: 1, dash: [1, 3] },
+        { data: data.map(([x, y]) => [x, Math.min(ymax, y)]), color: P.accent, width: 2.5 },
       ],
       vlines: [{ x: best[0], color: P.ok, label: "최적 " + CB.fmtN(best[0]) }],
-      points: [{ x: n, y: total(n, p) / p, color: P.accent, r: 5 }],
+      points: [{ x: n, y: Math.min(ymax, total(n, c, mp)), color: P.accent, r: 5 }],
     });
     ctx.font = "11px " + CB.color("font"); ctx.textAlign = "left";
-    ctx.fillStyle = P.accent2; ctx.fillText("--- 회절", 60, ch - 52); ctx.fillStyle = P.warn; ctx.fillText("--- 수차", 120, ch - 52);
-    // 확대 크롭
-    const sigma = (total(n, p) / p) * 0.55;
+    ctx.fillStyle = P.accent2; ctx.fillText("--- 회절", 60, ch - 52); ctx.fillStyle = P.warn; ctx.fillText("--- 수차", 120, ch - 52); ctx.fillStyle = P.dim; ctx.fillText("··· 화소", 180, ch - 52);
+    // 확대 크롭: 같은 크기로 인화한 사진의 일부
+    const sigma = total(n, c, mp) / 6;
     const k = sigma.toFixed(2);
     if (k !== key) { blurred = CB.blurCanvas(chart, sigma); key = k; }
     const iw = w > 520 ? w - cw - 16 : Math.min(w - 32, 300), ih = iw * (TH / TW);
     const ix = w > 520 ? cw + 4 : (w - iw) / 2, iy = w > 520 ? (h - ih) / 2 : ch + 10;
     ctx.imageSmoothingEnabled = false; ctx.drawImage(blurred, ix, iy, iw, ih); ctx.imageSmoothingEnabled = true;
     ctx.strokeStyle = P.border; ctx.strokeRect(ix, iy, iw, ih);
-    ctx.fillStyle = P.dim; ctx.fillText("100% 확대", ix, iy - 6);
+    ctx.fillStyle = P.dim; ctx.fillText("같은 크기로 인화해 일부 확대", ix, iy - 6);
+    // 100% 확대에서 회절이 눈에 띄기 시작하는 조리개(에어리 원반 ≈ 화소 2개)
+    const dla = LIST.find((x) => airy(x) >= 2 * pitch);
     CB.stat("sw-airy", CB.fmt(airy(n), 2) + "<small>µm</small>");
-    CB.stat("sw-ab", CB.fmt(aber(n, p), 2) + "<small>µm</small>");
-    CB.stat("sw-tot", "×" + (total(n, p) / p).toFixed(2));
+    CB.stat("sw-pitch", CB.fmt(pitch, 2) + "<small>µm</small>");
+    CB.stat("sw-tot", CB.fmt(total(n, c, mp), 2) + "<small>µm</small>");
+    CB.stat("sw-dla", dla ? CB.fmtN(dla) + "<small>부터</small>" : "f/22 너머");
   }, { aspect: (w) => (w > 520 ? 0.5 : 1.25), minHeight: 330, maxHeight: 460 });
 })();
 </script>

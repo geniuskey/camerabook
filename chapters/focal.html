@@ -18,7 +18,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"초점거리와 화각","name":"초점거리와 화각 · CameraBook","url":"https://camerabook.euiyun.com/chapters/focal.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/focal.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":9,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"초점거리와 화각의 관계, 크롭 팩터와 35mm 환산, 원근감과 망원 압축 효과의 진실(돌리 줌), 셀카 얼굴 왜곡, 줌과 단렌즈, 렌즈 왜곡을 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"09 초점거리와 화각","item":"https://camerabook.euiyun.com/chapters/focal.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"초점거리와 화각","name":"초점거리와 화각 · CameraBook","url":"https://camerabook.euiyun.com/chapters/focal.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/focal.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":9,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"초점거리와 화각의 관계, 크롭 팩터와 35mm 환산, 원근감과 망원 압축 효과의 진실(돌리 줌), 셀카 얼굴 왜곡, 줌과 단렌즈, 렌즈 왜곡을 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"09 초점거리와 화각","item":"https://camerabook.euiyun.com/chapters/focal.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -46,9 +46,18 @@
   <section id="fov">
     <h2>초점거리 = 얼마나 크게 확대하는가</h2>
     <p><span class="term">초점거리</span><span class="en">(Focal Length)</span>는 무한히 먼 곳에 초점을 맞췄을 때 렌즈(정확히는 주점)에서 센서까지의 거리입니다. 초점거리가 길수록 상이 크게 맺혀서, 같은 크기의 센서에는 장면의 좁은 부분만 담깁니다. 센서가 담는 각도를 <span class="term">화각</span><span class="en">(Angle of View)</span>이라 합니다.</p>
-    <div class="formula">$$\text{화각} = 2\arctan\frac{\text{센서 폭}}{2f}$$
-      <div class="where">풀프레임(폭 36 mm)에서 50 mm는 가로 약 40°, 24 mm는 74°, 200 mm는 10°. 초점거리를 2배로 하면 화각은 대략 절반이 되고, 같은 거리의 물체는 2배 크게 찍힌다.</div>
+    <div class="formula">$$\text{화각} = 2\arctan\frac{\text{센서 치수}}{2f}$$
+      <div class="where">센서 치수에 가로 폭을 넣으면 가로 화각, 세로 높이를 넣으면 세로 화각, 대각선 길이를 넣으면 대각 화각이다. 풀프레임(36×24 mm, 대각 43.3 mm)에서 50 mm는 가로 약 40°, 24 mm는 74°, 200 mm는 10°. 초점거리를 2배로 하면 화각은 대략 절반이 되고, 같은 거리의 물체는 2배 크게 찍힌다.</div>
     </div>
+    <p>같은 렌즈라도 어느 방향으로 재느냐에 따라 화각 숫자가 다릅니다. 렌즈 제조사의 사양표, 스마트폰 카메라 사양(GSMArena 등에서 보는 "24 mm, 84°" 같은 표기)은 보통 <b>대각 화각</b>을 씁니다. 사진의 가장 긴 방향인 대각선 기준이라 숫자가 가장 큽니다. 이 장의 시뮬레이터와 그림은 주로 눈으로 비교하기 쉬운 가로 화각을 보여 주므로, 사양표의 숫자와 비교할 때는 기준을 확인하세요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>풀프레임 초점거리</th><th class="num">가로 화각</th><th class="num">세로 화각</th><th class="num">대각 화각</th></tr>
+      <tr><td>14 mm</td><td class="num">104°</td><td class="num">81°</td><td class="num">114°</td></tr>
+      <tr><td>24 mm</td><td class="num">74°</td><td class="num">53°</td><td class="num">84°</td></tr>
+      <tr><td>50 mm</td><td class="num">40°</td><td class="num">27°</td><td class="num">47°</td></tr>
+      <tr><td>85 mm</td><td class="num">24°</td><td class="num">16°</td><td class="num">29°</td></tr>
+      <tr><td>200 mm</td><td class="num">10°</td><td class="num">7°</td><td class="num">12°</td></tr>
+    </table></div>
     <div class="sim" id="sim-fov">
       <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>줌 링을 돌려 보세요</h3></div>
       <div class="sim-body side">
@@ -61,6 +70,7 @@
       <div class="sim-view" style="border-top:1px solid var(--border)"><canvas id="cv-fovmap"></canvas></div>
       <div class="sim-readout">
         <div class="stat"><span class="k">가로 화각</span><span class="v" id="fv-a">—</span></div>
+        <div class="stat"><span class="k">대각 화각(사양표 기준)</span><span class="v" id="fv-d">—</span></div>
         <div class="stat"><span class="k">35 mm 환산</span><span class="v" id="fv-eq">—</span></div>
         <div class="stat"><span class="k">분류</span><span class="v" id="fv-c">—</span></div>
       </div>
@@ -80,6 +90,10 @@
   <section id="crop">
     <h2>크롭 팩터와 '환산 초점거리'</h2>
     <p>같은 50 mm 렌즈라도 작은 센서에 끼우면 센서가 상의 가운데만 잘라(crop) 보므로 화각이 좁아집니다. 그래서 작은 센서 카메라에서는 실제 초점거리에 크롭 팩터를 곱한 <span class="term">35 mm 환산 초점거리</span>로 화각을 이야기합니다. APS-C(×1.5)에 50 mm를 끼우면 풀프레임 75 mm와 비슷한 화각입니다.</p>
+    <div class="formula">$$\text{크롭 팩터} = \frac{\text{풀프레임 대각선 43.3 mm}}{\text{센서 대각선}}$$
+      <div class="where">환산 초점거리 = 실제 초점거리 × 크롭 팩터. 화면비가 다른 센서끼리도 비교할 수 있도록 <b>대각선</b>을 기준으로 한다. 즉 '환산 24 mm'는 풀프레임 24 mm와 <b>대각 화각</b>(84°)이 같다는 뜻이다.</div>
+    </div>
+    <p>여기서 한 가지 주의할 점이 있습니다. 스마트폰과 마이크로 포서드 센서는 가로세로 비율이 4:3이라 풀프레임(3:2)보다 덜 길쭉합니다. 대각 화각을 맞추면 가로 화각은 풀프레임보다 조금 좁고 세로 화각은 조금 넓어집니다. 예를 들어 1/1.3형(9.8×7.4 mm) 폰의 6.9 mm 렌즈는 크롭 3.5로 '환산 24 mm'이고 대각 화각도 약 83°로 풀프레임 24 mm(84°)와 거의 같지만, 가로 화각은 약 71°로 풀프레임 24 mm의 74°보다 약간 좁습니다.</p>
     <div class="callout warn"><strong>렌즈가 바뀌는 게 아니다</strong>크롭은 '확대'가 아니라 '잘라내기'입니다. 50 mm 렌즈의 원근감, 렌즈 자체의 성질은 그대로이고 센서가 가장자리를 버릴 뿐입니다. 그래서 APS-C의 50 mm는 풀프레임 75 mm와 화각은 같아도 심도는 다릅니다(3장의 등가 조리개).</div>
   </section>
 
@@ -157,8 +171,8 @@
   <section class="keypoints" id="summary">
     <h2>핵심 정리</h2>
     <ol>
-      <li>초점거리가 길수록 화각이 좁고 크게 찍힌다. 화각 = 2·arctan(센서폭/2f).</li>
-      <li>작은 센서는 같은 렌즈로 더 좁게 본다. 화각 비교에는 35 mm 환산 초점거리를 쓴다.</li>
+      <li>초점거리가 길수록 화각이 좁고 크게 찍힌다. 화각 = 2·arctan(센서 치수/2f). 사양표의 화각은 보통 대각선 기준이다.</li>
+      <li>작은 센서는 같은 렌즈로 더 좁게 본다. 화각 비교에는 대각선 비(크롭 팩터)로 구한 35 mm 환산 초점거리를 쓴다.</li>
       <li>원근감(압축·과장)은 촬영 거리가 정한다. 망원은 멀리서 찍게 만들 뿐이다.</li>
       <li>인물은 1.5~3 m 거리가 자연스럽고, 그 거리에서 화면을 채우는 렌즈가 85 mm 안팎이다.</li>
       <li>광각은 배럴, 망원은 핀쿠션 왜곡이 흔하고 프로파일로 보정한다. 위로 모이는 건물선은 왜곡이 아니라 기울인 원근이다.</li>
@@ -201,12 +215,15 @@ const World = CB.World();
   const upd = CB.throttle(() => { cv.redraw(); mp.redraw(); });
   const F = CB.steps("fv-f", FL, (v) => v + " mm", 24, upd);
   const S = CB.seg("fv-s", upd);
+  const SH = { 36: 24, 23.5: 15.6, 17.3: 13, 9.8: 7.4 };              // 센서 높이(mm)
   const cv = CB.canvas("#cv-fov", (ctx, w, h) => {
     const f = F(), sw = +S();
     World.draw(ctx, w, h, { f, sw, subjectZ: 8 });
-    const eq = f * (36 / sw), ang = 2 * Math.atan(sw / 2 / f) * 57.3;
-    CB.hud(ctx, 0, h - 24, w, [f + " mm (실제)", "환산 " + Math.round(eq) + " mm", "화각 " + ang.toFixed(0) + "°"]);
+    const diag = Math.hypot(sw, SH[sw]), crop = 43.27 / diag;          // 크롭 팩터는 대각선 길이의 비
+    const eq = f * crop, ang = 2 * Math.atan(sw / 2 / f) * 57.3, angD = 2 * Math.atan(diag / 2 / f) * 57.3;
+    CB.hud(ctx, 0, h - 24, w, [f + " mm (실제)", "환산 " + Math.round(eq) + " mm", "가로 " + ang.toFixed(0) + "° · 대각 " + angD.toFixed(0) + "°"]);
     CB.stat("fv-a", ang.toFixed(1) + "°");
+    CB.stat("fv-d", angD.toFixed(1) + "°");
     CB.stat("fv-eq", Math.round(eq) + "<small>mm</small>");
     CB.stat("fv-c", eq < 24 ? "초광각" : eq < 35 ? "광각" : eq < 40 ? "준광각" : eq < 60 ? "표준" : eq < 150 ? "중망원" : "망원");
   }, { aspect: 0.6 });

@@ -521,7 +521,9 @@
               const seg = (2 * Math.PI) / blades;
               const a = Math.atan2(dy, dx) + Math.PI / 2;
               const local = ((a % seg) + seg) % seg - seg / 2;
-              rr = rr * Math.cos(local) / Math.cos(seg / 2);
+              const rp = rr * Math.cos(local) / Math.cos(seg / 2);
+              // bladeCircle: 경통(원형 조리개 테두리) 반지름 ÷ 다각형 외접원 반지름. 1 미만이면 원과 다각형의 교집합
+              rr = p.bladeCircle ? Math.max(rp, rr / p.bladeCircle) : rp;
             }
             let cov = CB.clamp(r + 0.5 - rr, 0, 1);
             if (r > 3 && p.bokehRim) cov *= 0.75 + 0.35 * CB.smooth(r * 0.55, r, rr);
@@ -533,7 +535,7 @@
       }
     }
     function composite(p) {
-      const key = [p.N, p.focus, p.focal, p.sensorW, p.t, p.blades, p.pinhole, (p.shake || [0, 0]).join(","), p.panning || 0, p.extraBlur || 0].join("|");
+      const key = [p.N, p.focus, p.focal, p.sensorW, p.t, p.blades, p.bladeCircle || 0, p.pinhole, (p.shake || [0, 0]).join(","), p.panning || 0, p.extraBlur || 0].join("|");
       if (key === compKey) return;
       compKey = key;
       comp.fill(0);
