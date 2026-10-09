@@ -18,7 +18,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"노출과 노출 삼각형","name":"노출과 노출 삼각형 · CameraBook","url":"https://camerabook.euiyun.com/chapters/exposure.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/exposure.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":2,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"노출이란 무엇인가. 스톱과 EV, 조리개·셔터·ISO의 노출 삼각형, 같은 밝기를 만드는 여러 조합(상반 법칙), 써니 16 법칙을 가상 카메라로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"02 노출과 노출 삼각형","item":"https://camerabook.euiyun.com/chapters/exposure.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"노출과 노출 삼각형","name":"노출과 노출 삼각형 · CameraBook","url":"https://camerabook.euiyun.com/chapters/exposure.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/exposure.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":2,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"노출이란 무엇인가. 스톱과 EV, 조리개·셔터·ISO의 노출 삼각형, 같은 밝기를 만드는 여러 조합(상반 법칙), 써니 16 법칙을 가상 카메라로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"02 노출과 노출 삼각형","item":"https://camerabook.euiyun.com/chapters/exposure.html"}]}]}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -76,7 +76,7 @@
         <div class="stat"><span class="k">ISO 배율 적용 후</span><span class="v" id="bk-level">—</span></div>
         <div class="stat"><span class="k">결과</span><span class="v" id="bk-res">—</span></div>
       </div>
-      <div class="sim-note">해볼 것: 조리개를 한 칸(1/3스톱) 넓히면 물줄기가 굵어집니다. 셔터를 그만큼 짧게 하면 받은 물이 같아집니다. ISO를 올리면 물은 그대로인데 눈금이 확대되어 '찬 것처럼' 보입니다. 이 차이가 5장에서 노이즈의 정체로 이어집니다.</div>
+      <div class="sim-note">해볼 것: 조리개를 한 칸(1/3스톱) 넓히면 물줄기가 굵어집니다. 셔터를 그만큼 짧게 하면 받은 물이 같아집니다. 물이 차는 속도는 조리개(물줄기 굵기)만 정하고, 셔터는 꼭지를 열어 두는 시간만 정한다는 점을 눈여겨보세요(애니메이션은 실제보다 약 90배 느립니다). ISO를 올리면 물은 그대로인데 눈금이 확대되어 '찬 것처럼' 보입니다. 이 차이가 5장에서 노이즈의 정체로 이어집니다.</div>
     </div>
     <div class="callout"><strong>ISO는 빛을 늘리지 않는다</strong>조리개와 셔터는 실제로 센서에 들어가는 빛의 양을 바꿉니다. ISO는 이미 받은 신호를 증폭할 뿐입니다. 그래서 엄밀히 말하면 노출(exposure)은 조리개와 셔터가 정하고, ISO는 그 노출을 '어떤 밝기로 보여 줄지'를 정합니다. 하지만 결과 사진의 밝기에는 셋 다 똑같이 작용하므로 흔히 셋을 함께 '노출 삼각형'이라 부릅니다.</div>
   </section>
@@ -269,12 +269,16 @@
     const res = !level ? "—" : shown > 1.41 ? '<span style="color:var(--bad)">너무 밝음</span>' : shown < 0.7 ? '<span style="color:var(--accent-2)">너무 어두움</span>' : '<span style="color:var(--ok)">적정!</span>';
     CB.stat("bk-res", res);
   }, { aspect: 0.62, maxHeight: 380, minHeight: 280 });
+  // 물줄기 세기(초당 받는 물)는 조리개만, 꼭지를 여는 시간은 셔터만 정한다.
+  // 실제 시간을 SLOW배 늘려 보여 준다: f/5.6·1/125이 약 0.7초 동안 적정까지 찬다.
+  const SLOW = 0.7 / (1 / 125);
   const loop = CB.loop(document.getElementById("cv-bucket"), (dt) => {
     if (!flowing) return;
     flowT += dt;
-    const dur = 1.4; // 애니메이션 시간(초)
-    level = target * Math.min(1, flowT / dur);
-    if (flowT >= dur) flowing = false;
+    const rate = Math.pow(5.6 / ap(), 2) / 0.7; // 화면 시간 1초당 차는 양(적정=1)
+    const dur = sh() * SLOW;                    // 화면에서 꼭지가 열려 있는 시간
+    level = rate * Math.min(flowT, dur);
+    if (flowT >= dur || level > 1.4) { level = target; flowing = false; } // 넘치기 시작하면 결과로 건너뜀
     cv.redraw();
   });
   void loop;

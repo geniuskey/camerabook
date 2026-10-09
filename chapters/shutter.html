@@ -18,7 +18,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"셔터 속도와 움직임","name":"셔터 속도와 움직임 · CameraBook","url":"https://camerabook.euiyun.com/chapters/shutter.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/shutter.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":4,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-02","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"셔터 속도로 움직임을 멈추거나 흐르게 하는 법, 패닝, 손떨림과 1/초점거리 법칙, 장노출 빛 궤적, 셔터 막의 구조와 전자 셔터의 젤로 현상을 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"04 셔터 속도와 움직임","item":"https://camerabook.euiyun.com/chapters/shutter.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"셔터 속도와 움직임","name":"셔터 속도와 움직임 · CameraBook","url":"https://camerabook.euiyun.com/chapters/shutter.html","mainEntityOfPage":"https://camerabook.euiyun.com/chapters/shutter.html","inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"interactive textbook chapter","position":4,"image":"https://camerabook.euiyun.com/og.png","dateModified":"2026-10-08","isPartOf":{"@type":"Book","@id":"https://camerabook.euiyun.com/#book","name":"CameraBook — 인터랙티브 카메라 교과서","url":"https://camerabook.euiyun.com/"},"publisher":{"@type":"Organization","name":"CameraBook","url":"https://camerabook.euiyun.com/"},"description":"셔터 속도로 움직임을 멈추거나 흐르게 하는 법, 패닝, 손떨림과 1/초점거리 법칙, 장노출 빛 궤적, 셔터 막의 구조와 전자 셔터의 젤로 현상을 시뮬레이터로 배운다."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CameraBook","item":"https://camerabook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"04 셔터 속도와 움직임","item":"https://camerabook.euiyun.com/chapters/shutter.html"}]}]}</script>
 <link rel="stylesheet" href="../css/style.css">
 <script src="../js/common.js"></script>
 <!-- Cloudflare Web Analytics -->
@@ -53,15 +53,15 @@
           <label class="ctrl"><span>셔터 속도 <output id="mo-t-out"></output></span><input type="range" id="mo-t"></label>
           <label class="ctrl"><span>자전거 속도 <output id="mo-v-out"></output></span><input type="range" id="mo-v" min="1" max="12" value="5" step="0.5"></label>
           <div class="ctrl"><span>카메라</span><div class="seg" id="mo-pan"><button data-value="0" class="on">고정</button><button data-value="1">패닝(따라 돌리기)</button></div></div>
-          <label class="check"><input type="checkbox" id="mo-auto" checked> 밝기 자동(ISO로 보정)</label>
+          <label class="check"><input type="checkbox" id="mo-auto" checked> 밝기 자동(ISO·ND 필터로 보정)</label>
         </div>
       </div>
       <div class="sim-readout">
         <div class="stat"><span class="k">노출 시간 동안 이동</span><span class="v" id="mo-dist">—</span></div>
         <div class="stat"><span class="k">화면 위 블러 길이</span><span class="v" id="mo-blur">—</span></div>
-        <div class="stat"><span class="k">ISO</span><span class="v" id="mo-iso">—</span></div>
+        <div class="stat"><span class="k">ISO / ND 필터</span><span class="v" id="mo-iso">—</span></div>
       </div>
-      <div class="sim-note">해볼 것: ① 1/1000이면 바퀴살까지 멈춥니다. ② 1/30로 내리면 자전거가 흐릅니다. ③ '패닝'을 켜고 1/30을 쓰면 자전거는 비교적 또렷하고 배경이 흘러 속도감이 납니다.</div>
+      <div class="sim-note">해볼 것: ① 1/1000이면 바퀴살까지 멈춥니다. ② 1/30로 내리면 자전거가 흐릅니다. ③ '패닝'을 켜고 1/30을 쓰면 자전거는 비교적 또렷하고 배경이 흘러 속도감이 납니다. 1/125보다 느리면 ISO 100으로도 너무 밝아지므로, 자동 모드는 ND 필터(뒤의 장노출 절 참고)를 끼워 밝기를 맞춥니다. 자동을 끄고 느린 셔터를 쓰면 하얗게 날아가는 것도 확인해 보세요.</div>
     </div>
 
     <div class="table-wrap"><table>
@@ -221,17 +221,21 @@
     const v = V(), t = T(), panning = pan() === "1";
     subj.motion = [v * PXM, 0];
     photo.invalidate();
-    const N = 8;
-    const iso = auto() ? CB.ISOS[CB.nearest(CB.ISOS, CB.clamp(100 * Math.pow(2, CB.ev(N, t, 100) - 13), 100, 102400))] : 100;
+    const N = 8, sceneEV = 13;
+    // 자동: 빠른 셔터는 ISO를 올리고, ISO 100으로도 밝은 느린 셔터는 ND 필터로 빛을 줄여 항상 적정 노출
+    const isoNeed = 100 * Math.pow(2, CB.ev(N, t, 100) - sceneEV);
+    const iso = auto() ? CB.ISOS[CB.nearest(CB.ISOS, CB.clamp(isoNeed, 100, 102400))] : 100;
+    const ndStops = auto() ? Math.max(0, Math.round(-Math.log2(isoNeed / 100))) : 0;
     // 패닝: 카메라가 피사체 속도를 거의(95%) 따라감
     const p = { N, t, iso, focus: 9, focal: 35, panning: panning ? v * PXM * 0.95 : 0, noiseSeed: 4 };
+    if (ndStops) p.light = Math.pow(2, -ndStops);
     photo.render(p);
     photo.draw(ctx, 0, 0, w, h);
-    CB.hud(ctx, 0, h - 24, w, [CB.fmtT(t), CB.fmtN(N), "ISO " + Math.round(iso), panning ? "패닝" : "고정"]);
+    CB.hud(ctx, 0, h - 24, w, [CB.fmtT(t), CB.fmtN(N), "ISO " + Math.round(iso) + (ndStops ? ` · ND ${ndStops}스톱` : ""), panning ? "패닝" : "고정"]);
     const rel = panning ? v * 0.05 : v;
     CB.stat("mo-dist", CB.fmt(v * t * 100, 2) + "<small>cm</small>");
     CB.stat("mo-blur", CB.fmt((rel * PXM * t) / W * 100, 2) + "<small>% 화면폭</small>");
-    CB.stat("mo-iso", Math.round(iso));
+    CB.stat("mo-iso", Math.round(iso) + (ndStops ? `<small> + ND ${ndStops}스톱</small>` : ""));
   }, { aspect: 0.625 });
 })();
 
